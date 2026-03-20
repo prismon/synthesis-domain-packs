@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: ppm.layer
+metadata:
+  name: ppm-layer-market
+spec:
+  displayName: "Market"
+  layerType: market
+  purpose: |
+    Adapts products to local realities. Markets apply regulatory, commercial, and operational constraints required to operate in a specific geography. A product should be conceptually consistent regardless of where it is deployed — markets handle the delta through configuration, not bespoke engineering.
+  accountabilityModel: |
+    Market teams configure behavior; they do not build or maintain their own release trains or forks of the codebase. When a market requires custom code, it signals that the boundary between platform and product is not yet clean. The architecture office is responsible for enforcing this boundary.
+  uxOwnership: |
+    Markets do not own user experiences. All UX is owned by platform (internal/generic) or product (differentiated/external). Markets configure routing, thresholds, and feature flags within experiences owned by other layers.
+  apiIntegration: |
+    Markets configure behavior through rules, thresholds, workflow routing, and feature flags. They do not intercept or replace platform interfaces.
+  defaultSortingRule: |
+    Anything that is cleanly local and configurable belongs in the market layer. Configuration first — custom code is a red flag.

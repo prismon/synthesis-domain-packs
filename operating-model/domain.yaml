@@ -1,0 +1,160 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: ppm
+  version: 1
+spec:
+  displayName: "Platform-Product-Market"
+  description: "Scalable operating model separating Platform, Product, and Market layers for enterprise software delivery"
+  namespace: ppm
+  icon: "layers"
+  color: "#0ea5e9"
+
+  definitions:
+
+    # ─── Layers ───────────────────────────────────────────────
+
+    - name: ppm.layer
+      displayName: "Layers"
+      description: "Organizational architecture layer (Platform, Product, or Market) with distinct accountability and scope"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ppm-overview
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: layerType
+          type: enum
+          required: true
+          description: "Which layer this represents"
+          enumValues:
+            - platform
+            - product
+            - market
+        - name: purpose
+          type: text
+          required: false
+          description: "The core purpose and responsibility of this layer"
+        - name: accountabilityModel
+          type: text
+          required: false
+          description: "Who owns decisions within this layer and how accountability is structured"
+        - name: uxOwnership
+          type: text
+          required: false
+          description: "What user experiences this layer owns (generic/internal vs. differentiated/external)"
+        - name: apiIntegration
+          type: text
+          required: false
+          description: "How external consumers integrate with this layer (e.g. all APIs terminate at platform)"
+        - name: defaultSortingRule
+          type: text
+          required: false
+          description: "The default rule for deciding what belongs in this layer"
+      providerType: manual
+
+    # ─── Tenets ───────────────────────────────────────────────
+
+    - name: ppm.tenet
+      displayName: "Tenets"
+      description: "Durable guiding beliefs that drive decisions and act as tie-breakers across Platform-Product-Market tradeoffs"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ppm-overview
+      traits:
+        - traitName: Ownable
+      fields:
+        - name: statement
+          type: text
+          required: true
+          description: "The tenet statement — a concise, actionable belief"
+        - name: rationale
+          type: text
+          required: false
+          description: "Why this tenet matters and the problems it prevents"
+        - name: order
+          type: number
+          required: false
+          description: "Display order (1 = first)"
+        - name: layerRefs
+          type: ref-list
+          required: false
+          description: "Layers this tenet primarily governs"
+          targetKind: ppm.layer
+      providerType: manual
+
+    # ─── Capabilities ─────────────────────────────────────────
+
+    - name: ppm.capability
+      displayName: "Platform Capabilities"
+      description: "Shared, reusable platform capabilities that power multiple products — promoted only when demonstrably serving more than one product"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ppm-overview
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Lifecycle
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this capability provides and the horizontal problem it solves"
+        - name: layerRef
+          type: ref
+          required: true
+          description: "The layer this capability belongs to (typically Platform)"
+          targetKind: ppm.layer
+          critical: true
+        - name: reusedByProducts
+          type: text
+          required: false
+          description: "Named products or business lines that consume this capability"
+        - name: apiSurface
+          type: text
+          required: false
+          description: "API surface exposed by this capability (endpoints, SDKs, events)"
+        - name: promotionRationale
+          type: text
+          required: false
+          description: "Why this capability was promoted from product to platform (the reuse evidence)"
+      providerType: manual
+
+    # ─── Infrastructure ───────────────────────────────────────
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: ppm.capability
+          targetKind: ppm.layer
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentLayer
+          targetField: childCapabilities
+
+    - name: governs
+      displayName: "Governs"
+      reverseDisplayName: "Governed By"
+      constraints:
+        - sourceKind: ppm.tenet
+          targetKind: ppm.layer
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: governsLayers
+          targetField: governedByTenets

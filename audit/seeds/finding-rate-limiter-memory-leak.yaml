@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-rate-limiter-memory-leak
+spec:
+  displayName: "IP Rate Limiter Never Evicts Expired Buckets"
+  severity: critical
+  category: performance
+  description: "The ipRateLimiter in dcr_proxy.go lines 277-306 stores token buckets per IP address in a map that never removes expired entries. Over time, this map grows unbounded with entries for every unique IP that has ever made a request, eventually consuming excessive memory."
+  recommendation: "Implement periodic cleanup of expired bucket entries using a background goroutine with TTL-based eviction. Consider using golang.org/x/time/rate or a purpose-built rate limiter with built-in expiry. Create the limiter once at server startup rather than per-handler."
+  sourceFile: "backend/internal/tenant/dcr_proxy.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-tenant-middleware"

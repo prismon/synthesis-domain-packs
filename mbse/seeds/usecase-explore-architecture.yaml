@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.use-case
+metadata:
+  name: usecase-explore-architecture
+spec:
+  displayName: "Explore Architecture"
+  description: "An engineering lead navigates the C4 architecture model from context through container to component level, drilling down through interactive diagrams."
+  actor: "Engineering Lead"
+  preconditions: "Architecture domain pack loaded with system, container, and component items"
+  postconditions: "User has navigated to the component of interest and understands its dependencies"
+  mainFlow: |
+    1. User opens Architecture nav item
+    2. System renders C4 Context diagram with systems, people, external dependencies
+    3. User clicks a system node
+    4. System drills down to C4 Container diagram for that system
+    5. User clicks a container
+    6. System drills down to C4 Component diagram for that container
+    7. User clicks a component to view detail panel with traits, references, and fields
+  alternativeFlows: |
+    3a. User switches to Application Landscape view for cross-system comparison
+    5a. User opens Reference Graph to see dependency paths
+  scope: system

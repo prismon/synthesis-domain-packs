@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-measure-learn
+spec:
+  displayName: "Measure and Learn"
+  description: "Measure outcomes against goals and convert production signals into product learning."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 10
+  opsInScope: true

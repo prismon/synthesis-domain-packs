@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-get-item
+spec:
+  displayName: "Domain Get Item"
+  endpointType: mcp-tool
+  toolName: "get_item"
+  parameters:
+    required: [uid]
+    optional: []
+  description: "Gets a single domain item by UID."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

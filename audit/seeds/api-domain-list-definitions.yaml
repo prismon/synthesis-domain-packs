@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-list-definitions
+spec:
+  displayName: "Domain List Definitions"
+  endpointType: mcp-tool
+  toolName: "list_definition"
+  parameters:
+    required: []
+    optional: []
+  description: "Lists all domain definitions available in the current tenant."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

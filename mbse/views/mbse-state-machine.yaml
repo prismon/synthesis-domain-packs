@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-state-machine
+spec:
+  displayName: "State Machine Diagrams"
+  description: "SysML State Machine Diagrams showing behavioral states, transitions, guards, and actions for each block. States are rendered as rounded nodes within owner block boundaries."
+  itemGroup:
+    kinds:
+      - mbse.state-machine
+      - mbse.block
+  viewComponentRef: "!name vc-state-machine-diagram"
+  layoutConfig:
+    stateMachineKind: mbse.state-machine
+    blockKind: mbse.block
+    stateMachineColor: "#7c3aed"
+    stateColor: "#6366f1"
+  drillDown:
+    - nodeKind: mbse.state-machine
+      targetViewName: mbse-block-hierarchy

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-hierarchy-views
+spec:
+  displayName: "Hierarchy Board Views"
+  description: "Multi-level hierarchy boards for value stream maps, DDD bounded contexts, and any ref-chain traversal."
+  valueStreamRef: "!name vs-architecture-viz"
+  fundingModel: percent
+  fundingValue: 30
+  opsInScope: false

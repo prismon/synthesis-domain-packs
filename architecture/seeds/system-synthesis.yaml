@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: architecture.system
+metadata:
+  name: synthesis
+spec:
+  displayName: "Synthesis"
+  description: "Multi-tenant domain management and visualization platform. Provides an Airtable-like domain editor, C4 architecture diagrams, extensible view system, and MCP protocol integration for AI agents."
+  technology: "Go / React / PostgreSQL"
+  usesRefs:
+    - "!name ss-oidc-provider"
+    - "!name ss-postgresql"
+    - "!name github"
+    - "!name docker-registry"

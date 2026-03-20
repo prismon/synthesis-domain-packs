@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-synthesis-resolve-budget
+spec:
+  displayName: "Synthesis Resolve Budget"
+  endpointType: mcp-tool
+  toolName: "resolve_synthesis_budget"
+  parameters:
+    required: []
+    optional: [workItemRef]
+  description: "Resolves the active token budget for the current user and tenant."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

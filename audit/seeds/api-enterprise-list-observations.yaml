@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-list-observations
+spec:
+  displayName: "Enterprise List Observations"
+  endpointType: mcp-tool
+  toolName: "list_enterprise_observation"
+  parameters:
+    required: []
+    optional: [metricRef]
+  description: "Lists metric observations, optionally filtered by metric reference."
+  permissionRequired: tenant_user
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

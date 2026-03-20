@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-optimize-retire
+spec:
+  displayName: "Optimize or Retire"
+  description: "Improve, simplify, or retire features based on measured value and ongoing maintenance cost."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 10
+  opsInScope: true

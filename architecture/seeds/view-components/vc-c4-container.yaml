@@ -1,0 +1,25 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-c4-container
+spec:
+  displayName: "C4 Container Diagram"
+  description: "C4 model Level 2 — shows containers within a system"
+  layoutType: c4-container
+  icon: boxes
+  componentKind: react
+  requiredFields:
+    systemRef:
+      type: ref
+  defaultLayoutConfig:
+    containerKind: architecture.container
+    systemKind: architecture.system
+    externalSystemKind: architecture.external-system
+  defaultItemGroup:
+    kinds:
+      - architecture.container
+      - architecture.system
+      - architecture.external-system
+  defaultDrillDown:
+    - nodeKind: architecture.container
+      targetViewComponent: vc-c4-component

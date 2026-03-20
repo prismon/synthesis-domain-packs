@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: mbse.test-case
+metadata:
+  name: tc-rls-isolation
+spec:
+  displayName: "RLS Tenant Isolation Test"
+  description: "Verify that PostgreSQL row-level security prevents cross-tenant data access"
+  testId: "TC-SYS-001"
+  method: test
+  level: system
+  testProcedure: |
+    1. Create items in tenant-A context
+    2. Switch connection to tenant-B context
+    3. Query for tenant-A items
+    4. Assert zero results returned
+    5. Verify no SQL errors (clean empty result, not permission denied)
+  expectedResult: "Tenant-B query returns zero items belonging to tenant-A"
+  testStatus: passed
+  verifiesReqs:
+    - "!name req-rls-tenant-isolation"

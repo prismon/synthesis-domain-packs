@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-state-machines
+spec:
+  title: "State Machines"
+  icon: "git-branch"
+  viewRef: "mbse-state-machine"
+  order: 7

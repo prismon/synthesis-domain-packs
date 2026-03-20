@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-expiry-worker-stub
+spec:
+  displayName: "StartExpiryWorker Is an Empty Stub"
+  severity: info
+  category: design-gap
+  description: "notifier.go lines 125-131 contains an empty StartExpiryWorker function with a comment saying expiry is handled per-request. Without a background worker, pending SSE change notifications may accumulate indefinitely if per-request cleanup fails or clients disconnect without triggering cleanup."
+  recommendation: "Either implement the background expiry worker to periodically clean up stale notifications, or document and validate that per-request cleanup is sufficient under all conditions including client disconnects."
+  sourceFile: "backend/internal/mcpserver/notifier.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-activity-flow
+spec:
+  displayName: "Activity Diagram"
+  description: "SysML Activity Diagram showing functional behaviors with swim lanes per allocated block, typed activity shapes (action, decision, fork/join), inputs/outputs, and control flow edges"
+  itemGroup:
+    kinds:
+      - mbse.activity
+      - mbse.block
+  viewComponentRef: "!name vc-activity-diagram"
+  layoutConfig:
+    activityKind: mbse.activity
+    blockKind: mbse.block
+    activityColor: "#4f46e5"
+    blockColor: "#0891b2"
+    showDetails: true
+  drillDown:
+    - nodeKind: mbse.activity
+      targetViewName: mbse-block-hierarchy

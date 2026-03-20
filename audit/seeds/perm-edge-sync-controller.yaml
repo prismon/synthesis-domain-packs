@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.permission
+metadata:
+  name: perm-edge-sync-controller
+spec:
+  displayName: "Edge Sync Admission Controller"
+  permissionType: admission
+  enforcementPoint: "admission/edge_sync.go:Mutate"
+  roleRequired: tenant_user
+  description: "Diffs old vs new ref field values on item write, emits __edge_create/__edge_delete side effects to maintain domain_edges table in sync."
+  componentRef: "!name ss-reference-engine"
+  containerRef: "!name ss-backend"

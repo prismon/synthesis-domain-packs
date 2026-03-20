@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: conversation.channel
+metadata:
+  name: domain-activity
+spec:
+  displayName: "Domain Activity"
+  description: "Automated feed of domain item changes -- creates, updates, and deletes"
+  channelType: activity-feed

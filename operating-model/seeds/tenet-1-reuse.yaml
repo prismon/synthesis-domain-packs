@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-1-reuse
+spec:
+  displayName: "Build platforms to be reused, not to be helpful once"
+  order: 1
+  statement: |
+    We build platforms to be reused, not to be helpful once. A capability is platform only when it demonstrably serves multiple products. Reuse, not intent, earns promotion to the platform layer.
+  rationale: |
+    Premature platform promotion creates over-engineered shared infrastructure that serves one product while creating drag for all. Requiring demonstrated reuse prevents this failure mode.
+  layerRefs:
+    - "!name ppm-layer-platform"

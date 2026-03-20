@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: system.review-policy
+metadata:
+  name: review-architecture-systems
+spec:
+  targetKind: architecture.system
+  requireReviewForCreate: true
+  requireReviewForUpdate: true
+  requireReviewForDelete: true
+  criticalFieldsOnly: false
+  autoExpireHours: 168
+  selfApprovalAllowed: false

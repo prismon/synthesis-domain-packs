@@ -1,0 +1,29 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: audit-backend
+spec:
+  displayName: "Backend API — Audit"
+  description: "Audit findings, endpoints, and permissions for the Backend API container"
+  itemGroup:
+    kinds:
+      - audit.finding
+      - audit.api-endpoint
+      - audit.permission
+      - audit.design-pattern
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: audit.finding
+        groupByField: severity
+        label: "Findings"
+      - kind: audit.api-endpoint
+        groupByField: endpointType
+        label: "Endpoints"
+      - kind: audit.permission
+        groupByField: permissionType
+        label: "Permissions"
+    filterByRef:
+      field: containerRef
+      value: ss-backend
+    showDescriptions: true

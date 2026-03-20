@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: task-notes-view
+spec:
+  displayName: "Task Notes"
+  description: "Two-panel view showing task list with markdown notes"
+  itemGroup:
+    kinds:
+      - tasks.task
+  viewComponentRef: "!name vc-task-notes"
+  layoutConfig:
+    showMetadataBadges: true
+    notesFieldName: notes

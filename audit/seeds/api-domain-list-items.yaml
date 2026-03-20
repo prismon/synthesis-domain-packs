@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-list-items
+spec:
+  displayName: "Domain List Items"
+  endpointType: mcp-tool
+  toolName: "list_items"
+  parameters:
+    required: [kind]
+    optional: []
+  description: "Lists domain items filtered by kind."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

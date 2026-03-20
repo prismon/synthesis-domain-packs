@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-ai-process-intelligence
+spec:
+  displayName: "AI Process Intelligence"
+  description: "AI-driven insights across value streams and delivery metrics — bottleneck detection, dependency risk analysis, and automated recommendations for process improvement."
+  valueStreamRef: "!name vs-ai-enablement"
+  status: active
+  affectedComponentRefs:
+    - "!name ss-domain-service"
+    - "!name ss-repository"

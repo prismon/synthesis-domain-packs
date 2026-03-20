@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: modeling.value-object
+metadata:
+  name: vo-item-spec
+spec:
+  displayName: "Item Spec"
+  description: "A map of field name to value representing the user-defined data on a domain item. Validated against the resolved schema before persistence."
+  aggregateRef: "!name domain-item"
+  equalitySemantics: "Deep equality of all key-value pairs."
+  immutabilityNotes: "Each mutation creates a new spec snapshot. The previous spec is not retained (no built-in versioning yet)."
+  exampleValues: |
+    - { displayName: "Backend API", technology: "Go / Chi", systemRef: "synthesis" }
+    - { displayName: "Inline Editing", status: "active", segmentRef: "seg-item-crud" }

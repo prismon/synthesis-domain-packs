@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: architecture.external-system
+metadata:
+  name: ss-oidc-provider
+spec:
+  displayName: "OIDC Identity Provider"
+  description: "External identity provider (Zitadel, Azure AD, etc.) that authenticates users and issues JWT tokens with tenant and role claims."
+  technology: "OIDC / OAuth 2.0"

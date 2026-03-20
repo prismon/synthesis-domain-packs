@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-item-detach
+spec:
+  displayName: "Detach Managed Items"
+  description: "Detach a domain-pack-loader managed item to make it fully user-editable, removing the controller lock."
+  segmentRef: "!name seg-version-history"
+  implementedByRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-domain-service"
+  problemStatement: "Users need to customize seeded items without forking the domain pack."
+  acceptanceCriteria: "detach_item removes the managedBy annotation; subsequent updates succeed without detach errors."
+  status: active

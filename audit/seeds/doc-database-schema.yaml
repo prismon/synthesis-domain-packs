@@ -1,0 +1,75 @@
+apiVersion: synthesis/v1
+kind: audit.design-document
+metadata:
+  name: doc-database-schema
+spec:
+  displayName: "Database Schema Reference"
+  documentType: schema-reference
+  description: "Complete PostgreSQL schema documentation including tables, indexes, and RLS policies"
+  containerRef: "!name ss-database"
+  lifecycleState: published
+markdown: |
+  # Database Schema Reference
+
+  ## Overview
+  Synthesis uses 3 PostgreSQL tables with row-level security.
+  All tables use `tenant_id` for multi-tenant isolation.
+
+  ## Tables
+
+  ### domain_definitions
+  Stores domain type definitions (schemas for items).
+  - `uid` TEXT PRIMARY KEY
+  - `tenant_id` TEXT NOT NULL
+  - `api_version` TEXT NOT NULL DEFAULT 'synthesis/v1'
+  - `kind` TEXT NOT NULL DEFAULT 'DomainDefinition'
+  - `name` TEXT NOT NULL
+  - `version` BIGINT NOT NULL DEFAULT 1
+  - `labels` JSONB NOT NULL DEFAULT '{}'
+  - `annotations` JSONB NOT NULL DEFAULT '{}'
+  - `spec` JSONB NOT NULL DEFAULT '{}'
+  - `created_at` TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  - `updated_at` TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  - UNIQUE(tenant_id, name)
+
+  ### domain_items
+  Stores all domain items (instances of definitions).
+  - `uid` TEXT PRIMARY KEY
+  - `tenant_id` TEXT NOT NULL
+  - `api_version` TEXT NOT NULL DEFAULT 'synthesis/v1'
+  - `kind` TEXT NOT NULL
+  - `name` TEXT NOT NULL
+  - `version` BIGINT NOT NULL DEFAULT 1
+  - `labels` JSONB NOT NULL DEFAULT '{}'
+  - `annotations` JSONB NOT NULL DEFAULT '{}'
+  - `spec` JSONB NOT NULL DEFAULT '{}'
+  - `status` JSONB NOT NULL DEFAULT '{}'
+  - `created_at` TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  - `updated_at` TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  - UNIQUE(tenant_id, kind, name)
+
+  ### domain_edges
+  Stores typed relationships (references) between items.
+  - `id` TEXT PRIMARY KEY
+  - `tenant_id` TEXT NOT NULL
+  - `ref_kind` TEXT NOT NULL
+  - `source_uid` TEXT NOT NULL REFERENCES domain_items(uid) ON DELETE CASCADE
+  - `target_uid` TEXT NOT NULL REFERENCES domain_items(uid) ON DELETE CASCADE
+  - `source_kind` TEXT NOT NULL
+  - `source_name` TEXT NOT NULL
+  - `target_kind` TEXT NOT NULL
+  - `target_name` TEXT NOT NULL
+  - `created_at` TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  - UNIQUE(tenant_id, ref_kind, source_uid, target_uid)
+
+  ## Row-Level Security
+  All tables have `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` and
+  `ALTER TABLE ... FORCE ROW LEVEL SECURITY`.
+
+  Policy: `tenant_id = current_setting('app.tenant_id', true)`
+  Applied via `SET LOCAL app.tenant_id = $1` per transaction in `withTx()`.
+
+  ## Notes
+  - Markdown content is stored inside `spec` JSONB, not a dedicated column
+  - Optimistic concurrency: `version` is incremented on each update
+  - Cascade delete on edges ensures referential integrity

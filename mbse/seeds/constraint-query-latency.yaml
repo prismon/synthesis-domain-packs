@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: mbse.constraint
+metadata:
+  name: constraint-query-latency
+spec:
+  displayName: "Query Latency Budget"
+  description: "End-to-end query latency constraint from frontend callTool to rendered result"
+  equation: "t_total = t_network + t_backend + t_database + t_render < 500ms"
+  parameters: |
+    t_network: HTTP round-trip (target < 50ms)
+    t_backend: MCP dispatch + validation (target < 100ms)
+    t_database: PostgreSQL query with RLS (target < 200ms)
+    t_render: React re-render + layout (target < 150ms)
+  constraintType: performance
+  analysisMethod: "Profiling + Playwright timing assertions"
+  result: "p50=120ms, p95=380ms, p99=480ms"
+  constrainsBlocks:
+    - "!name block-frontend"
+    - "!name block-backend"
+    - "!name block-database"

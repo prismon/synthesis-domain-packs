@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-synthesis-session-info
+spec:
+  displayName: "Synthesis Session Info"
+  endpointType: mcp-tool
+  toolName: "get_synthesis_session"
+  parameters:
+    required: []
+    optional: []
+  description: "Returns the current user's session info including tenant context, role, and identity claims."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

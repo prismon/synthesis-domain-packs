@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-version-diff
+spec:
+  displayName: "Version Diff"
+  description: "Compute field-level diffs between any two versions of a domain item to see exactly what changed."
+  segmentRef: "!name seg-version-history"
+  implementedByRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-domain-service"
+  problemStatement: "Engineers need to understand the exact changes between any two domain item states."
+  acceptanceCriteria: "diff_versions returns a structured diff showing added, removed, and changed fields."
+  status: active

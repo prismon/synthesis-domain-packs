@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-version-history
+spec:
+  displayName: "Item Version History"
+  description: "Browse the full version history of any domain item and retrieve any past snapshot by version number."
+  segmentRef: "!name seg-version-history"
+  implementedByRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-domain-service"
+  problemStatement: "Users need an audit trail of how domain items changed over time."
+  acceptanceCriteria: "list_versions returns all versions; get_version returns the exact snapshot for any version number."
+  status: active

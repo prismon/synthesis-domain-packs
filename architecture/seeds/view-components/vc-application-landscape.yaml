@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-application-landscape
+spec:
+  displayName: "Application Landscape"
+  description: "High-level landscape view of applications and their groupings"
+  layoutType: application-landscape
+  icon: app-window
+  componentKind: react

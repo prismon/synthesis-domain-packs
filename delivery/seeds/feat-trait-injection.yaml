@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-trait-injection
+spec:
+  displayName: "Trait Field Injection"
+  description: "Traits inject fields (owners, status, lifecycle, links, etc.) into any definition that composes them, without duplicating field declarations."
+  segmentRef: "!name seg-trait-system"
+  implementedByRefs:
+    - "!name ss-trait-system"
+    - "!name ss-schema-resolver"
+  problemStatement: "Common fields like 'owners' and 'status' must be manually declared on every definition."
+  acceptanceCriteria: "Adding traitName: Ownable to a definition automatically adds owner and ownerTeam fields."
+  status: active

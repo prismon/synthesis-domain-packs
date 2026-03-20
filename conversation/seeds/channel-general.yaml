@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: conversation.channel
+metadata:
+  name: general
+spec:
+  displayName: "General"
+  description: "General team discussion and announcements"
+  channelType: discussion

@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-v-model
+spec:
+  title: "V-Model"
+  icon: "chevrons-down"
+  viewRef: "mbse-v-model"
+  order: 1

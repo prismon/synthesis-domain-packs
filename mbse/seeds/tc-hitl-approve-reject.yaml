@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.test-case
+metadata:
+  name: tc-hitl-approve-reject
+spec:
+  displayName: "HITL Approve/Reject Flow"
+  description: "Verify that AI-proposed changes require human approval and that rejected changes do not become canonical"
+  testId: "TC-SYS-004"
+  method: demonstration
+  level: system
+  testProcedure: |
+    1. AI agent proposes a new domain item via changeset
+    2. Verify item appears in review queue with pending status
+    3. Reviewer rejects the item with a reason
+    4. Verify item does NOT appear in canonical item list
+    5. AI agent proposes another item
+    6. Reviewer approves the item
+    7. Verify item now appears in canonical item list
+  expectedResult: "Only approved items become canonical. Rejected items are logged but not persisted."
+  testStatus: passed
+  verifiesReqs:
+    - "!name req-hitl-review"

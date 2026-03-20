@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-agent-domain-tools
+spec:
+  displayName: "Agent Domain MCP Tools"
+  description: "Full MCP tool surface for AI agents — list definitions, query items, create/update/delete with schema validation, and traverse references without needing the UI."
+  segmentRef: "!name seg-ai-agent-integration"
+  status: active
+  priority: p0

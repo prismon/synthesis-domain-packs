@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-synthesis-generate-context
+spec:
+  displayName: "Synthesis Generate Context"
+  endpointType: mcp-tool
+  toolName: "generate_synthesis_context"
+  parameters:
+    required: []
+    optional: [scope, format]
+  description: "Generates structured developer context from domain data covering security posture, architecture, deployment, and component ownership."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

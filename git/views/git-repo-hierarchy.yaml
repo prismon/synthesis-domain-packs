@@ -1,0 +1,35 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: git-repo-hierarchy
+spec:
+  displayName: "Git Repository Hierarchy"
+  description: "Tree view of repositories, their branches, and pull requests"
+  itemGroup:
+    kinds:
+      - git.repository
+      - git.branch
+      - git.pull-request
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: git.repository
+        label: Repositories
+        color: "#6366f1"
+      - kind: git.branch
+        label: Branches
+        color: "#22c55e"
+      - kind: git.pull-request
+        label: Pull Requests
+        color: "#f59e0b"
+    refChain:
+      - from: git.branch
+        field: repoRef
+        to: git.repository
+      - from: git.pull-request
+        field: repoRef
+        to: git.repository
+    expandByDefault: true
+  drillDown:
+    - nodeKind: git.repository
+      targetViewName: git-repo-detail

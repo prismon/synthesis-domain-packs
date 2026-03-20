@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-sandbox-terminate
+spec:
+  displayName: "Sandbox Terminate"
+  endpointType: mcp-tool
+  toolName: "terminate_sandbox_session"
+  parameters:
+    required: [sessionName]
+    optional: []
+  description: "Tears down a running sandbox session and transitions it to completed state."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

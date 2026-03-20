@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-tech-radar
+spec:
+  displayName: "Tech Radar"
+  description: "Technology radar showing adoption status of technologies"
+  layoutType: tech-radar
+  icon: radar
+  componentKind: react

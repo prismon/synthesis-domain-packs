@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: modeling.aggregate
+metadata:
+  name: domain-definition
+spec:
+  displayName: "Domain Definition"
+  description: "Schema definition for a kind of domain item. Declares custom fields, trait composition, and provider type. The trait system resolves it into a full field schema."
+  boundedContextRef: "!name domain-context"
+  componentRef: "!name ss-trait-system"
+  lifecycleState: active
+  invariants: |
+    - Definition name (kind) must be unique within a domain
+    - Trait names must reference registered traits
+    - Field names must be unique within the definition (including trait-injected fields)
+    - Required fields must have a non-empty type
+  consistencyBoundary: "Owns: name, displayName, description, fields[], traits[], providerType. Does NOT own: the items of this kind (managed by Domain Item aggregate)."
+  aggregateRootEntity: "Definition"

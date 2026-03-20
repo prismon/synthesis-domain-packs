@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-tenant-rls
+spec:
+  displayName: "Tenant RLS Policies"
+  description: "Row-level security policies enforcing multi-tenant data isolation. Every table is scoped by tenant_id with policies applied at the database level."
+  technology: "PostgreSQL / RLS"
+  containerRef: "!name ss-database"

@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: mbse.interface
+metadata:
+  name: iface-db-rls
+spec:
+  displayName: "RLS-Scoped Database Access"
+  description: "Backend to PostgreSQL interface with tenant context injected into every connection via SET app.tenant_id"
+  interfaceType: data
+  direction: inout
+  sourceBlockRef: "!name block-backend"
+  targetBlockRef: "!name block-database"
+  protocol: "PostgreSQL wire protocol"
+  dataFormat: "SQL with RLS policies"

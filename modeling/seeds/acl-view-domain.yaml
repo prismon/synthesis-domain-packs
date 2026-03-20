@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: modeling.anti-corruption-layer
+metadata:
+  name: acl-view-domain
+spec:
+  displayName: "View-Domain ACL"
+  description: "Translates between the View Context's layout-oriented data model (nodes, edges, positions) and the Domain Context's item-oriented model (kinds, specs, refs). Prevents view rendering logic from leaking into domain queries."
+  upstreamContextRef: "!name domain-context"
+  downstreamContextRef: "!name view-context"
+  translationStrategy: "The C4DataWrapper and HierarchyBoard components transform raw domain items into layout-specific node/edge structures using domainRefs and layoutConfig from the view definition."
+  componentRef: "!name ss-view-renderer"

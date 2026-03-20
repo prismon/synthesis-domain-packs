@@ -1,0 +1,19 @@
+apiVersion: synthesis/v1
+kind: mbse.block
+metadata:
+  name: block-frontend
+spec:
+  displayName: "Frontend SPA"
+  description: "React single-page application with TypeScript, Vite, Tailwind, and shadcn/ui"
+  blockType: software
+  parentBlockRef: "!name block-synthesis-platform"
+  properties: |
+    framework: React 18
+    language: TypeScript
+    bundler: Vite
+    styling: Tailwind CSS
+  operations: |
+    callTool(name, args): Promise<Result>
+    resolveSchema(definition): ResolvedFields
+    renderView(config): ReactElement
+  technology: "React 18 + TypeScript + Vite"

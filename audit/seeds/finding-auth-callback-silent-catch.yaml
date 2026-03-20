@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-auth-callback-silent-catch
+spec:
+  displayName: "Auth Callback and Impersonation Errors Silently Swallowed"
+  severity: info
+  category: design-gap
+  description: "AuthCallback.tsx lines 15-16 catches OIDC callback errors and only logs to console with no user notification. ImpersonationContext.tsx line 56-57 has empty catch block that silently ignores tenant list loading failures. Users are not informed when authentication or authorization operations fail."
+  recommendation: "Show user-visible error notifications (toast or error boundary) when auth callback fails. For tenant list failures, show a degraded UI state or retry mechanism rather than silently continuing."
+  sourceFile: "src/pages/AuthCallback.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-auth-module"

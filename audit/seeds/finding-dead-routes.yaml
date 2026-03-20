@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dead-routes
+spec:
+  displayName: "Dead Routes Rendering Placeholder Component"
+  severity: info
+  category: dead-code
+  description: "/timeline and /settings routes both render the placeholder Dashboard component. These are stub routes with no real functionality."
+  recommendation: "Either implement the timeline and settings pages or remove the routes and any navigation links pointing to them."
+  sourceFile: "src/App.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-view-renderer"

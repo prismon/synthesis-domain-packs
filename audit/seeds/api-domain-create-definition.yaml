@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-create-definition
+spec:
+  displayName: "Domain Create Definition"
+  endpointType: mcp-tool
+  toolName: "create_definition"
+  parameters:
+    required: [name, displayName]
+    optional: [description, traits, fields, providerType, preferredViewRef]
+  description: "Creates a new domain definition."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

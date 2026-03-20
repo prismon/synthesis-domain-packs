@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-sandbox-launch
+spec:
+  displayName: "Sandbox Launch"
+  endpointType: mcp-tool
+  toolName: "launch_sandbox_session"
+  parameters:
+    required: []
+    optional: [templateRef, image, skillRefs, gitCloneUrl, gitRef, mcpUrl, env, model]
+  description: "Provisions a Docker sandbox session with MCP connectivity, optional git clone, and skill-composed system prompt."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

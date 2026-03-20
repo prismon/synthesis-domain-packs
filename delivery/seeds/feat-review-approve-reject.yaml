@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-review-approve-reject
+spec:
+  displayName: "Approve / Reject Changes"
+  description: "Approve a pending change and apply it to the domain, or reject it with a required comment explaining the decision."
+  segmentRef: "!name seg-review-workflow"
+  implementedByRefs:
+    - "!name ss-review-engine"
+  problemStatement: "Admins need a gated mechanism to accept or decline agent-proposed domain mutations."
+  acceptanceCriteria: "approve_review_change applies the change and removes it from the queue; reject_review_change records the comment and discards the change."
+  status: active

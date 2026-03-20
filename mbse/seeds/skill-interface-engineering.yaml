@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-interface-engineering
+spec:
+  displayName: "Interface Engineering"
+  description: "Defining, managing, and verifying interfaces between system blocks — ports, protocols, data formats, and Interface Control Documents (ICDs)."
+  category: interface-engineering
+  proficiencyLevels: |
+    Novice: Can define basic data interfaces between two blocks
+    Practitioner: Creates typed port hierarchies with flow specifications and N-squared matrices
+    Expert: Manages enterprise interface governance with ICD automation and cross-program interface agreements
+  tools:
+    - "Cameo Systems Modeler"
+    - "Interface Control Toolset"
+    - "Swagger/OpenAPI"
+    - "Synthesis MBSE"
+  certifications:
+    - "INCOSE CSEP"
+  maturity: stable

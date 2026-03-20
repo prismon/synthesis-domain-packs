@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: mbse.block
+metadata:
+  name: block-oidc-auth
+spec:
+  displayName: "OIDC Authentication"
+  description: "Provider-agnostic OIDC authentication supporting Keycloak, Zitadel, and Azure AD"
+  blockType: software
+  parentBlockRef: "!name block-synthesis-platform"
+  properties: |
+    protocol: OpenID Connect
+    providers: Keycloak, Zitadel, Azure AD
+    tenantClaim: configurable
+  technology: "OIDC + JWT"

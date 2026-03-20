@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-review-list-my-changes
+spec:
+  displayName: "Review List My Changes"
+  endpointType: mcp-tool
+  toolName: "list_my_review_change"
+  parameters:
+    required: []
+    optional: [state]
+  description: "Lists changes created by the current authenticated user, optionally filtered by state."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-review-engine"

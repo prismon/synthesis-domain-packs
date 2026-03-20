@@ -1,0 +1,249 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: git
+  version: 4
+spec:
+  displayName: "Git"
+  description: "Source code repositories, branches, pull requests, and tracked files"
+  icon: "git-merge"
+  color: "#ef4444"
+  dependencies:
+    - name: architecture
+      reason: "Repositories link to architecture containers via the Deployable trait"
+  definitions:
+    - name: git.repository
+      displayName: "Repositories"
+      description: "Git repositories tracked by the domain"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "Repository description"
+        - name: defaultBranch
+          type: string
+          required: false
+          description: "Default branch name (e.g., main)"
+        - name: visibility
+          type: enum
+          required: false
+          description: "Repository visibility"
+          enumValues:
+            - public
+            - private
+            - internal
+        - name: language
+          type: string
+          required: false
+          description: "Primary programming language"
+        - name: cloneUrl
+          type: string
+          required: false
+          description: "HTTPS clone URL"
+        - name: provider
+          type: enum
+          required: false
+          description: "Git hosting provider"
+          enumValues:
+            - github
+            - gitlab
+            - bitbucket
+            - azure-devops
+            - self-hosted
+        - name: starCount
+          type: number
+          required: false
+          description: "Number of stars or favorites"
+        - name: openIssueCount
+          type: number
+          required: false
+          description: "Number of open issues"
+      providerType: manual
+
+    - name: git.branch
+      displayName: "Branches"
+      description: "Git branches within repositories"
+      preferredWidgetTag: synth-widget-default
+      traits: []
+      fields:
+        - name: repoRef
+          type: ref
+          required: true
+          description: "The repository this branch belongs to"
+          targetKind: git.repository
+        - name: headCommitSha
+          type: string
+          required: false
+          description: "SHA of the HEAD commit"
+        - name: isDefault
+          type: boolean
+          required: false
+          description: "Whether this is the default branch"
+        - name: isProtected
+          type: boolean
+          required: false
+          description: "Whether this branch has protection rules"
+        - name: aheadBehind
+          type: string
+          required: false
+          description: "Commits ahead/behind default branch (e.g., '3 ahead, 1 behind')"
+      providerType: manual
+
+    - name: git.pull-request
+      displayName: "Pull Requests"
+      description: "Pull requests and merge requests"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Lifecycle
+      fields:
+        - name: repoRef
+          type: ref
+          required: true
+          description: "The repository this PR belongs to"
+          targetKind: git.repository
+        - name: sourceBranch
+          type: string
+          required: false
+          description: "Source branch name"
+        - name: targetBranch
+          type: string
+          required: false
+          description: "Target branch name"
+        - name: prNumber
+          type: number
+          required: false
+          description: "PR number"
+        - name: description
+          type: text
+          required: false
+          description: "PR description or body"
+        - name: mergeStatus
+          type: enum
+          required: false
+          description: "Current merge status"
+          enumValues:
+            - open
+            - merged
+            - closed
+            - draft
+        - name: reviewStatus
+          type: enum
+          required: false
+          description: "Review approval status"
+          enumValues:
+            - pending
+            - approved
+            - changes-requested
+            - review-required
+        - name: additions
+          type: number
+          required: false
+          description: "Lines added"
+        - name: deletions
+          type: number
+          required: false
+          description: "Lines deleted"
+        - name: changedFiles
+          type: number
+          required: false
+          description: "Number of files changed"
+      providerType: manual
+
+    - name: git.repo-file
+      displayName: "Repository Files"
+      description: "Tracked files and directories within a repository"
+      preferredWidgetTag: synth-widget-default
+      traits: []
+      fields:
+        - name: repoRef
+          type: ref
+          required: true
+          description: "The repository this file belongs to"
+          targetKind: git.repository
+        - name: path
+          type: string
+          required: true
+          description: "File path relative to repository root"
+        - name: fileType
+          type: enum
+          required: false
+          description: "Type of file"
+          enumValues:
+            - file
+            - directory
+            - symlink
+        - name: language
+          type: string
+          required: false
+          description: "Detected programming language"
+        - name: sizeBytes
+          type: number
+          required: false
+          description: "File size in bytes"
+        - name: lastModifiedSha
+          type: string
+          required: false
+          description: "SHA of the last commit that modified this file"
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+    - name: contains-branch
+      displayName: "Contains Branch"
+      reverseDisplayName: "Branch Of"
+      constraints:
+        - sourceKind: git.repository
+          targetKind: git.branch
+          sourceCardinality: "0..*"
+          targetCardinality: "1"
+          sourceField: branchRefs
+          targetField: repoRef
+    - name: contains-pr
+      displayName: "Contains PR"
+      reverseDisplayName: "PR Of"
+      constraints:
+        - sourceKind: git.repository
+          targetKind: git.pull-request
+          sourceCardinality: "0..*"
+          targetCardinality: "1"
+          sourceField: prRefs
+          targetField: repoRef
+    - name: contains-file
+      displayName: "Contains File"
+      reverseDisplayName: "File In"
+      constraints:
+        - sourceKind: git.repository
+          targetKind: git.repo-file
+          sourceCardinality: "0..*"
+          targetCardinality: "1"
+          sourceField: fileRefs
+          targetField: repoRef
+    - name: hosted-in
+      displayName: "Hosted In"
+      reverseDisplayName: "Hosts Code For"
+      constraints:
+        - sourceKind: architecture.container
+          targetKind: git.repository
+          sourceCardinality: "0..1"
+          targetCardinality: "0..1"
+          sourceField: repository
+          targetField: containerRef

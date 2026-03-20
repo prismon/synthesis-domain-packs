@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-shadcn-ui
+spec:
+  displayName: "shadcn/ui"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  packageManager: npm
+  license: "MIT"
+  openSourceAdoption: moderate
+  approved: approved
+  strengths:
+    - "Accessible component primitives"
+    - "Copy-paste ownership model"
+    - "Radix UI foundation"
+  description: "Base UI component library"

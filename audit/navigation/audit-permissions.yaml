@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: audit-permissions
+spec:
+  title: "Permissions"
+  icon: "lock"
+  kind: "audit.permission"
+  order: 13

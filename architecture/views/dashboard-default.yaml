@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: dashboard-default
+spec:
+  displayName: "Status Board"
+  description: "Drag domain items to build a status board"
+  viewComponentRef: "!name vc-dashboard"
+  itemGroup:
+    kinds: []
+  layoutConfig:
+    columns: 12
+    rowHeight: 100
+    widgets: []

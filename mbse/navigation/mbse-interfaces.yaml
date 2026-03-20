@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-interfaces
+spec:
+  title: "Interfaces"
+  icon: "cable"
+  viewRef: "mbse-interface-matrix"
+  order: 4

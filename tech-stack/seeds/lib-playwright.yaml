@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-playwright
+spec:
+  displayName: "Playwright"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  packageManager: npm
+  license: "Apache-2.0"
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "Cross-browser E2E testing"
+    - "Auto-waiting and retries"
+  description: "End-to-end testing framework"

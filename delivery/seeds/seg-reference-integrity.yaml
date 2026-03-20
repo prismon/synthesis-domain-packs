@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-reference-integrity
+spec:
+  displayName: "Reference & Relationship Integrity"
+  description: "First-class reference items, ref-kind constraints, cardinality enforcement, and cross-kind relationship resolution."
+  valueStreamRef: "!name vs-domain-management"
+  fundingModel: percent
+  fundingValue: 30
+  opsInScope: false

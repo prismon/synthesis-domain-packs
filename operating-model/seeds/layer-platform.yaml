@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: ppm.layer
+metadata:
+  name: ppm-layer-platform
+spec:
+  displayName: "Platform"
+  layerType: platform
+  purpose: |
+    Provides shared, reusable capabilities that power the entire company. Platform components solve horizontal problems — data access, identity, analytics frameworks, orchestration, delivery — once, and make those capabilities available everywhere through stable APIs. The platform is intentionally agnostic to business lines and geographies.
+  accountabilityModel: |
+    The platform team owns all platform capabilities. Capabilities earn promotion to the platform layer only when they demonstrably serve multiple products. Reuse, not intent, earns promotion.
+  uxOwnership: |
+    General user interfaces that primarily support internal use cases: operations, analysts, administration, configuration, monitoring, and cross-product workflows. These experiences are intentionally consistent across products.
+  apiIntegration: |
+    All API interactions go directly to the platform. Whether a request originates from a product service, a market configuration, or an external customer, it interacts with platform APIs as the system of record. Products assemble and orchestrate platform capabilities but do not become alternative integration endpoints.
+  defaultSortingRule: |
+    Anything that is cleanly reusable and business-agnostic belongs in the platform.

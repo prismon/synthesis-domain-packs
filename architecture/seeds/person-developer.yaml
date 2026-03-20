@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: developer
+spec:
+  displayName: "Developer / Platform User"
+  role: "End User"
+  description: "Uses the web UI to create and manage domain items, view C4 architecture diagrams, and configure domain definitions and views."
+  usesRefs:
+    - "!name synthesis"

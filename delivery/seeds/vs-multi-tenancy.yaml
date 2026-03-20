@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-multi-tenancy
+spec:
+  displayName: "Multi-Tenant Platform"
+  description: "Tenant provisioning, hostname-based routing, row-level security, and domain composition — enabling multiple organizations to share a single Synthesis deployment with complete data isolation."
+  productRef: "!name synthesis-product"
+  status: active
+  touchesContainerRefs:
+    - "!name ss-backend"
+    - "!name ss-database"

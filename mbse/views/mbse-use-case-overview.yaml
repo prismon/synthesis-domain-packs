@@ -1,0 +1,30 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-use-case-overview
+spec:
+  displayName: "Use Case Overview"
+  description: "Actor-system interactions organized by scope — modern rendering of SysML Use Case Diagram"
+  itemGroup:
+    kinds:
+      - mbse.use-case
+  viewComponentRef: "!name vc-table"
+  layoutConfig:
+    columns:
+      - field: displayName
+        label: "Use Case"
+        width: 220
+      - field: actor
+        label: "Actor"
+        width: 150
+      - field: scope
+        label: "Scope"
+        width: 100
+      - field: status
+        label: "Status"
+        width: 100
+      - field: description
+        label: "Description"
+        width: 300
+    sortField: scope
+    sortDirection: asc

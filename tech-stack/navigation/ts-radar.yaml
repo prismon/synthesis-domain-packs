@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: ts-radar
+spec:
+  title: "Tech Radar"
+  icon: "radar"
+  viewRef: ts-radar-synthesis
+  order: 50

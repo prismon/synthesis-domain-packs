@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-git-repo-diagram
+spec:
+  displayName: "Git Repository Diagram"
+  description: "Visual representation of git repository structure and branches"
+  layoutType: git-repo-diagram
+  icon: git-branch
+  componentKind: react

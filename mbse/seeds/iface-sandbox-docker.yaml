@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: mbse.interface
+metadata:
+  name: iface-sandbox-docker
+spec:
+  displayName: "Docker Sandbox Interface"
+  description: "Backend orchestrates Docker containers for AI agent sandbox sessions"
+  interfaceType: api
+  direction: out
+  sourceBlockRef: "!name block-backend"
+  targetBlockRef: "!name block-sandbox-engine"
+  protocol: "Docker API"
+  dataFormat: "Container lifecycle commands"

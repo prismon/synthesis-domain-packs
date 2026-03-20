@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: conversation.message
+metadata:
+  name: msg-welcome
+spec:
+  displayName: "Welcome"
+  channelRef: "!name general"
+  author: "Synthesis"
+  authorKind: system
+  body: "Welcome to Synthesis! This is the general discussion channel. Use it for team announcements and open conversation."
+  sentAt: "2026-03-01T09:00:00Z"

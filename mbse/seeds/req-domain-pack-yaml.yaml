@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-domain-pack-yaml
+spec:
+  displayName: "YAML Domain Pack Loading"
+  description: "The system shall load domain definitions, seeds, views, and navigation from YAML files organized in a standard directory structure, with two-pass reference resolution."
+  reqId: "SYS-REQ-005"
+  reqType: functional
+  level: subsystem
+  verificationMethod: test
+  risk: low
+  rationale: "YAML-based configuration enables non-developer domain experts to extend the model."
+  derivedFromReqs:
+    - "!name req-trait-composition"
+  derivedFromNeeds:
+    - "!name need-extensible-domain-model"

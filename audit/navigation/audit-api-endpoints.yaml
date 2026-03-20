@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: audit-api-endpoints
+spec:
+  title: "API Endpoints"
+  icon: "plug"
+  kind: "audit.api-endpoint"
+  order: 11

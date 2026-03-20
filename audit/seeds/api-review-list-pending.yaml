@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-review-list-pending
+spec:
+  displayName: "Review List Pending"
+  endpointType: mcp-tool
+  toolName: "list_review_change"
+  parameters:
+    required: []
+    optional: [kind, state, createdBy]
+  description: "Lists pending changes awaiting review, optionally filtered by kind, state, or author."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-review-engine"

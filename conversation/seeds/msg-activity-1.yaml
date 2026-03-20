@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: conversation.message
+metadata:
+  name: msg-activity-1
+spec:
+  displayName: "System created"
+  channelRef: "!name domain-activity"
+  author: "Synthesis"
+  authorKind: system
+  body: "**Created** system `synthesis` -- Multi-tenant domain management and visualization platform."
+  itemRef: "!name systems/synthesis"
+  sentAt: "2026-03-01T10:00:00Z"

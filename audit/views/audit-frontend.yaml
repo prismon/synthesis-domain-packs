@@ -1,0 +1,24 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: audit-frontend
+spec:
+  displayName: "Frontend SPA — Audit"
+  description: "Audit findings for the Frontend SPA container"
+  itemGroup:
+    kinds:
+      - audit.finding
+      - audit.design-pattern
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: audit.finding
+        groupByField: severity
+        label: "Findings"
+      - kind: audit.design-pattern
+        groupByField: patternCategory
+        label: "Patterns"
+    filterByRef:
+      field: containerRef
+      value: ss-frontend
+    showDescriptions: true

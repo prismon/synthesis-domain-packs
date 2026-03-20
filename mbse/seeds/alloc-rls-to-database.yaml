@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.allocation
+metadata:
+  name: alloc-rls-to-database
+spec:
+  displayName: "Tenant Isolation → PostgreSQL RLS"
+  description: "Row-level security enforcement is allocated to the PostgreSQL database engine, not application layer"
+  allocationType: software-to-hardware
+  sourceRef: "Tenant Isolation Logic"
+  targetRef: "PostgreSQL Database (block)"
+  rationale: "Database-level enforcement eliminates entire class of application-layer tenant leakage bugs."
+  confidence: confirmed

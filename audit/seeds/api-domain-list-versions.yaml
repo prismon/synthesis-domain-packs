@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-list-versions
+spec:
+  displayName: "Domain List Versions"
+  endpointType: mcp-tool
+  toolName: "list_version"
+  parameters:
+    required: [uid]
+    optional: [limit]
+  description: "Lists the version history for a domain item in reverse chronological order."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

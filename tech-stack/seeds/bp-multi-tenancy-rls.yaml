@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: tech-stack.blueprint
+metadata:
+  name: ts-multi-tenancy-rls
+spec:
+  displayName: "Multi-Tenancy with RLS"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  patternType: architectural
+  openSourceAdoption: moderate
+  approved: approved
+  strengths:
+    - "Data isolation without separate databases"
+    - "Transparent to application code"
+  description: "PostgreSQL row-level security policies enforce tenant isolation"

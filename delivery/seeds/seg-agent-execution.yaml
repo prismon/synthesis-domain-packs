@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-agent-execution
+spec:
+  displayName: "Agent Execution"
+  description: "Sandbox agent session lifecycle — launch Docker-native agent environments, route messages in and out, and expose platform context to running agents."
+  valueStreamRef: "!name vs-ai-enablement"
+  fundingModel: percent
+  fundingValue: 50
+  opsInScope: false

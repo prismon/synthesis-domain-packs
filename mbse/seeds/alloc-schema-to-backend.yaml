@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.allocation
+metadata:
+  name: alloc-schema-to-backend
+spec:
+  displayName: "Schema Resolution → Backend"
+  description: "The schema resolution function (3-phase trait/ref/custom merge) is allocated to the Go backend domain service"
+  allocationType: function-to-structure
+  sourceRef: "Resolve Schema (activity)"
+  targetRef: "Domain Service Backend (block)"
+  rationale: "Schema resolution must happen server-side to ensure consistent validation regardless of client."
+  confidence: confirmed

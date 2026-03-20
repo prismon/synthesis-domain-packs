@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-trait-system
+spec:
+  displayName: "Trait System"
+  description: "Built-in behavioral traits (Ownable, Trackable, Hierarchical, Viewable, etc.) that inject fields into domain definitions. Schema resolution merges trait fields with custom fields."
+  valueStreamRef: "!name vs-domain-extensibility"
+  fundingModel: percent
+  fundingValue: 40
+  opsInScope: false

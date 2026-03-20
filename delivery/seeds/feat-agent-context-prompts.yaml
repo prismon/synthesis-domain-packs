@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-agent-context-prompts
+spec:
+  displayName: "Schema-Aware Agent Prompts"
+  description: "MCP prompt templates that inject trait-resolved schemas, reference vocabularies, and domain context so AI agents produce valid domain items on first attempt."
+  segmentRef: "!name seg-ai-agent-integration"
+  status: planned
+  priority: p1

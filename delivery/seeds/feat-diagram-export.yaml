@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-diagram-export
+spec:
+  displayName: "Diagram PNG/SVG Export"
+  description: "Export any rendered C4 diagram or hierarchy board as a PNG or SVG image for embedding in documentation."
+  segmentRef: "!name seg-c4-diagrams"
+  implementedByRefs:
+    - "!name ss-view-renderer"
+  problemStatement: "Architecture diagrams can only be viewed in the app. Teams need to embed them in wikis, RFCs, and slide decks."
+  acceptanceCriteria: "Export button produces high-resolution PNG or SVG. Exported image includes title and legend."
+  status: proposed

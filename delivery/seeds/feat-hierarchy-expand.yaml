@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-hierarchy-expand
+spec:
+  displayName: "Hierarchy Board Expand/Collapse"
+  description: "Expand and collapse hierarchy levels in the board view. Remembers expansion state per user session."
+  segmentRef: "!name seg-hierarchy-views"
+  implementedByRefs:
+    - "!name ss-view-renderer"
+  problemStatement: "Large hierarchies show all levels at once, making it hard to focus on a specific branch."
+  acceptanceCriteria: "Click to expand/collapse. State persists during session. Expand All / Collapse All controls available."
+  status: active

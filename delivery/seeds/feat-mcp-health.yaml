@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-mcp-health
+spec:
+  displayName: "MCP Health Endpoint"
+  description: "Health check endpoint for the MCP server verifying database connectivity and session state."
+  segmentRef: "!name seg-mcp-server"
+  implementedByRefs:
+    - "!name ss-mcp-server"
+  problemStatement: "Load balancers and orchestrators need a health endpoint to verify the backend is ready to serve requests."
+  acceptanceCriteria: "GET /health returns 200 when DB is connected. Returns 503 with diagnostic info when unhealthy."
+  status: proposed

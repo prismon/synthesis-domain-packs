@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-rbac
+spec:
+  displayName: "RBAC Enforcer"
+  description: "Extracts roles from OIDC JWT claims and enforces role-based access control on MCP tool invocations. Supports admin, editor, and viewer roles with tenant-scoped permissions."
+  technology: "Go / OIDC"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-tenant-middleware"

@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: mbse.block
+metadata:
+  name: block-synthesis-platform
+spec:
+  displayName: "Synthesis Platform"
+  description: "Top-level system block for the Synthesis delivery intelligence platform"
+  blockType: system
+  properties: |
+    tenantCount: integer
+    domainPackCount: integer
+    activeUsers: integer
+  operations: |
+    loadDomainPacks(): void
+    resolveSchema(definition): ResolvedSchema
+    routeTenant(request): TenantContext
+  technology: "React + Go + PostgreSQL"

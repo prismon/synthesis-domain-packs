@@ -1,0 +1,36 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-v-model
+spec:
+  displayName: "V-Model Traceability"
+  description: "Full V-model diagram showing needs → requirements → design → test traceability chain with dedicated MBSE node types and traceability edges"
+  itemGroup:
+    kinds:
+      - mbse.stakeholder-need
+      - mbse.requirement
+      - mbse.block
+      - mbse.activity
+      - mbse.test-case
+  viewComponentRef: "!name vc-v-model-diagram"
+  layoutConfig:
+    needKind: mbse.stakeholder-need
+    requirementKind: mbse.requirement
+    blockKind: mbse.block
+    activityKind: mbse.activity
+    testCaseKind: mbse.test-case
+    needColor: "#0891b2"
+    requirementColor: "#0d9488"
+    blockColor: "#059669"
+    activityColor: "#4f46e5"
+    testCaseColor: "#7c3aed"
+    showDescriptions: true
+  drillDown:
+    - nodeKind: mbse.stakeholder-need
+      targetViewName: mbse-needs-traceability
+    - nodeKind: mbse.requirement
+      targetViewName: mbse-requirements-table
+    - nodeKind: mbse.block
+      targetViewName: mbse-block-hierarchy
+    - nodeKind: mbse.test-case
+      targetViewName: mbse-verification-matrix

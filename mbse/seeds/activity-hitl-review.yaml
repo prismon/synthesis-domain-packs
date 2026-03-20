@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: mbse.activity
+metadata:
+  name: activity-hitl-review
+spec:
+  displayName: "HITL Review Workflow"
+  description: "Buffer AI-proposed changes, present to human reviewers, apply approved changes, reject others"
+  activityType: call-behavior
+  inputs: |
+    proposedChanges: []PendingChange
+    reviewPolicy: system.review-policy
+  outputs: |
+    approvedItems: []DomainItem
+    rejectedChanges: []RejectionRecord
+  preconditions: "Agent has proposed mutations via changeset"
+  postconditions: "Approved changes are canonical; rejected changes are logged with reason"
+  allocatedToBlockRef: "!name block-backend"

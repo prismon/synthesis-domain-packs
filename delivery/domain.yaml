@@ -1,0 +1,206 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: vsm
+  version: 4
+spec:
+  displayName: "Value Stream Mapping"
+  description: "Product → Value Stream → Segment → Feature hierarchy for modeling delivery flow"
+  namespace: delivery
+  icon: "git-branch"
+  color: "#10b981"
+  dependencies:
+    - name: architecture
+      reason: "Products, value-streams, segments reference systems/containers/components"
+  definitions:
+    - name: delivery.product
+      displayName: "Products"
+      description: "Top-level business products that contain value streams"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: vsm-overview
+      traits:
+        - traitName: Ownable
+        - traitName: Hierarchical
+        - traitName: Linkable
+      fields:
+        - name: dependsOnSystemRefs
+          type: ref-list
+          required: false
+          description: "Architecture systems this product depends on (manual or auto-derived from child value streams)"
+          targetKind: architecture.system
+        - name: tier
+          type: string
+          required: false
+          description: "Product tier (e.g. platform, product, internal)"
+      providerType: manual
+
+    - name: delivery.value-stream
+      displayName: "Value Streams"
+      description: "Multi-year delivery constructs within a product"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: vsm-overview
+      traits:
+        - traitName: Ownable
+        - traitName: Hierarchical
+        - traitName: Composable
+        - traitName: Trackable
+        - traitName: Impactable
+      fields:
+        - name: productRef
+          type: ref
+          required: true
+          description: "Parent product reference"
+          targetKind: delivery.product
+          critical: true
+        - name: touchesContainerRefs
+          type: ref-list
+          required: false
+          description: "Architecture containers touched by this value stream (manual or auto-derived from child segments)"
+          targetKind: architecture.container
+        - name: kpis
+          type: object
+          required: false
+          description: "Key performance indicators"
+      providerType: manual
+
+    - name: delivery.segment
+      displayName: "Value Stream Segments"
+      description: "Operational slices of a value stream with funding allocation"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: vsm-overview
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Composable
+      fields:
+        - name: valueStreamRef
+          type: ref
+          required: true
+          description: "Parent value stream reference"
+          targetKind: delivery.value-stream
+          critical: true
+        - name: affectedComponentRefs
+          type: ref-list
+          required: false
+          description: "Architecture components affected by this segment (manual or auto-derived from child features)"
+          targetKind: architecture.component
+        - name: fundingModel
+          type: string
+          required: false
+          description: "Funding model (percent, fixed, etc.)"
+        - name: fundingValue
+          type: number
+          required: false
+          description: "Funding allocation value"
+        - name: opsInScope
+          type: boolean
+          required: false
+          description: "Whether ops work is in scope"
+      providerType: manual
+
+    - name: delivery.feature
+      displayName: "Features"
+      description: "Deliverable units of work within a segment"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: vsm-overview
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Dependable
+        - traitName: Lifecycle
+        - traitName: Governable
+      fields:
+        - name: segmentRef
+          type: ref
+          required: true
+          description: "Parent segment reference"
+          targetKind: delivery.segment
+          critical: true
+        - name: implementedByRefs
+          type: ref-list
+          required: false
+          description: "Architecture components that implement this feature (manual or auto-derived)"
+          targetKind: architecture.component
+        - name: problemStatement
+          type: text
+          required: false
+          description: "Problem being solved"
+        - name: successMetrics
+          type: text
+          required: false
+          description: "Success metrics with targets"
+        - name: acceptanceCriteria
+          type: text
+          required: false
+          description: "Acceptance criteria for completion"
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: delivery.value-stream
+          targetKind: delivery.product
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentProduct
+          targetField: childValueStreams
+        - sourceKind: delivery.segment
+          targetKind: delivery.value-stream
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentValueStream
+          targetField: childSegments
+        - sourceKind: delivery.feature
+          targetKind: delivery.segment
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentSegment
+          targetField: childFeatures
+    - name: depends-on
+      displayName: "Depends On"
+      reverseDisplayName: "Depended On By"
+      constraints:
+        - sourceKind: delivery.product
+          targetKind: architecture.system
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: dependsOnSystems
+          targetField: dependedOnByProducts
+        - sourceKind: delivery.value-stream
+          targetKind: architecture.container
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: dependsOnContainers
+          targetField: dependedOnByValueStreams
+        - sourceKind: delivery.segment
+          targetKind: architecture.component
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: dependsOnComponents
+          targetField: dependedOnBySegments
+    - name: implemented-by
+      displayName: "Implemented By"
+      reverseDisplayName: "Implements"
+      constraints:
+        - sourceKind: delivery.feature
+          targetKind: architecture.component
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: implementedByComponents
+          targetField: implementsFeatures

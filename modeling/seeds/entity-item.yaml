@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: modeling.entity
+metadata:
+  name: entity-item
+spec:
+  displayName: "Item"
+  description: "A domain entry identified by its composite key of (tenant_id, kind, name). Holds the spec map of user-defined field values."
+  aggregateRef: "!name domain-item"
+  identityField: "(tenant_id, kind, name)"
+  isAggregateRoot: true
+  keyBusinessRules: |
+    - Spec must pass schema validation before persistence
+    - Name is slugified from displayName if not explicitly set
+    - Updated_at is set on every mutation

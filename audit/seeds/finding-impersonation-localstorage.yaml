@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-impersonation-localstorage
+spec:
+  displayName: "Impersonation State Stored in Manipulable localStorage"
+  severity: critical
+  category: security
+  description: "ImpersonationContext stores tenant slug and role in localStorage key 'synthesis:impersonation'. An attacker with access to localStorage can inject arbitrary tenant/role values to bypass authorization, impersonating any tenant or role."
+  recommendation: "Derive impersonation state from server-side session or signed JWT claims. Never trust client-side localStorage for authorization decisions. If localStorage must be used, validate the stored values against server-provided allowlists on every use."
+  sourceFile: "src/contexts/ImpersonationContext.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-auth-module"

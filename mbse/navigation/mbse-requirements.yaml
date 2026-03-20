@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-requirements
+spec:
+  title: "Requirements"
+  icon: "list-checks"
+  viewRef: "mbse-requirements-table"
+  order: 2

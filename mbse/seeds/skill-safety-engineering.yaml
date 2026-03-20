@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-safety-engineering
+spec:
+  displayName: "Safety & Reliability Engineering"
+  description: "Hazard analysis, fault tree analysis, FMEA, and safety requirement derivation using model-based safety assessment techniques."
+  category: safety-engineering
+  proficiencyLevels: |
+    Novice: Can identify basic hazards and create preliminary hazard lists
+    Practitioner: Performs FTA/FMEA, derives safety requirements, and creates safety cases
+    Expert: Designs safety architectures with SIL/DAL allocation, common cause analysis, and certification evidence
+  tools:
+    - "Cameo Safety & Reliability Analyzer"
+    - "Isograph FaultTree+"
+    - "medini analyze"
+    - "Synthesis MBSE"
+  certifications:
+    - "CSP (Certified Safety Professional)"
+    - "INCOSE CSEP"
+  maturity: stable

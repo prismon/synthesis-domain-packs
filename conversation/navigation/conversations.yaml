@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: nav-conversations
+spec:
+  title: "Conversations"
+  icon: "message-square"
+  viewRef: "conversation-timeline"
+  order: 5

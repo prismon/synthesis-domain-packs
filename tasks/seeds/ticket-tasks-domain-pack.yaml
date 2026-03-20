@@ -1,0 +1,24 @@
+apiVersion: synthesis/v1
+kind: tasks.ticket
+metadata:
+  name: ticket-tasks-domain-pack
+spec:
+  displayName: "Implement tasks domain pack YAML"
+  status: done
+  priority: p1
+  issueType: task
+  storyPoints: 2
+  sprint: "Sprint 12"
+  labels:
+    - backend
+    - domain-packs
+  componentRefs:
+    - "!name ss-domain-loader"
+  acceptanceCriteria: |
+    - `tasks.task` and `tasks.ticket` definitions load successfully
+    - Seed items visible in the domain table
+    - Navigation items appear in the sidebar
+    - `implements` reference kind registered correctly
+  reporter: "josh"
+  resolution: "Domain pack YAML authored and seeded."
+  lifecycleState: active

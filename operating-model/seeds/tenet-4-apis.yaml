@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-4-apis
+spec:
+  displayName: "APIs terminate at the platform"
+  order: 4
+  statement: |
+    APIs terminate at the platform. All consumers — products, markets, and customers — integrate directly with platform APIs to preserve consistency, security, and scale.
+  rationale: |
+    Hidden coupling between layers creates invisible dependencies that slow change and introduce security surface. Platform-terminating APIs enforce the architectural boundary mechanically.
+  layerRefs:
+    - "!name ppm-layer-platform"
+    - "!name ppm-layer-product"
+    - "!name ppm-layer-market"

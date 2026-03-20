@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-ref-cascade
+spec:
+  displayName: "Reference Cascade Delete"
+  description: "When a domain item is deleted, automatically clean up or warn about dangling references in other items."
+  segmentRef: "!name seg-reference-integrity"
+  implementedByRefs:
+    - "!name ss-reference-engine"
+  problemStatement: "Deleting an item leaves broken ref fields in other items, causing rendering errors in views."
+  acceptanceCriteria: "Delete operation checks for inbound references. User is warned and can choose cascade or cancel."
+  status: proposed

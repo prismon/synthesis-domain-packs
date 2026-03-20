@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-admission-chain
+spec:
+  displayName: "Admission Controller Chain"
+  patternCategory: architectural
+  description: "All write operations pass through an admission controller chain with Mutate then Validate phases. Controllers include CardinalityController (validates ref cardinality), EdgeSyncController (maintains graph edges), RuleExecutionController (enterprise, runs rules on write), and TenantProvisioningController (provisions Keycloak realms)."
+  componentRefs:
+    - "!name ss-domain-service"
+    - "!name ss-reference-engine"
+  containerRefs:
+    - "!name ss-backend"

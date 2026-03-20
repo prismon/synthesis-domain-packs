@@ -1,0 +1,25 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ddd-class-diagram
+spec:
+  displayName: "Domain Class Diagram"
+  description: "Aggregates, entities, and value objects with their field definitions"
+  itemGroup:
+    kinds:
+      - modeling.aggregate
+      - modeling.entity
+      - modeling.value-object
+  viewComponentRef: "!name vc-class-diagram"
+  focusKind: modeling.bounded-context
+  layoutConfig:
+    kinds:
+      - modeling.aggregate
+      - modeling.entity
+      - modeling.value-object
+    aggregateKind: modeling.aggregate
+    aggregateRefField: aggregateRef
+    boundedContextRefField: boundedContextRef
+  drillDown:
+    - nodeKind: modeling.aggregate
+      targetViewComponent: vc-hierarchy-board

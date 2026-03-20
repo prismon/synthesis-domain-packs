@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-architecture-overview
+spec:
+  displayName: "Architecture Overview"
+  description: "Graphical landscape view of all systems — no single focus item"
+  layoutType: architecture-overview
+  icon: layout-grid
+  componentKind: web-component
+  webComponentTag: synth-architecture-overview
+  webComponentModule: "/domain-assets/architecture/view-components/architecture-overview.js"
+  defaultItemGroup:
+    kinds:
+      - architecture.system
+      - architecture.person
+      - architecture.external-system
+  defaultDrillDown:
+    - nodeKind: architecture.system
+      targetViewComponent: vc-c4-context

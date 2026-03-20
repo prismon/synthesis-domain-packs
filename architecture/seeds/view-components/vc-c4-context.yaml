@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-c4-context
+spec:
+  displayName: "C4 Context Diagram"
+  description: "C4 model Level 1 — shows a system in context with its users and external systems"
+  layoutType: c4-context
+  icon: network
+  componentKind: react
+  requiredFields:
+    usesRefs:
+      type: ref-list
+  defaultItemGroup:
+    kinds:
+      - architecture.system
+      - architecture.person
+      - architecture.external-system
+  defaultDrillDown:
+    - nodeKind: architecture.system
+      targetViewComponent: vc-c4-container

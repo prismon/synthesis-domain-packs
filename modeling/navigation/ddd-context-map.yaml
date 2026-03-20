@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: ddd-context-map
+spec:
+  title: "Context Map"
+  icon: "map"
+  viewRef: "ddd-context-map"
+  order: 1

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-prioritize-feature-investment
+spec:
+  displayName: "Prioritize Feature Investment"
+  description: "Prioritize features using expected impact, delivery risk, and strategic fit."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 12
+  opsInScope: false

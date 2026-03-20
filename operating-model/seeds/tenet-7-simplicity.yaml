@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-7-simplicity
+spec:
+  displayName: "Optimize for long-term simplicity over short-term speed"
+  order: 7
+  statement: |
+    We optimize for long-term simplicity over short-term speed. Every decision should reduce future coordination and fragmentation, even when that slows a single delivery.
+  rationale: |
+    Short-term delivery exceptions compound into long-term structural debt. Optimizing for simplicity prevents the kind of fragmentation that eventually makes the whole organization slow — not just a single team.
+  layerRefs:
+    - "!name ppm-layer-platform"
+    - "!name ppm-layer-product"
+    - "!name ppm-layer-market"

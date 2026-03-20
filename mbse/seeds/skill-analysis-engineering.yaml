@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-analysis-engineering
+spec:
+  displayName: "Analysis & Trade Studies"
+  description: "Creating parametric constraints, running trade studies, and binding analysis results to model properties for design optimization."
+  category: trade-study
+  proficiencyLevels: |
+    Novice: Can define basic constraint equations with parameter bindings
+    Practitioner: Runs multi-variable trade studies with sensitivity analysis and Pareto optimization
+    Expert: Integrates simulation tools (Simulink, OpenMDAO) with model-based parametric diagrams for automated analysis
+  tools:
+    - "Cameo Simulation Toolkit"
+    - "MATLAB/Simulink"
+    - "OpenMDAO"
+    - "ModelCenter"
+    - "Synthesis MBSE"
+  certifications:
+    - "INCOSE CSEP"
+  maturity: stable

@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: architecture.capability
+metadata:
+  name: capability-llms
+spec:
+  displayName: "Large Language Models"
+  description: "Foundation models for natural language understanding and generation"
+  guidance: |
+    Use for: natural language chat, code generation, structured data extraction,
+    domain validation, document summarization.
+
+    Avoid for: deterministic calculations, real-time latency-critical paths,
+    operations requiring 100% accuracy guarantees.
+  maturity: stable
+  ring: invest
+  approved: approved
+  strengths:
+    - "Natural language understanding"
+    - "Code generation and review"
+    - "Structured data extraction"
+    - "Multi-step reasoning"

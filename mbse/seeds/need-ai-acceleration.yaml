@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.stakeholder-need
+metadata:
+  name: need-ai-acceleration
+spec:
+  displayName: "AI-Accelerated Workflows"
+  description: "Platform users need AI agents that can propose changes, generate documentation, and automate repetitive modeling tasks while keeping humans in the review loop."
+  source: "Engineering Teams, Product Management"
+  priority: critical
+  rationale: "Manual model maintenance is the #1 reason MBSE tools are abandoned. AI acceleration with human review makes the model self-maintaining."
+  acceptanceCriteria: "AI agents propose changes through a HITL review workflow. Humans approve or reject. Models stay current without manual upkeep."
+  category: operational

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-hitl-review
+spec:
+  displayName: "Human-in-the-Loop Review Workflow"
+  description: "The system shall buffer all AI-proposed mutations as pending changes requiring human approval before becoming canonical domain items."
+  reqId: "SYS-REQ-004"
+  reqType: functional
+  level: system
+  verificationMethod: demonstration
+  risk: medium
+  rationale: "AI acceleration without human governance is unacceptable in enterprise contexts. HITL review is the trust boundary."
+  derivedFromNeeds:
+    - "!name need-ai-acceleration"

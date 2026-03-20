@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-mcp-client-unvalidated-array
+spec:
+  displayName: "MCP Client Accesses result.content[0] Without Bounds Check"
+  severity: warning
+  category: security
+  description: "In src/lib/mcp/client.ts lines 155-158, the code accesses result.content[0].text without checking if the content array exists or has elements. If the MCP server returns an unexpected response format, this will throw an unhandled runtime error, potentially crashing the application."
+  recommendation: "Add defensive checks: verify result.content is an array with at least one element before accessing index 0. Return a meaningful error if the response format is unexpected."
+  sourceFile: "src/lib/mcp/client.ts"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-mcp-client"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-controller-reconcile
+spec:
+  displayName: "Controller Reconcile"
+  endpointType: mcp-tool
+  toolName: "reconcile_controller"
+  parameters:
+    required: [controller]
+    optional: []
+  description: "Triggers an immediate reconciliation for a named resource controller across all tenants."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

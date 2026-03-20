@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: tasks.task
+metadata:
+  name: task-review-rls-policies
+spec:
+  displayName: "Audit row-level security policies for all tables"
+  status: todo
+  priority: p1
+  list: "Platform Work"
+  flagged: true
+  notes: |
+    Verify that every PostgreSQL table in the `synthesis` schema has a RLS policy
+    restricting reads to `tenant_id = current_setting('app.tenant_id')`.
+
+    Tables to check: `items`, `definitions`, `traits`, `references`, `changesets`.

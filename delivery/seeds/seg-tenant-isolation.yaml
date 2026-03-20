@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-tenant-isolation
+spec:
+  displayName: "Tenant Data Isolation"
+  description: "PostgreSQL row-level security policies scoped by tenant_id, middleware-injected tenant context, and hostname-based tenant resolution."
+  valueStreamRef: "!name vs-multi-tenancy"
+  fundingModel: percent
+  fundingValue: 50
+  opsInScope: true

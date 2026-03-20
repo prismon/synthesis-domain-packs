@@ -1,0 +1,19 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-state-machine-diagram
+spec:
+  displayName: "State Machine Diagram"
+  description: "SysML State Machine Diagram showing states as rounded nodes with transition edges, guards, and actions within owner block boundaries"
+  layoutType: state-machine-diagram
+  icon: git-branch
+  componentKind: web-component
+  webComponentTag: synth-state-machine-diagram
+  webComponentModule: "/domain-assets/mbse/view-components/state-machine-diagram.js"
+  defaultItemGroup:
+    kinds:
+      - mbse.state-machine
+      - mbse.block
+  defaultDrillDown:
+    - nodeKind: mbse.state-machine
+      targetViewName: mbse-block-hierarchy

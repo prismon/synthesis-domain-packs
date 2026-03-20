@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: portfolio-manager
+spec:
+  displayName: "Portfolio Manager"
+  role: "Stakeholder"
+  description: "Oversees investment allocation across systems and value streams, uses architecture views and budget tracking to balance capacity and strategic priorities."
+  usesRefs:
+    - "!name synthesis"

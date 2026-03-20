@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-design-feature-exposure-strategy
+spec:
+  displayName: "Design Feature and Exposure Strategy"
+  description: "Design feature behavior, release controls, and exposure strategy for safe rollout and learning."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 12
+  opsInScope: false

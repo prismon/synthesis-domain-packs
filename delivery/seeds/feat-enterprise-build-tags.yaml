@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-enterprise-build-tags
+spec:
+  displayName: "Enterprise Build Tags"
+  description: "Go build tag 'enterprise' activates additional domain packs (metrics-dora, rules-agents) without modifying core source code."
+  segmentRef: "!name seg-enterprise-plugins"
+  problemStatement: "Enterprise features should not be compiled into the open-source binary."
+  acceptanceCriteria: "go build without -tags enterprise produces a binary with only core domains. With the tag, enterprise packs register automatically."
+  status: active

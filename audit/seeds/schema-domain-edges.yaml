@@ -1,0 +1,26 @@
+apiVersion: synthesis/v1
+kind: audit.db-schema
+metadata:
+  name: schema-domain-edges
+spec:
+  displayName: "Domain Edges Table"
+  tableName: "domain_edges"
+  columns:
+    id: "TEXT PRIMARY KEY"
+    tenant_id: "TEXT NOT NULL"
+    ref_kind: "TEXT NOT NULL"
+    source_uid: "TEXT NOT NULL REFERENCES domain_items(uid) ON DELETE CASCADE"
+    target_uid: "TEXT NOT NULL REFERENCES domain_items(uid) ON DELETE CASCADE"
+    source_kind: "TEXT NOT NULL"
+    source_name: "TEXT NOT NULL"
+    target_kind: "TEXT NOT NULL"
+    target_name: "TEXT NOT NULL"
+    created_at: "TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+  indexes:
+    idx_edges_source: "tenant_id, source_uid"
+    idx_edges_target: "tenant_id, target_uid"
+    idx_edges_ref_kind: "tenant_id, ref_kind"
+    idx_edges_source_ref_kind: "tenant_id, source_uid, ref_kind"
+    unique_edge: "UNIQUE(tenant_id, ref_kind, source_uid, target_uid)"
+  rlsPolicy: "CREATE POLICY tenant_isolation ON domain_edges FOR ALL USING (tenant_id = current_setting('app.tenant_id', true)) WITH CHECK (tenant_id = current_setting('app.tenant_id', true))"
+  componentRef: "!name ss-repository"

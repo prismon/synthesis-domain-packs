@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-query-graph
+spec:
+  displayName: "Domain Query Graph"
+  endpointType: mcp-tool
+  toolName: "query_graph"
+  parameters:
+    required: [startUid]
+    optional: [direction, depth, refKinds]
+  description: "Multi-layer graph traversal starting from a given item."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

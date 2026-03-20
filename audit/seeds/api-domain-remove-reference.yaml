@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-remove-reference
+spec:
+  displayName: "Domain Remove Reference"
+  endpointType: mcp-tool
+  toolName: "remove_reference"
+  parameters:
+    required: [sourceUid, refKind, targetUid]
+    optional: []
+  description: "Removes a typed edge between two domain items."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

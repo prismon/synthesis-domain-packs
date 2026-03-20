@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-detach-item
+spec:
+  displayName: "Domain Detach Item"
+  endpointType: mcp-tool
+  toolName: "detach_item"
+  parameters:
+    required: [uid]
+    optional: []
+  description: "Detaches a controller-managed item, removing the managedBy annotation and making it fully user-editable."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

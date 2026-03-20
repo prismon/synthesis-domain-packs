@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-get-version
+spec:
+  displayName: "Domain Get Version"
+  endpointType: mcp-tool
+  toolName: "get_version"
+  parameters:
+    required: [uid, version]
+    optional: []
+  description: "Returns a specific historical snapshot of a domain item by version number."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

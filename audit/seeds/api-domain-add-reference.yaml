@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-add-reference
+spec:
+  displayName: "Domain Add Reference"
+  endpointType: mcp-tool
+  toolName: "add_reference"
+  parameters:
+    required: [sourceUid, refKind, targetUid]
+    optional: []
+  description: "Adds a typed edge between two domain items."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-novamart-data-mixed
+spec:
+  displayName: "NovaMart Demo Data Mixed with Synthesis DDD Model"
+  severity: note
+  category: data-quality
+  description: "NovaMart e-commerce demo data was mixed with Synthesis self-referential DDD model in domain-modeling seeds. Cleaned up as part of this audit — 72 NovaMart files removed."
+  recommendation: "No further action required. NovaMart data has been removed. Ensure future demo data additions are intentional and documented."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

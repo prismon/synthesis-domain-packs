@@ -1,0 +1,30 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-constraint-table
+spec:
+  displayName: "Parametric Constraints"
+  description: "Constraint equations and parametric bindings for trade studies and analysis — SysML Parametric Diagram as structured data"
+  itemGroup:
+    kinds:
+      - mbse.constraint
+  viewComponentRef: "!name vc-table"
+  layoutConfig:
+    columns:
+      - field: displayName
+        label: "Constraint"
+        width: 200
+      - field: equation
+        label: "Equation"
+        width: 250
+      - field: constraintType
+        label: "Type"
+        width: 110
+      - field: analysisMethod
+        label: "Method"
+        width: 130
+      - field: result
+        label: "Result"
+        width: 200
+    sortField: constraintType
+    sortDirection: asc

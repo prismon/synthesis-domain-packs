@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-evaluate-rules-stub
+spec:
+  displayName: "Evaluate Rules MCP Tool Is a Stub"
+  severity: warning
+  category: design-gap
+  description: "enterprise_evaluate_rules MCP tool returns only a count, not actual evaluation results. Appears to be a stub."
+  recommendation: "Implement full rule evaluation logic that returns individual rule results, pass/fail status, and actionable details for each evaluated rule."
+  sourceFile: "backend/enterprise/tools/tools_rules.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

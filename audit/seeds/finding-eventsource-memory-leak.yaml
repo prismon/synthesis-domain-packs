@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-eventsource-memory-leak
+spec:
+  displayName: "EventSource Not Cleaned Up on Component Unmount"
+  severity: warning
+  category: design-gap
+  description: "ChatWindow.tsx creates an EventSource in handleSend() (line 82) with no cleanup logic if the component unmounts while streaming. The SSE connection remains open and event listeners accumulate, causing memory leaks."
+  recommendation: "Store the EventSource in a React ref and clean up in a useEffect return function. Close the EventSource and remove all event listeners on unmount."
+  sourceFile: "src/components/ChatWindow.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

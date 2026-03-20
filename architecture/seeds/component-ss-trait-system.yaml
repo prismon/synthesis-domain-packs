@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-trait-system
+spec:
+  displayName: "Trait System"
+  description: "Registry of 12 built-in traits (Ownable, Trackable, Viewable, etc.) that inject fields into domain definitions. Resolves the full field schema by merging trait-injected fields with custom fields."
+  technology: "Go"
+  containerRef: "!name ss-backend"

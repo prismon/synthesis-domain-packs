@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: modeling.service
+metadata:
+  name: service-schema-resolver
+spec:
+  displayName: "Schema Resolver"
+  description: "Stateless domain service that merges trait-injected fields with a definition's custom fields to produce the full resolved schema. Called on every item create/update for validation."
+  boundedContextRef: "!name trait-context"
+  componentRef: "!name ss-schema-resolver"
+  lifecycleState: active
+  inputDescription: "A domain definition with its trait list and custom fields."
+  outputDescription: "A flat list of all fields (trait + custom) with their types, constraints, and metadata."
+  dependencies: "Trait Registry (to look up field lists for each trait name)."

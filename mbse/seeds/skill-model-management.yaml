@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-model-management
+spec:
+  displayName: "Model Management & Governance"
+  description: "Organizing model packages, managing model libraries and profiles, version control, access control, and model quality governance."
+  category: model-management
+  proficiencyLevels: |
+    Novice: Can organize model elements into packages and apply basic stereotypes
+    Practitioner: Manages model libraries, creates custom profiles, and enforces naming conventions
+    Expert: Designs enterprise model governance with branching strategies, merge policies, review workflows, and model quality metrics
+  tools:
+    - "Teamwork Cloud"
+    - "Cameo Collaborator"
+    - "Git-based model management"
+    - "Synthesis MBSE"
+  certifications:
+    - "OMG OCSMP Model Builder Advanced"
+  maturity: stable

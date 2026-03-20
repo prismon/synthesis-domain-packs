@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-migrations
+spec:
+  displayName: "Schema Migrations"
+  description: "Versioned migration scripts managing schema evolution. Applied on startup to ensure database schema matches the expected version."
+  technology: "SQL / golang-migrate"
+  containerRef: "!name ss-database"

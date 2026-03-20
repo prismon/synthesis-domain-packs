@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-review-get-change
+spec:
+  displayName: "Review Get Change"
+  endpointType: mcp-tool
+  toolName: "get_review_change"
+  parameters:
+    required: [uid]
+    optional: []
+  description: "Returns a single pending change with full field-level diff."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-review-engine"

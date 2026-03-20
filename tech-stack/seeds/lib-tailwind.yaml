@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-tailwind
+spec:
+  displayName: "Tailwind CSS"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  packageManager: npm
+  version: "3.x"
+  license: "MIT"
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "Utility-first rapid styling"
+    - "No CSS file proliferation"
+    - "Design system consistency"
+  description: "CSS utility framework for all styling"

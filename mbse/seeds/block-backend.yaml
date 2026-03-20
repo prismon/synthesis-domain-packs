@@ -1,0 +1,19 @@
+apiVersion: synthesis/v1
+kind: mbse.block
+metadata:
+  name: block-backend
+spec:
+  displayName: "Domain Service Backend"
+  description: "Go microservice providing MCP over Streamable HTTP, domain CRUD, trait resolution, and tenant isolation"
+  blockType: software
+  parentBlockRef: "!name block-synthesis-platform"
+  properties: |
+    language: Go
+    protocol: MCP/JSON-RPC
+    transport: Streamable HTTP
+  operations: |
+    handleMCPRequest(jsonrpc): Response
+    loadDomainPack(path): Domain
+    validateItem(item, schema): ValidationResult
+    enforceRLS(query, tenantId): ScopedQuery
+  technology: "Go + net/http + pgx"

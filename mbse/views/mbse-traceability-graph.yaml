@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-traceability-graph
+spec:
+  displayName: "Traceability Graph"
+  description: "Full reference graph showing all traceability relationships across MBSE artifacts — derives, satisfies, verifies, allocates, realizes"
+  itemGroup:
+    kinds:
+      - mbse.stakeholder-need
+      - mbse.requirement
+      - mbse.block
+      - mbse.activity
+      - mbse.test-case
+      - mbse.use-case
+      - mbse.constraint
+  viewComponentRef: "!name vc-reference-graph"
+  layoutConfig:
+    layout: force
+    showLabels: true

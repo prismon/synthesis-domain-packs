@@ -1,0 +1,24 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ddd-context-map
+spec:
+  displayName: "DDD Context Map"
+  description: "Strategic overview of bounded contexts and their integration patterns"
+  itemGroup:
+    kinds:
+      - modeling.bounded-context
+      - modeling.anti-corruption-layer
+      - modeling.shared-kernel
+  viewComponentRef: "!name vc-context-map"
+  layoutConfig:
+    contextKind: modeling.bounded-context
+    aclKind: modeling.anti-corruption-layer
+    sharedKernelKind: modeling.shared-kernel
+    aggregateKind: modeling.aggregate
+    contextColor: "#0f766e"
+    aclColor: "#b45309"
+    showDescriptions: true
+  drillDown:
+    - nodeKind: modeling.bounded-context
+      targetViewName: ddd-bounded-context

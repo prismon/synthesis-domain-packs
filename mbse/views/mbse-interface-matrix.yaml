@@ -1,0 +1,36 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-interface-matrix
+spec:
+  displayName: "Interface Matrix"
+  description: "All interfaces between blocks with type, direction, and protocol — the N-squared interface matrix"
+  itemGroup:
+    kinds:
+      - mbse.interface
+  viewComponentRef: "!name vc-table"
+  layoutConfig:
+    columns:
+      - field: displayName
+        label: "Interface"
+        width: 200
+      - field: interfaceType
+        label: "Type"
+        width: 100
+      - field: direction
+        label: "Direction"
+        width: 90
+      - field: sourceBlockRef
+        label: "Source"
+        width: 160
+      - field: targetBlockRef
+        label: "Target"
+        width: 160
+      - field: protocol
+        label: "Protocol"
+        width: 120
+      - field: status
+        label: "Status"
+        width: 100
+    sortField: interfaceType
+    sortDirection: asc

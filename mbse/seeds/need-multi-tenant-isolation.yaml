@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.stakeholder-need
+metadata:
+  name: need-multi-tenant-isolation
+spec:
+  displayName: "Multi-Tenant Data Isolation"
+  description: "Enterprise customers need complete data isolation between tenants with row-level security, separate authentication realms, and auditable access controls."
+  source: "Enterprise Security, Compliance"
+  priority: critical
+  rationale: "Enterprise adoption requires SOC 2 compliance and contractual guarantees of tenant isolation."
+  acceptanceCriteria: "No tenant can access another tenant's data. RLS enforced at database level. Audit trail for all access."
+  category: security

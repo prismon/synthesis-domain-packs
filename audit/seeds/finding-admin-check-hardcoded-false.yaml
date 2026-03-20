@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-admin-check-hardcoded-false
+spec:
+  displayName: "Admin Detection Hardcoded to False (TODO Not Implemented)"
+  severity: warning
+  category: design-gap
+  description: "ImpersonationContext.tsx line 74 has TODO comment: 'derive isAdmin from JWT claims (e.g. realm_access.roles)'. Currently hardcoded to false. The impersonation bar cannot verify actual admin status from auth tokens, meaning authorization logic relying on this value is incomplete."
+  recommendation: "Implement isAdmin derivation from JWT realm_access.roles claims. Parse the access token and check for admin role membership."
+  sourceFile: "src/contexts/ImpersonationContext.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-auth-module"

@@ -1,0 +1,36 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-skill-radar
+spec:
+  displayName: "MBSE Skills Radar"
+  description: "Systems engineering competencies mapped by category and maturity"
+  itemGroup:
+    kinds:
+      - mbse.skill
+  viewComponentRef: "!name vc-tech-radar"
+  layoutConfig:
+    ringField: maturity
+    quadrantField: category
+    quadrants:
+      - name: requirements-engineering
+        label: "Requirements"
+      - name: structural-design
+        label: "Structural Design"
+      - name: behavioral-modeling
+        label: "Behavioral"
+      - name: verification-validation
+        label: "V&V"
+    rings:
+      - name: emerging
+        label: "Emerging"
+        color: "#ef4444"
+      - name: stable
+        label: "Stable"
+        color: "#f59e0b"
+      - name: mature
+        label: "Mature"
+        color: "#22c55e"
+      - name: declining
+        label: "Declining"
+        color: "#6b7280"

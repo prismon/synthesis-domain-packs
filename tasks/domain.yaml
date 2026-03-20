@@ -1,0 +1,132 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: tasks
+  version: 1
+spec:
+  displayName: "Tasks & Tickets"
+  description: "Lightweight task tracking (Apple Reminders style) and issue tracking (Jira style) with architecture component linkage"
+  namespace: tasks
+  icon: "check-square"
+  color: "#8b5cf6"
+  dependencies:
+    - name: architecture
+      reason: "Tickets link to architecture components via the implements reference kind"
+  definitions:
+    - name: tasks.task
+      displayName: "Tasks"
+      description: "Lightweight personal and team tasks with reminders, flags, and recurrence"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: task-kanban-view
+      traits:
+        - traitName: Trackable
+        - traitName: Ownable
+        - traitName: Managed
+        - traitName: Linkable
+        - traitName: Dependable
+      fields:
+        - name: list
+          type: string
+          required: false
+          description: "Logical grouping or list name (e.g. 'Platform Work', 'Personal')"
+        - name: flagged
+          type: boolean
+          required: false
+          description: "Whether this task is flagged for urgent attention"
+        - name: recurrence
+          type: string
+          required: false
+          description: "Recurrence pattern (e.g. 'daily', 'weekly', 'monthly')"
+        - name: location
+          type: string
+          required: false
+          description: "Physical or logical location context for the task"
+        - name: completedAt
+          type: string
+          required: false
+          description: "ISO 8601 timestamp when the task was completed"
+        - name: notes
+          type: text
+          required: false
+          description: "Free-form notes and context in markdown"
+      providerType: manual
+
+    - name: tasks.ticket
+      displayName: "Tickets"
+      description: "Structured issue tracking items with story points, sprints, acceptance criteria, and component linkage"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ticket-kanban-view
+      traits:
+        - traitName: Trackable
+        - traitName: Ownable
+        - traitName: Managed
+        - traitName: Linkable
+        - traitName: Dependable
+        - traitName: Lifecycle
+      fields:
+        - name: issueType
+          type: enum
+          required: false
+          description: "Classification of the issue"
+          enumValues:
+            - story
+            - bug
+            - task
+            - spike
+            - improvement
+        - name: storyPoints
+          type: number
+          required: false
+          description: "Effort estimate in story points"
+        - name: sprint
+          type: string
+          required: false
+          description: "Sprint or iteration identifier (e.g. 'Sprint 42')"
+        - name: labels
+          type: string-list
+          required: false
+          description: "Free-form labels for categorisation and filtering"
+        - name: componentRefs
+          type: ref-list
+          required: false
+          description: "Architecture components this ticket relates to"
+          targetKind: architecture.component
+        - name: acceptanceCriteria
+          type: text
+          required: false
+          description: "Definition of done — markdown list of acceptance criteria"
+        - name: reporter
+          type: string
+          required: false
+          description: "Username or display name of the person who reported this ticket"
+        - name: resolution
+          type: string
+          required: false
+          description: "Resolution note or outcome when the ticket is closed"
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+    - name: implements
+      displayName: "Implements"
+      reverseDisplayName: "Implemented By"
+      constraints:
+        - sourceKind: tasks.ticket
+          targetKind: architecture.component
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: implementsComponent
+          targetField: implementedByTickets

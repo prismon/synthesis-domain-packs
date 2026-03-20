@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-reference-tables
+spec:
+  displayName: "Reference Tables"
+  description: "Tables storing domain references and reference kinds. Models relationships between domain items as first-class entities with vocabulary and constraints."
+  technology: "PostgreSQL / DDL"
+  containerRef: "!name ss-database"

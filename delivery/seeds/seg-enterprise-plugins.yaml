@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-enterprise-plugins
+spec:
+  displayName: "Enterprise Plugin System"
+  description: "Go build tags and frontend @enterprise alias enabling optional packs (metrics-dora, rules-agents) without modifying core code."
+  valueStreamRef: "!name vs-domain-extensibility"
+  fundingModel: percent
+  fundingValue: 30
+  opsInScope: false

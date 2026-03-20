@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: architecture.external-system
+metadata:
+  name: docker-registry
+spec:
+  displayName: "Container Registry"
+  technology: "Docker / OCI"
+  description: "Hosts the synthesis-frontend and synthesis-backend container images used for Docker Compose and production deployments."

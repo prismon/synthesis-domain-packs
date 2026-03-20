@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.permission
+metadata:
+  name: perm-require-write
+spec:
+  displayName: "Require Write Permission"
+  permissionType: rbac
+  enforcementPoint: "service/domain.go:requireWrite"
+  roleRequired: tenant_admin
+  description: "Create/Update/Delete operations on definitions and items require tenant_admin or higher. Read operations have no permission check."
+  componentRef: "!name ss-domain-service"
+  containerRef: "!name ss-backend"

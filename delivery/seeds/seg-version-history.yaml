@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-version-history
+spec:
+  displayName: "Version History"
+  description: "Full version history for every domain item — browse past versions, diff any two, and detach controller-managed items for user editing."
+  valueStreamRef: "!name vs-domain-management"
+  fundingModel: percent
+  fundingValue: 20
+  opsInScope: false

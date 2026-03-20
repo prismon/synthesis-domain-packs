@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: tech-stack.blueprint
+metadata:
+  name: ts-domain-packs
+spec:
+  displayName: "Domain Packs"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  patternType: architectural
+  openSourceAdoption: internal
+  approved: approved
+  strengths:
+    - "YAML-based extensibility"
+    - "Bundled definitions + seeds + views + navigation"
+  description: "Pluggable domain modules that bundle domain schema with seed data and views"

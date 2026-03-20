@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-git-analyze-repository
+spec:
+  displayName: "Git Analyze Repository"
+  endpointType: mcp-tool
+  toolName: "analyze_git_repository"
+  parameters:
+    required: [repositoryName]
+    optional: []
+  description: "Returns a structured analysis plan as a recipe of tool calls for a repository."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-git-plugin"

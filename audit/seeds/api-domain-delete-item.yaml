@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-delete-item
+spec:
+  displayName: "Domain Delete Item"
+  endpointType: mcp-tool
+  toolName: "delete_item"
+  parameters:
+    required: [uid]
+    optional: []
+  description: "Deletes a domain item."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

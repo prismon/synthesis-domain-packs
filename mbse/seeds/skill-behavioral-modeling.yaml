@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-behavioral-modeling
+spec:
+  displayName: "Behavioral Modeling"
+  description: "Creating activity diagrams, state machine diagrams, and sequence diagrams to model system behavior, operational modes, and interaction protocols."
+  category: behavioral-modeling
+  proficiencyLevels: |
+    Novice: Can create simple activity flows and state machines
+    Practitioner: Models complex concurrent behaviors with fork/join, guards, and composite states
+    Expert: Designs executable state machines with simulation, formal verification, and code generation
+  tools:
+    - "Cameo Systems Modeler"
+    - "Simulink/Stateflow"
+    - "SCADE"
+    - "Rhapsody"
+    - "Synthesis MBSE"
+  certifications:
+    - "OMG OCSMP Model Builder Advanced"
+  maturity: stable

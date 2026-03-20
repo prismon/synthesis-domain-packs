@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-session-reconnect
+spec:
+  displayName: "MCP Session Auto-Reconnect"
+  description: "Frontend MCP client automatically reconnects when the backend restarts or the network drops, re-establishing the session without user intervention."
+  segmentRef: "!name seg-mcp-client"
+  implementedByRefs:
+    - "!name ss-mcp-client"
+  problemStatement: "Backend restarts during development drop the MCP session, requiring a page refresh."
+  acceptanceCriteria: "Client detects disconnection and reconnects with exponential backoff. Pending queries are retried."
+  status: active

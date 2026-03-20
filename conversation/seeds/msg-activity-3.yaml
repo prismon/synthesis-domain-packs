@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: conversation.message
+metadata:
+  name: msg-activity-3
+spec:
+  displayName: "Feature proposed"
+  channelRef: "!name domain-activity"
+  author: "Platform Engineer"
+  authorKind: person
+  body: "**Proposed** feature `feat-bulk-import` -- Import multiple domain items from YAML files or clipboard paste."
+  itemRef: "!name features/feat-bulk-import"
+  sentAt: "2026-03-02T14:30:00Z"

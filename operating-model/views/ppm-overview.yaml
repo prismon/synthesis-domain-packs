@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ppm-overview
+spec:
+  displayName: "Platform-Product-Market Overview"
+  description: "OneTru layered operating model view showing layers, tenets, and capabilities"
+  itemGroup:
+    kinds:
+      - ppm.layer
+      - ppm.tenet
+      - ppm.capability
+  viewComponentRef: "!name vc-onetru"

@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-domain-service
+spec:
+  displayName: "Domain Service"
+  description: "Business logic layer for domain operations. Validates item specs against trait-resolved field schemas, enforces tenant permissions, and orchestrates CRUD operations through the repository."
+  technology: "Go"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-repository"
+    - "!name ss-trait-system"

@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: modeling.bounded-context
+metadata:
+  name: view-context
+spec:
+  displayName: "View Context"
+  description: "Rendering and layout system — dispatches view definitions to layout-type-specific React components (C4 diagrams, hierarchy boards, class diagrams) via a pluggable registry."
+  systemRef: "!name synthesis"
+  lifecycleState: active
+  integrationPatterns:
+    - "Plugin Architecture (layout type registry)"
+  teamResponsibility: "The platform team owns the view registry and built-in layout types. Custom views can be added via web component bridges."
+  ubiquitousLanguageNotes: |
+    - View: a domain item of kind 'views' with a layoutType and layoutConfig
+    - Layout Type: the rendering strategy (c4-context, c4-container, hierarchy-board, class-diagram)
+    - Drill-Down: navigating from one view to another by clicking a node
+    - DomainRefs: the item kinds a view queries and displays

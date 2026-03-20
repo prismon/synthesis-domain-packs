@@ -1,0 +1,23 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-requirements-engineering
+spec:
+  displayName: "Requirements Engineering"
+  description: "Eliciting, analyzing, specifying, and validating stakeholder needs and system requirements using shall-language, INCOSE taxonomy, and traceability matrices."
+  category: requirements-engineering
+  proficiencyLevels: |
+    Novice: Can write basic shall-statements from stakeholder interviews
+    Practitioner: Decomposes system requirements to subsystem level with TIDA verification mapping
+    Expert: Designs requirement architectures with cross-concern traceability, manages requirement volatility
+  tools:
+    - "IBM DOORS"
+    - "Jama Connect"
+    - "Cameo Requirements Modeler"
+    - "Polarion"
+    - "Synthesis MBSE"
+  certifications:
+    - "INCOSE ASEP"
+    - "INCOSE CSEP"
+    - "IREB CPRE"
+  maturity: mature

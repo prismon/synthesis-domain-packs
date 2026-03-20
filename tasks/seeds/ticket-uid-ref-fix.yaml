@@ -1,0 +1,23 @@
+apiVersion: synthesis/v1
+kind: tasks.ticket
+metadata:
+  name: ticket-uid-ref-fix
+spec:
+  displayName: "Fix UID reference resolution in two-pass loader"
+  status: in-progress
+  priority: p0
+  issueType: bug
+  storyPoints: 3
+  sprint: "Sprint 12"
+  labels:
+    - backend
+    - loader
+    - bug
+  componentRefs:
+    - "!name ss-domain-loader"
+  acceptanceCriteria: |
+    - `!name <item-name>` refs in seed files resolve to UIDs after the second pass
+    - Managed-item guard does not block second-pass resolution
+    - All existing views (VSM, C4, context map) render without broken references
+  reporter: "josh"
+  lifecycleState: active

@@ -1,0 +1,28 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: git-repo-detail
+spec:
+  displayName: "Repository Detail"
+  description: "Detailed view of a single repository with branches, PRs, and files"
+  itemGroup:
+    kinds:
+      - git.repository
+      - git.branch
+      - git.pull-request
+      - git.repo-file
+  viewComponentRef: "!name vc-git-repo-diagram"
+  layoutConfig:
+    repoKind: git.repository
+    branchKind: git.branch
+    prKind: git.pull-request
+    fileKind: git.repo-file
+    focusRepoName: ""
+    repoColor: "#6366f1"
+    branchColor: "#22c55e"
+    prColor: "#f59e0b"
+    fileColor: "#94a3b8"
+    showDescriptions: true
+  drillDown:
+    - nodeKind: git.branch
+      targetViewName: git-repo-hierarchy

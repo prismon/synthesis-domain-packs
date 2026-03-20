@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: mbse.block
+metadata:
+  name: block-sandbox-engine
+spec:
+  displayName: "Sandbox Execution Engine"
+  description: "Docker-based isolated execution environment for AI agent sessions"
+  blockType: software
+  parentBlockRef: "!name block-synthesis-platform"
+  properties: |
+    runtime: Docker
+    isolation: per-session containers
+    messaging: async via domain items
+  operations: |
+    launchSession(template): Session
+    terminateSession(id): void
+    postMessage(sessionId, content): Message
+  technology: "Docker + Go"

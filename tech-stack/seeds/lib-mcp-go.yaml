@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-mcp-go
+spec:
+  displayName: "mcp-go"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  packageManager: "go modules"
+  license: "MIT"
+  openSourceAdoption: niche
+  approved: approved
+  strengths:
+    - "Go-native MCP server implementation"
+    - "Streamable HTTP transport"
+  description: "MCP protocol server library for Go backend"

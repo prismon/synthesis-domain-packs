@@ -1,0 +1,28 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-v-model-diagram
+spec:
+  displayName: "V-Model Traceability Diagram"
+  description: "V-shaped diagram showing needs → requirements → design → verification traceability chain with MBSE-specific node types and traceability edges"
+  layoutType: v-model-diagram
+  icon: chevrons-down
+  componentKind: web-component
+  webComponentTag: synth-vmodel-diagram
+  webComponentModule: "/domain-assets/mbse/view-components/vmodel-diagram.js"
+  defaultItemGroup:
+    kinds:
+      - mbse.stakeholder-need
+      - mbse.requirement
+      - mbse.block
+      - mbse.activity
+      - mbse.test-case
+  defaultDrillDown:
+    - nodeKind: mbse.stakeholder-need
+      targetViewName: mbse-needs-traceability
+    - nodeKind: mbse.requirement
+      targetViewName: mbse-requirements-table
+    - nodeKind: mbse.block
+      targetViewName: mbse-block-hierarchy
+    - nodeKind: mbse.test-case
+      targetViewName: mbse-verification-matrix

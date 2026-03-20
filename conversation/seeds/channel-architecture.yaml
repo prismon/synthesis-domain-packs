@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: conversation.channel
+metadata:
+  name: architecture-discussion
+spec:
+  displayName: "Architecture"
+  description: "Architecture decisions, RFC discussion, and C4 diagram reviews"
+  channelType: discussion

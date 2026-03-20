@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: ppm-tenets
+spec:
+  title: "Tenets"
+  icon: "bookmark"
+  viewRef: "ppm-tenets"
+  order: 2

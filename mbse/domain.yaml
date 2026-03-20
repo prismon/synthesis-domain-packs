@@ -1,0 +1,884 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: mbse
+  version: 1
+spec:
+  displayName: "Model-Based Systems Engineering"
+  description: "SysML-aligned MBSE domain — stakeholder needs, requirements, structural blocks, behavioral models, interfaces, parametric constraints, verification, and full V-model traceability. Mirrors Cameo Systems Modeler artifact taxonomy with modern SysML v2 semantics."
+  namespace: mbse
+  icon: "cpu"
+  color: "#0891b2"
+  dependencies:
+    - name: architecture
+      reason: "Blocks and components trace to C4 architecture containers and components"
+    - name: delivery
+      reason: "Requirements trace to delivery features for backlog alignment"
+
+  definitions:
+
+    # ─── Mission & Needs (V-Model Top) ────────────────────────
+
+    - name: mbse.stakeholder-need
+      displayName: "Stakeholder Needs"
+      description: "Mission-level needs and concept of operations (ConOps) statements that drive system requirements. Maps to SysML Requirement with «stakeholderNeed» stereotype."
+      preferredViewRef: mbse-needs-traceability
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Linkable
+        - traitName: Lifecycle
+        - traitName: Governable
+      fields:
+        - name: description
+          type: text
+          required: true
+          description: "The need statement — what the stakeholder requires the system to accomplish"
+        - name: source
+          type: string
+          required: false
+          description: "Origin of this need (stakeholder name, RFP section, ConOps paragraph)"
+        - name: priority
+          type: enum
+          required: false
+          description: "Stakeholder priority"
+          enumValues:
+            - critical
+            - important
+            - desired
+            - optional
+        - name: rationale
+          type: text
+          required: false
+          description: "Why this need exists and the consequences if unmet"
+        - name: acceptanceCriteria
+          type: text
+          required: false
+          description: "How stakeholder will judge if the need is met"
+        - name: category
+          type: enum
+          required: false
+          description: "Need category for grouping"
+          enumValues:
+            - mission
+            - operational
+            - safety
+            - regulatory
+            - business
+      providerType: manual
+
+    # ─── Requirements (SysML Requirement Diagram) ─────────────
+
+    - name: mbse.requirement
+      displayName: "Requirements"
+      description: "Formal system, subsystem, and component requirements with full traceability. Maps to SysML «requirement» block with id, text, and risk/verification attributes."
+      preferredViewRef: mbse-requirements-table
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Linkable
+        - traitName: Lifecycle
+        - traitName: Governable
+      fields:
+        - name: description
+          type: text
+          required: true
+          description: "The requirement statement (shall-language)"
+        - name: reqId
+          type: string
+          required: false
+          description: "External requirement identifier (e.g. SYS-REQ-042)"
+        - name: reqType
+          type: enum
+          required: true
+          description: "Requirement classification per INCOSE taxonomy"
+          enumValues:
+            - functional
+            - performance
+            - interface
+            - constraint
+            - safety
+            - reliability
+            - security
+            - environmental
+            - design
+        - name: level
+          type: enum
+          required: false
+          description: "Decomposition level in the V-model"
+          enumValues:
+            - system
+            - subsystem
+            - component
+            - software
+            - hardware
+        - name: verificationMethod
+          type: enum
+          required: false
+          description: "How this requirement will be verified (TIDA)"
+          enumValues:
+            - test
+            - inspection
+            - demonstration
+            - analysis
+        - name: risk
+          type: enum
+          required: false
+          description: "Implementation risk level"
+          enumValues:
+            - high
+            - medium
+            - low
+        - name: rationale
+          type: text
+          required: false
+          description: "Why this requirement exists"
+        - name: parentReqRef
+          type: ref
+          required: false
+          description: "Parent requirement this was derived from"
+          targetKind: mbse.requirement
+      providerType: manual
+
+    # ─── Blocks (SysML Block Definition Diagram) ─────────────
+
+    - name: mbse.block
+      displayName: "Blocks"
+      description: "SysML blocks representing structural elements — systems, subsystems, hardware, software, or logical components. The primary structural modeling element in MBSE."
+      preferredViewRef: mbse-block-hierarchy
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Linkable
+        - traitName: Lifecycle
+        - traitName: Hierarchical
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this block represents and its responsibilities"
+        - name: blockType
+          type: enum
+          required: true
+          description: "Block classification"
+          enumValues:
+            - system
+            - subsystem
+            - hardware
+            - software
+            - logical
+            - physical
+            - human
+        - name: properties
+          type: text
+          required: false
+          description: "Block value properties (name:type pairs, one per line)"
+        - name: operations
+          type: text
+          required: false
+          description: "Block operations/behaviors (method signatures)"
+        - name: constraints
+          type: text
+          required: false
+          description: "Block constraint expressions (parametric bindings)"
+        - name: technology
+          type: string
+          required: false
+          description: "Implementation technology or physical material"
+        - name: weight
+          type: string
+          required: false
+          description: "Physical weight or resource budget allocation"
+        - name: power
+          type: string
+          required: false
+          description: "Power consumption or generation specification"
+        - name: containerRef
+          type: ref
+          required: false
+          description: "Architecture container this block maps to"
+          targetKind: architecture.container
+      providerType: manual
+
+    # ─── Interfaces & Ports (SysML IBD) ──────────────────────
+
+    - name: mbse.interface
+      displayName: "Interfaces"
+      description: "Ports and interface definitions between blocks. Models flow specifications, item flows, and connection points from SysML Internal Block Diagrams."
+      preferredViewRef: mbse-interface-matrix
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Linkable
+        - traitName: Lifecycle
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What flows across this interface and the protocol"
+        - name: interfaceType
+          type: enum
+          required: true
+          description: "Type of interface"
+          enumValues:
+            - data
+            - electrical
+            - mechanical
+            - optical
+            - thermal
+            - fluid
+            - human
+            - api
+            - protocol
+        - name: direction
+          type: enum
+          required: false
+          description: "Flow direction from source block perspective"
+          enumValues:
+            - in
+            - out
+            - inout
+        - name: sourceBlockRef
+          type: ref
+          required: true
+          description: "Block that provides/sends through this interface"
+          targetKind: mbse.block
+        - name: targetBlockRef
+          type: ref
+          required: true
+          description: "Block that consumes/receives through this interface"
+          targetKind: mbse.block
+        - name: dataFormat
+          type: string
+          required: false
+          description: "Data format, signal type, or physical medium specification"
+        - name: bandwidth
+          type: string
+          required: false
+          description: "Throughput, data rate, or capacity specification"
+        - name: protocol
+          type: string
+          required: false
+          description: "Communication protocol (REST, gRPC, SPI, CAN, etc.)"
+        - name: icd
+          type: text
+          required: false
+          description: "Interface Control Document details or reference"
+      providerType: manual
+
+    # ─── Activities / Functions (SysML Activity Diagram) ──────
+
+    - name: mbse.activity
+      displayName: "Activities"
+      description: "Functional behaviors and operational activities. Maps to SysML Activity Diagram actions — the behavioral decomposition of what the system does."
+      preferredViewRef: mbse-activity-flow
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Hierarchical
+        - traitName: Dependable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this activity accomplishes"
+        - name: activityType
+          type: enum
+          required: false
+          description: "Activity classification"
+          enumValues:
+            - action
+            - decision
+            - fork
+            - join
+            - signal-send
+            - signal-receive
+            - object-flow
+            - call-behavior
+        - name: inputs
+          type: text
+          required: false
+          description: "Input pins — what data/material/energy this activity consumes"
+        - name: outputs
+          type: text
+          required: false
+          description: "Output pins — what data/material/energy this activity produces"
+        - name: preconditions
+          type: text
+          required: false
+          description: "Conditions that must be true before this activity can execute"
+        - name: postconditions
+          type: text
+          required: false
+          description: "Conditions that will be true after this activity completes"
+        - name: duration
+          type: string
+          required: false
+          description: "Expected execution time or timing constraint"
+        - name: allocatedToBlockRef
+          type: ref
+          required: false
+          description: "Block this activity is allocated to (function-to-structure)"
+          targetKind: mbse.block
+      providerType: manual
+
+    # ─── State Machines (SysML State Machine Diagram) ────────
+
+    - name: mbse.state-machine
+      displayName: "State Machines"
+      description: "Behavioral state models showing modes, states, transitions, and guards. Maps to SysML State Machine Diagrams for system modes and operational states."
+      preferredViewRef: mbse-state-machine
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What behavior this state machine models"
+        - name: ownerBlockRef
+          type: ref
+          required: true
+          description: "Block whose behavior this state machine describes"
+          targetKind: mbse.block
+        - name: states
+          type: text
+          required: false
+          description: "States in this machine (one per line: stateName — description)"
+        - name: transitions
+          type: text
+          required: false
+          description: "Transitions (one per line: source -> target [guard] / action)"
+        - name: initialState
+          type: string
+          required: false
+          description: "Name of the initial state"
+        - name: events
+          type: text
+          required: false
+          description: "Events that trigger transitions (one per line)"
+      providerType: manual
+
+    # ─── Use Cases (SysML Use Case Diagram) ──────────────────
+
+    - name: mbse.use-case
+      displayName: "Use Cases"
+      description: "Actor-system interactions capturing operational scenarios. Maps to SysML Use Case Diagrams with actors, use cases, and include/extend/generalize relationships."
+      preferredViewRef: mbse-use-case-overview
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: true
+          description: "Use case narrative — the interaction scenario"
+        - name: actor
+          type: string
+          required: true
+          description: "Primary actor who initiates this use case"
+        - name: preconditions
+          type: text
+          required: false
+          description: "System state before the use case begins"
+        - name: postconditions
+          type: text
+          required: false
+          description: "System state after the use case completes"
+        - name: mainFlow
+          type: text
+          required: false
+          description: "Main success scenario (numbered steps)"
+        - name: alternativeFlows
+          type: text
+          required: false
+          description: "Alternative and exception flows"
+        - name: scope
+          type: enum
+          required: false
+          description: "Use case scope level"
+          enumValues:
+            - system
+            - subsystem
+            - component
+      providerType: manual
+
+    # ─── Parametric Constraints (SysML Parametric Diagram) ───
+
+    - name: mbse.constraint
+      displayName: "Parametric Constraints"
+      description: "Mathematical and physical constraint equations binding block properties. Maps to SysML Parametric Diagrams and constraint blocks for trade studies and analysis."
+      preferredViewRef: mbse-constraint-table
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this constraint represents and when it applies"
+        - name: equation
+          type: text
+          required: true
+          description: "Constraint equation or expression (e.g. F = m * a, latency < 100ms)"
+        - name: parameters
+          type: text
+          required: false
+          description: "Parameters and their bindings to block properties (one per line)"
+        - name: constraintType
+          type: enum
+          required: false
+          description: "Category of constraint"
+          enumValues:
+            - physics
+            - performance
+            - budget
+            - timing
+            - reliability
+            - trade-study
+        - name: analysisMethod
+          type: string
+          required: false
+          description: "Analysis technique (FEA, Monte Carlo, closed-form, simulation)"
+        - name: result
+          type: text
+          required: false
+          description: "Analysis result or current computed value"
+      providerType: manual
+
+    # ─── Test Cases / Verification (V-Model Right Side) ──────
+
+    - name: mbse.test-case
+      displayName: "Test Cases"
+      description: "Verification and validation artifacts that close the V-model. Each test case verifies one or more requirements using TIDA methods (Test, Inspection, Demonstration, Analysis)."
+      preferredViewRef: mbse-verification-matrix
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+        - traitName: Linkable
+        - traitName: Lifecycle
+      fields:
+        - name: description
+          type: text
+          required: true
+          description: "What this test verifies and the test approach"
+        - name: testId
+          type: string
+          required: false
+          description: "External test case identifier (e.g. TC-SYS-007)"
+        - name: method
+          type: enum
+          required: true
+          description: "Verification method (TIDA)"
+          enumValues:
+            - test
+            - inspection
+            - demonstration
+            - analysis
+        - name: level
+          type: enum
+          required: false
+          description: "Integration level at which this test executes"
+          enumValues:
+            - unit
+            - component
+            - subsystem
+            - system
+            - acceptance
+        - name: testProcedure
+          type: text
+          required: false
+          description: "Step-by-step test procedure"
+        - name: expectedResult
+          type: text
+          required: false
+          description: "Expected outcome that constitutes passing"
+        - name: actualResult
+          type: text
+          required: false
+          description: "Actual result from last execution"
+        - name: testStatus
+          type: enum
+          required: false
+          description: "Current execution status"
+          enumValues:
+            - not-run
+            - passed
+            - failed
+            - blocked
+            - waived
+      providerType: manual
+
+    # ─── Packages (SysML Package Diagram) ────────────────────
+
+    - name: mbse.package
+      displayName: "Packages"
+      description: "Model organizational containers that group related elements. Maps to SysML Package Diagrams — provides namespace and visibility control for model elements."
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Hierarchical
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this package contains and why it is organized this way"
+        - name: packageType
+          type: enum
+          required: false
+          description: "Package classification"
+          enumValues:
+            - model-library
+            - profile
+            - domain
+            - viewpoint
+            - analysis
+        - name: stereotype
+          type: string
+          required: false
+          description: "Applied SysML profile or stereotype"
+      providerType: manual
+
+    # ─── Allocation (Cross-Concern Traceability) ──────────────
+
+    - name: mbse.allocation
+      displayName: "Allocations"
+      description: "Explicit cross-concern mappings — function to structure, logical to physical, software to hardware. The key MBSE traceability artifact that connects behavioral and structural models."
+      preferredViewRef: mbse-allocation-matrix
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Trackable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "Why this allocation was made and any constraints"
+        - name: allocationType
+          type: enum
+          required: true
+          description: "What kind of allocation this represents"
+          enumValues:
+            - function-to-structure
+            - logical-to-physical
+            - software-to-hardware
+            - requirement-to-block
+            - activity-to-block
+            - block-to-container
+        - name: sourceRef
+          type: string
+          required: true
+          description: "Source element name (function, logical element, or software item)"
+        - name: targetRef
+          type: string
+          required: true
+          description: "Target element name (structure, physical element, or hardware item)"
+        - name: rationale
+          type: text
+          required: false
+          description: "Design rationale for this allocation decision"
+        - name: confidence
+          type: enum
+          required: false
+          description: "Confidence level in this allocation"
+          enumValues:
+            - confirmed
+            - proposed
+            - tentative
+      providerType: manual
+
+    # ─── Skills (MBSE Competency Model) ──────────────────────
+
+    - name: mbse.skill
+      displayName: "MBSE Skills"
+      description: "Systems engineering competencies and skills required to create and maintain MBSE artifacts. Maps roles to the artifacts they own and the tools they use."
+      preferredViewRef: mbse-skill-radar
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this skill entails and why it matters"
+        - name: category
+          type: enum
+          required: true
+          description: "Skill domain"
+          enumValues:
+            - requirements-engineering
+            - structural-design
+            - behavioral-modeling
+            - interface-engineering
+            - analysis-engineering
+            - verification-validation
+            - model-management
+            - stakeholder-engagement
+            - trade-study
+            - safety-engineering
+            - systems-integration
+        - name: proficiencyLevels
+          type: text
+          required: false
+          description: "What novice, practitioner, and expert look like for this skill"
+        - name: tools
+          type: string-list
+          required: false
+          description: "Tools commonly used for this skill (Cameo, DOORS, Simulink, etc.)"
+        - name: certifications
+          type: string-list
+          required: false
+          description: "Relevant certifications (INCOSE ASEP/CSEP, OMG OCSMP, etc.)"
+        - name: maturity
+          type: enum
+          required: false
+          description: "Skill maturity on tech radar"
+          enumValues:
+            - emerging
+            - stable
+            - mature
+            - declining
+      providerType: manual
+
+    # ─── Infrastructure ──────────────────────────────────────
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for MBSE domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items for MBSE domain"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  # ─── Reference Kinds (Traceability Vocabulary) ──────────────
+
+  referenceKinds:
+
+    # Structural containment
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: mbse.block
+          targetKind: mbse.block
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: parentBlockRef
+          targetField: childBlocks
+        - sourceKind: mbse.requirement
+          targetKind: mbse.requirement
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: parentReqRef
+          targetField: childRequirements
+        - sourceKind: mbse.activity
+          targetKind: mbse.activity
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: parentActivityRef
+          targetField: childActivities
+        - sourceKind: mbse.package
+          targetKind: mbse.package
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: parentPackageRef
+          targetField: childPackages
+
+    # V-Model left side: need → requirement derivation
+    - name: derives-from
+      displayName: "Derives From"
+      reverseDisplayName: "Derived Into"
+      constraints:
+        - sourceKind: mbse.requirement
+          targetKind: mbse.stakeholder-need
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: derivedFromNeeds
+          targetField: derivedRequirements
+        - sourceKind: mbse.requirement
+          targetKind: mbse.requirement
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: derivedFromReqs
+          targetField: derivedChildReqs
+
+    # Design satisfaction: block/activity satisfies requirement
+    - name: satisfies
+      displayName: "Satisfies"
+      reverseDisplayName: "Satisfied By"
+      constraints:
+        - sourceKind: mbse.block
+          targetKind: mbse.requirement
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: satisfiesReqs
+          targetField: satisfiedByBlocks
+        - sourceKind: mbse.activity
+          targetKind: mbse.requirement
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: satisfiesReqs
+          targetField: satisfiedByActivities
+
+    # V-Model right side: test verifies requirement
+    - name: verifies
+      displayName: "Verifies"
+      reverseDisplayName: "Verified By"
+      constraints:
+        - sourceKind: mbse.test-case
+          targetKind: mbse.requirement
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: verifiesReqs
+          targetField: verifiedByTests
+
+    # Refinement: requirement refines use case or need
+    - name: refines
+      displayName: "Refines"
+      reverseDisplayName: "Refined By"
+      constraints:
+        - sourceKind: mbse.requirement
+          targetKind: mbse.use-case
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: refinesUseCases
+          targetField: refinedByReqs
+
+    # Allocation: function → structure
+    - name: allocated-to
+      displayName: "Allocated To"
+      reverseDisplayName: "Allocated From"
+      constraints:
+        - sourceKind: mbse.activity
+          targetKind: mbse.block
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: allocatedToBlocks
+          targetField: allocatedActivities
+        - sourceKind: mbse.requirement
+          targetKind: mbse.block
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: allocatedToBlocks
+          targetField: allocatedRequirements
+
+    # Flow: block → block data/energy/material flow
+    - name: flows-to
+      displayName: "Flows To"
+      reverseDisplayName: "Receives From"
+      constraints:
+        - sourceKind: mbse.block
+          targetKind: mbse.block
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: flowsToBlocks
+          targetField: receivesFromBlocks
+
+    # Behavioral ownership: state machine describes block
+    - name: describes-behavior
+      displayName: "Describes Behavior Of"
+      reverseDisplayName: "Behavior Described By"
+      constraints:
+        - sourceKind: mbse.state-machine
+          targetKind: mbse.block
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: ownerBlockRef
+          targetField: stateMachines
+
+    # Constraint binding: constraint applies to block
+    - name: constrains
+      displayName: "Constrains"
+      reverseDisplayName: "Constrained By"
+      constraints:
+        - sourceKind: mbse.constraint
+          targetKind: mbse.block
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: constrainsBlocks
+          targetField: constrainedByConstraints
+
+    # Cross-domain: block realizes architecture component
+    - name: realizes
+      displayName: "Realizes"
+      reverseDisplayName: "Realized By"
+      constraints:
+        - sourceKind: mbse.block
+          targetKind: architecture.component
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: realizesComponents
+          targetField: realizedByBlocks
+        - sourceKind: mbse.block
+          targetKind: architecture.container
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: realizesContainers
+          targetField: realizedByBlocks
+
+    # Cross-domain: requirement traces to delivery feature
+    - name: traces-to-feature
+      displayName: "Traces To Feature"
+      reverseDisplayName: "Traced From Requirement"
+      constraints:
+        - sourceKind: mbse.requirement
+          targetKind: delivery.feature
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: tracesToFeatures
+          targetField: tracedFromRequirements
+
+    # Skill covers artifact type
+    - name: covers-artifact
+      displayName: "Covers Artifact"
+      reverseDisplayName: "Requires Skill"
+      constraints:
+        - sourceKind: mbse.skill
+          targetKind: mbse.block
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.requirement
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.activity
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.test-case
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.interface
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.constraint
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.state-machine
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: mbse.skill
+          targetKind: mbse.use-case
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"

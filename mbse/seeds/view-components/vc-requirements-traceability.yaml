@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-requirements-traceability
+spec:
+  displayName: "Requirements Traceability Matrix"
+  description: "Coverage matrix showing requirement satisfaction and verification status with color-coded coverage bars, gap analysis, and filtering"
+  layoutType: requirements-traceability
+  icon: list-checks
+  componentKind: web-component
+  webComponentTag: synth-requirements-traceability
+  webComponentModule: "/domain-assets/mbse/view-components/requirements-traceability.js"
+  defaultItemGroup:
+    kinds:
+      - mbse.requirement
+      - mbse.block
+      - mbse.test-case
+      - mbse.stakeholder-need

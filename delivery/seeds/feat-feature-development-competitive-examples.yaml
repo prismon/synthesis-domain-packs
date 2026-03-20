@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-feature-development-competitive-examples
+spec:
+  displayName: "Competitive Examples"
+  description: "Competitor or market examples that inform feature strategy, design, and differentiation."
+  segmentRef: seg-analyze-competitive-examples
+  problemStatement: "Feature strategy is less effective when market context and competitor patterns are not captured and compared."
+  successMetrics: "High-priority features include current market examples and differentiation hypotheses."
+  acceptanceCriteria: "Competitive examples are captured and used as explicit inputs during prioritization and design."
+  status: active

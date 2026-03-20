@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: modeling.bounded-context
+metadata:
+  name: tenant-context
+spec:
+  displayName: "Tenant Context"
+  description: "Manages multi-tenant isolation — tenant provisioning, hostname routing, domain composition, and row-level security context injection."
+  systemRef: "!name synthesis"
+  lifecycleState: active
+  integrationPatterns:
+    - "Context Map: Shared Kernel (identity)"
+  teamResponsibility: "The platform team owns tenant lifecycle. Tenant configuration is declarative (YAML manifests). Data isolation is enforced at the database layer via RLS."
+  ubiquitousLanguageNotes: |
+    - Tenant: an organization with its own isolated domain data
+    - TenantManifest: YAML file declaring a tenant's display name, hostnames, tier, and domains
+    - Domain: a named collection of definitions, seeds, views, and navigation
+    - Tier: tenant classification (shared, dedicated) affecting resource allocation

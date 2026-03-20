@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.permission
+metadata:
+  name: perm-tenant-middleware
+spec:
+  displayName: "Tenant Middleware"
+  permissionType: middleware
+  enforcementPoint: "tenant/middleware.go:Middleware"
+  roleRequired: tenant_user
+  description: "All /mcp and /agent/stream/* routes require tenant context. Healthz/readyz and .well-known are excluded."
+  componentRef: "!name ss-tenant-middleware"
+  containerRef: "!name ss-backend"

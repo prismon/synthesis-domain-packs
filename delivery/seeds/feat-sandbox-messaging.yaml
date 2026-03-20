@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-sandbox-messaging
+spec:
+  displayName: "Sandbox Message I/O"
+  description: "Post messages into running sandbox sessions and stream agent responses back as conversation.message domain items."
+  segmentRef: "!name seg-agent-execution"
+  implementedByRefs:
+    - "!name ss-sandbox-orchestrator"
+  problemStatement: "Running agents need a channel to emit structured output back to the platform."
+  acceptanceCriteria: "sandbox_post_message creates a conversation.message with the correct sessionRef; sandbox_update_message patches the body in place."
+  status: active

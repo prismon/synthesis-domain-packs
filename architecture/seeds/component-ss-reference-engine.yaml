@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-reference-engine
+spec:
+  displayName: "Reference Engine"
+  description: "Manages first-class system.reference items that model all relationships between domain items. Enforces reference-kind constraints (cardinality, source/target kind) and supports both ref and ref-list field types."
+  technology: "Go"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-repository"

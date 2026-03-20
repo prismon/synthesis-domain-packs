@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-schema-resolver
+spec:
+  displayName: "Schema Resolver"
+  description: "Merges trait-injected fields with custom fields defined in domain.yaml to produce the full schema for each domain definition. Used by both the frontend form renderer and the backend validation layer."
+  technology: "TypeScript / Go"
+  containerRef: "!name ss-frontend"
+  usesRefs:
+    - "!name ss-mcp-client"

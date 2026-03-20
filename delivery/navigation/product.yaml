@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: vsm-product
+spec:
+  title: "Product"
+  icon: "package"
+  viewRef: "vsm-overview"
+  order: 1

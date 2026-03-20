@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-review-pending-changes
+spec:
+  displayName: "Pending Change Queue"
+  description: "List all changes awaiting approval and inspect individual change details with field-level diffs."
+  segmentRef: "!name seg-review-workflow"
+  implementedByRefs:
+    - "!name ss-review-engine"
+  problemStatement: "Operators need visibility into queued mutations before they affect the live domain."
+  acceptanceCriteria: "list_review_change returns all pending changes; get_review_change returns full diff for any change."
+  status: active

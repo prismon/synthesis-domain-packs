@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: tickets-kanban
+spec:
+  title: "Tickets"
+  icon: "ticket"
+  viewRef: "ticket-kanban-view"
+  order: 21

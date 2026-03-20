@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-controller-status
+spec:
+  displayName: "Controller Status"
+  endpointType: mcp-tool
+  toolName: "get_controller_status"
+  parameters:
+    required: []
+    optional: []
+  description: "Lists all registered resource controllers and their current sync status."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

@@ -1,0 +1,24 @@
+apiVersion: synthesis/v1
+kind: audit.db-schema
+metadata:
+  name: schema-domain-definitions
+spec:
+  displayName: "Domain Definitions Table"
+  tableName: "domain_definitions"
+  columns:
+    uid: "TEXT PRIMARY KEY"
+    tenant_id: "TEXT NOT NULL"
+    api_version: "TEXT NOT NULL DEFAULT 'synthesis/v1'"
+    kind: "TEXT NOT NULL DEFAULT 'DomainDefinition'"
+    name: "TEXT NOT NULL"
+    version: "BIGINT NOT NULL DEFAULT 1"
+    labels: "JSONB NOT NULL DEFAULT '{}'"
+    annotations: "JSONB NOT NULL DEFAULT '{}'"
+    spec: "JSONB NOT NULL DEFAULT '{}'"
+    created_at: "TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+    updated_at: "TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+  indexes:
+    idx_definitions_tenant: "tenant_id"
+    unique_tenant_name: "UNIQUE(tenant_id, name)"
+  rlsPolicy: "CREATE POLICY tenant_isolation ON domain_definitions FOR ALL USING (tenant_id = current_setting('app.tenant_id', true)) WITH CHECK (tenant_id = current_setting('app.tenant_id', true))"
+  componentRef: "!name ss-repository"

@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-domain-schema
+spec:
+  displayName: "Domain Schema"
+  description: "Core tables for domain definitions, items, and spec fields. Stores the trait-resolved schema and item data with JSON spec columns."
+  technology: "PostgreSQL / DDL"
+  containerRef: "!name ss-database"

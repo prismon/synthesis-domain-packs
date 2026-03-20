@@ -1,0 +1,272 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: architecture
+  version: 8
+spec:
+  displayName: "Architecture"
+  description: "C4 model architecture diagrams — systems, people, and external dependencies"
+  icon: "building-2"
+  color: "#3b82f6"
+  definitions:
+    - name: architecture.system
+      displayName: "Systems"
+      description: "Software systems that provide value to users"
+      preferredViewComponent: vc-c4-context
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Investable
+        - traitName: Linkable
+      fields:
+        - name: technology
+          type: string
+          required: false
+          description: "Primary technology or platform"
+        - name: description
+          type: string
+          required: false
+          description: "What the system does"
+        - name: usesRefs
+          type: ref-list
+          required: false
+          description: "External systems this system depends on"
+          targetKind: architecture.external-system
+      providerType: manual
+
+    - name: architecture.external-system
+      displayName: "External Systems"
+      description: "Systems outside the architecture boundary"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Linkable
+      fields:
+        - name: technology
+          type: string
+          required: false
+          description: "Technology or platform"
+        - name: description
+          type: string
+          required: false
+          description: "What this external system provides"
+      providerType: manual
+
+    - name: architecture.person
+      displayName: "People"
+      description: "People and roles who interact with the architecture (C4 actors)"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Linkable
+      fields:
+        - name: role
+          type: string
+          required: false
+          description: "Job title or functional role"
+        - name: description
+          type: string
+          required: false
+          description: "How this person interacts with the system"
+        - name: usesRefs
+          type: ref-list
+          required: false
+          description: "Systems this person uses"
+          targetKind: architecture.system
+      providerType: manual
+
+    - name: architecture.container
+      displayName: "Containers"
+      description: "Deployable units within a software system — applications, services, databases"
+      preferredViewComponent: vc-c4-container
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Deployable
+        - traitName: Linkable
+      fields:
+        - name: systemRef
+          type: ref
+          required: true
+          description: "The system this container belongs to"
+          targetKind: architecture.system
+        - name: technology
+          type: string
+          required: false
+          description: "Primary technology, language, or framework"
+        - name: description
+          type: string
+          required: false
+          description: "What this container does"
+        - name: usesRefs
+          type: ref-list
+          required: false
+          description: "Other containers this container communicates with"
+          targetKind: architecture.container
+      providerType: manual
+
+    - name: architecture.component
+      displayName: "Components"
+      description: "Major structural building blocks inside a container"
+      preferredViewRef: arch-component-hierarchy
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+      fields:
+        - name: containerRef
+          type: ref
+          required: true
+          description: "The container this component belongs to"
+          targetKind: architecture.container
+        - name: technology
+          type: string
+          required: false
+          description: "Technology or framework used"
+        - name: description
+          type: string
+          required: false
+          description: "What this component is responsible for"
+        - name: usesRefs
+          type: ref-list
+          required: false
+          description: "Other components this component depends on"
+          targetKind: architecture.component
+        - name: supportsFeatureRefs
+          type: ref-list
+          required: false
+          description: "VSM features this component supports (manual or auto-derived)"
+          targetKind: delivery.feature
+      providerType: manual
+
+    - name: architecture.code-element
+      displayName: "Code Elements"
+      description: "Classes, interfaces, functions, and modules that make up components"
+      preferredWidgetTag: synth-widget-default
+      traits: []
+      fields:
+        - name: componentRef
+          type: ref
+          required: true
+          description: "The component this code element belongs to"
+          targetKind: architecture.component
+        - name: language
+          type: string
+          required: false
+          description: "Programming language"
+        - name: type
+          type: enum
+          required: false
+          description: "Kind of code element"
+          enumValues:
+            - class
+            - interface
+            - function
+            - module
+        - name: description
+          type: string
+          required: false
+          description: "What this element does"
+      providerType: manual
+
+    - name: architecture.capability
+      displayName: "Capabilities"
+      description: "Abstract technical capabilities — LLMs, vector databases, ML algorithms, etc."
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: guidance
+          type: text
+          required: false
+          description: "When to use and when not to use this capability"
+        - name: maturity
+          type: enum
+          required: false
+          description: "Capability maturity level"
+          enumValues:
+            - emerging
+            - stable
+            - mature
+            - declining
+        - name: ring
+          type: enum
+          required: false
+          description: "FIRE lifecycle position on the tech radar"
+          enumValues:
+            - fix
+            - invest
+            - reduce
+            - eliminate
+        - name: approved
+          type: enum
+          required: false
+          description: "Approval status"
+          enumValues:
+            - approved
+            - approved-with-use-case
+            - not-approved
+        - name: strengths
+          type: string-list
+          required: false
+          description: "Things this capability solves well"
+        - name: description
+          type: string
+          required: false
+          description: "What this capability is"
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Configured view instances combining a view component with focused data"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: architecture.container
+          targetKind: architecture.system
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentSystem
+          targetField: childContainers
+        - sourceKind: architecture.component
+          targetKind: architecture.container
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentContainer
+          targetField: childComponents
+        - sourceKind: architecture.code-element
+          targetKind: architecture.component
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentComponent
+          targetField: childCodeElements
+    - name: uses
+      displayName: "Uses"
+      reverseDisplayName: "Used By"
+      constraints:
+        - sourceTrait: Composable
+          targetTrait: Composable
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: usesRefs
+          targetField: usedByRefs
+    - name: supports
+      displayName: "Supports"
+      reverseDisplayName: "Supported By"
+      constraints:
+        - sourceKind: architecture.component
+          targetKind: delivery.feature
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+          sourceField: supportsFeatures
+          targetField: supportedByComponents

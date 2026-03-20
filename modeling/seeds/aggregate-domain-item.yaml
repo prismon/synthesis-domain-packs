@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: modeling.aggregate
+metadata:
+  name: domain-item
+spec:
+  displayName: "Domain Item"
+  description: "The core aggregate representing a single entry in the domain. Contains a kind, name, and spec validated against the resolved schema for that kind."
+  boundedContextRef: "!name domain-context"
+  componentRef: "!name ss-domain-service"
+  lifecycleState: active
+  invariants: |
+    - Name must be unique within a kind and tenant
+    - Spec fields must validate against the resolved schema (trait fields + custom fields)
+    - Kind must reference an existing domain definition
+    - Tenant ID must be set and immutable after creation
+  consistencyBoundary: "Owns: name, kind, spec (all field values), tenant_id, created_at, updated_at. Does NOT own: references to/from other items (managed by Reference Context)."
+  aggregateRootEntity: "Item"

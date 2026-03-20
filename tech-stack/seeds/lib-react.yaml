@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-react
+spec:
+  displayName: "React"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  packageManager: npm
+  version: "18.x"
+  latestVersion: "19.x"
+  license: "MIT"
+  openSourceAdoption: widely-adopted
+  cveCount: 0
+  approved: approved
+  strengths:
+    - "Component-based UI architecture"
+    - "Massive ecosystem and community"
+    - "Hooks for state management"
+  description: "Frontend UI framework"

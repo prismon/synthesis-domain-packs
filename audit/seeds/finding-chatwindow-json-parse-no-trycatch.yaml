@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-chatwindow-json-parse-no-trycatch
+spec:
+  displayName: "ChatWindow JSON.parse Calls Without Error Handling"
+  severity: warning
+  category: security
+  description: "ChatWindow.tsx lines 85, 94, 105 have multiple JSON.parse(e.data) calls in EventSource listeners without try-catch. If the server sends malformed JSON, the handler will throw an unhandled exception and potentially crash the component."
+  recommendation: "Wrap all JSON.parse calls in try-catch blocks. Log parse errors and gracefully handle malformed SSE messages rather than letting them crash the component."
+  sourceFile: "src/components/ChatWindow.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

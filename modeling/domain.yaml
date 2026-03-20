@@ -1,0 +1,500 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: ddd
+  version: 5
+spec:
+  displayName: "Domain Modeling"
+  description: "Domain-Driven Design domain — bounded contexts, aggregates, entities, value objects, domain events, services, repositories, and context integration patterns"
+  namespace: modeling
+  icon: "hexagon"
+  color: "#8b5cf6"
+  dependencies:
+    - name: architecture
+      reason: "Bounded contexts reference systems; aggregates, services, repositories, and ACLs reference components"
+
+  definitions:
+
+    # ─── Strategic Design ─────────────────────────────────────
+
+    - name: modeling.bounded-context
+      displayName: "Bounded Contexts"
+      description: "Explicit boundaries within which a domain model is consistent and authoritative"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-context-map
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Lifecycle
+        - traitName: Governable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this context is responsible for and what problems it solves"
+        - name: systemRef
+          type: ref
+          required: false
+          description: "The architecture system that implements this bounded context"
+          targetKind: architecture.system
+        - name: integrationPatterns
+          type: string-list
+          required: false
+          description: "Integration patterns used at this context boundary (e.g. Published Language, Open Host Service)"
+        - name: teamResponsibility
+          type: text
+          required: false
+          description: "Narrative description of the team ownership mandate within this context"
+        - name: ubiquitousLanguageNotes
+          type: text
+          required: false
+          description: "Key terms and their precise meaning within this context"
+      providerType: manual
+
+    - name: modeling.context-map
+      displayName: "Context Maps"
+      description: "High-level maps of how bounded contexts relate and integrate"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-context-map
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "Scope and purpose of this context map"
+        - name: integrationPatternsOverview
+          type: text
+          required: false
+          description: "Summary of the dominant integration patterns in this map"
+        - name: contextRefs
+          type: ref-list
+          required: false
+          description: "All bounded contexts included in this map"
+          targetKind: modeling.bounded-context
+        - name: diagramUrl
+          type: string
+          required: false
+          description: "Link to an external diagram (Miro, Lucidchart, etc.)"
+      providerType: manual
+
+    - name: modeling.anti-corruption-layer
+      displayName: "Anti-Corruption Layers"
+      description: "Translation boundaries that protect a downstream context from the model of an upstream context"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-context-map
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Dependable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this ACL translates and why the translation is necessary"
+        - name: upstreamContextRef
+          type: ref
+          required: true
+          description: "The upstream bounded context whose model is being translated from"
+          targetKind: modeling.bounded-context
+          critical: true
+        - name: downstreamContextRef
+          type: ref
+          required: true
+          description: "The downstream bounded context that this ACL protects"
+          targetKind: modeling.bounded-context
+          critical: true
+        - name: translationStrategy
+          type: text
+          required: false
+          description: "How translation works — adapters, facades, translation maps"
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Architecture component that implements this ACL"
+          targetKind: architecture.component
+      providerType: manual
+
+    - name: modeling.shared-kernel
+      displayName: "Shared Kernels"
+      description: "A deliberately shared subset of the domain model co-owned by two or more bounded contexts"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-context-map
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Governable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What model elements are shared and why sharing is appropriate"
+        - name: contextRefs
+          type: ref-list
+          required: true
+          description: "All bounded contexts that share this kernel (minimum two)"
+          targetKind: modeling.bounded-context
+          critical: true
+        - name: sharedModelDescription
+          type: text
+          required: false
+          description: "Description of the shared types, events, or identifiers"
+        - name: changeProtocol
+          type: text
+          required: false
+          description: "How changes to this kernel are proposed, reviewed, and ratified"
+      providerType: manual
+
+    # ─── Tactical Design ──────────────────────────────────────
+
+    - name: modeling.aggregate
+      displayName: "Aggregates"
+      description: "Cluster of domain objects that form a consistency boundary with a single entry point"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-class-diagram
+      traits:
+        - traitName: Hierarchical
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Lifecycle
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this aggregate represents and the domain problem it models"
+        - name: boundedContextRef
+          type: ref
+          required: true
+          description: "The bounded context this aggregate belongs to"
+          targetKind: modeling.bounded-context
+          critical: true
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Architecture component that implements this aggregate root"
+          targetKind: architecture.component
+        - name: invariants
+          type: text
+          required: false
+          description: "Business rules that must always hold true within this aggregate"
+        - name: consistencyBoundary
+          type: text
+          required: false
+          description: "What the aggregate owns and what it does NOT own"
+        - name: aggregateRootEntity
+          type: string
+          required: false
+          description: "Name of the entity that serves as the aggregate root"
+      providerType: manual
+
+    - name: modeling.entity
+      displayName: "Entities"
+      description: "Domain objects with a persistent identity that persists through state changes"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-class-diagram
+      traits:
+        - traitName: Hierarchical
+        - traitName: Ownable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this entity represents in the domain"
+        - name: aggregateRef
+          type: ref
+          required: true
+          description: "The aggregate this entity belongs to"
+          targetKind: modeling.aggregate
+          critical: true
+        - name: identityField
+          type: string
+          required: false
+          description: "The field that uniquely identifies this entity (e.g. OrderId)"
+        - name: keyBusinessRules
+          type: text
+          required: false
+          description: "Business rules and invariants this entity enforces"
+        - name: isAggregateRoot
+          type: boolean
+          required: false
+          description: "Whether this entity is the aggregate root"
+      providerType: manual
+
+    - name: modeling.value-object
+      displayName: "Value Objects"
+      description: "Immutable domain objects defined entirely by their attributes, with no identity"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-class-diagram
+      traits:
+        - traitName: Hierarchical
+        - traitName: Ownable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this value object represents"
+        - name: aggregateRef
+          type: ref
+          required: true
+          description: "The aggregate this value object belongs to"
+          targetKind: modeling.aggregate
+          critical: true
+        - name: equalitySemantics
+          type: text
+          required: false
+          description: "Which attributes determine equality"
+        - name: immutabilityNotes
+          type: text
+          required: false
+          description: "How immutability is enforced in code"
+        - name: exampleValues
+          type: text
+          required: false
+          description: "Illustrative example values"
+      providerType: manual
+
+    - name: modeling.event
+      displayName: "Domain Events"
+      description: "Immutable records that something significant happened in the domain"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-class-diagram
+      traits:
+        - traitName: Hierarchical
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Lifecycle
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What happened in the domain that this event records"
+        - name: aggregateRef
+          type: ref
+          required: true
+          description: "The aggregate that publishes this event"
+          targetKind: modeling.aggregate
+          critical: true
+        - name: payloadSchema
+          type: text
+          required: false
+          description: "Fields carried in the event payload"
+        - name: triggerConditions
+          type: text
+          required: false
+          description: "State transitions or conditions that cause this event"
+        - name: consumers
+          type: text
+          required: false
+          description: "Known consumers of this event"
+        - name: schemaVersion
+          type: string
+          required: false
+          description: "Current schema version of this event"
+      providerType: manual
+
+    - name: modeling.service
+      displayName: "Domain Services"
+      description: "Stateless operations that belong to the domain but do not fit on any single entity"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-class-diagram
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Dependable
+        - traitName: Lifecycle
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What domain operation this service performs"
+        - name: boundedContextRef
+          type: ref
+          required: true
+          description: "The bounded context this service belongs to"
+          targetKind: modeling.bounded-context
+          critical: true
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Architecture component that implements this service"
+          targetKind: architecture.component
+        - name: inputDescription
+          type: text
+          required: false
+          description: "Inputs the service accepts"
+        - name: outputDescription
+          type: text
+          required: false
+          description: "What the service returns or produces"
+        - name: dependencies
+          type: text
+          required: false
+          description: "Other domain objects or services this operation requires"
+      providerType: manual
+
+    - name: modeling.repository
+      displayName: "Repositories"
+      description: "Persistence abstraction for aggregate roots"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: ddd-class-diagram
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+        - traitName: Lifecycle
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this repository persists and the access patterns it supports"
+        - name: aggregateRef
+          type: ref
+          required: true
+          description: "The aggregate root this repository manages"
+          targetKind: modeling.aggregate
+          critical: true
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Architecture component that implements this repository"
+          targetKind: architecture.component
+        - name: storageStrategy
+          type: enum
+          required: false
+          description: "Underlying storage technology or pattern"
+          enumValues:
+            - relational
+            - document
+            - event-store
+            - in-memory
+            - key-value
+            - hybrid
+        - name: queryMethods
+          type: text
+          required: false
+          description: "Named query methods beyond basic findById/save"
+      providerType: manual
+
+    # ─── Infrastructure ───────────────────────────────────────
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  # ─── Reference Kinds ──────────────────────────────────────
+
+  referenceKinds:
+
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: modeling.aggregate
+          targetKind: modeling.bounded-context
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentRef
+          targetField: childAggregates
+        - sourceKind: modeling.entity
+          targetKind: modeling.aggregate
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentRef
+          targetField: childEntities
+        - sourceKind: modeling.value-object
+          targetKind: modeling.aggregate
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentRef
+          targetField: childValueObjects
+        - sourceKind: modeling.event
+          targetKind: modeling.aggregate
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentRef
+          targetField: childDomainEvents
+        - sourceKind: modeling.service
+          targetKind: modeling.bounded-context
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentRef
+          targetField: childDomainServices
+        - sourceKind: modeling.repository
+          targetKind: modeling.aggregate
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentRef
+          targetField: childRepositories
+
+    - name: belongs-to-context
+      displayName: "Belongs To Context"
+      reverseDisplayName: "Contains"
+      constraints:
+        - sourceKind: modeling.aggregate
+          targetKind: modeling.bounded-context
+        - sourceKind: modeling.service
+          targetKind: modeling.bounded-context
+
+    - name: implements
+      displayName: "Implemented By"
+      reverseDisplayName: "Implements"
+      constraints:
+        - sourceKind: modeling.bounded-context
+          targetKind: architecture.system
+        - sourceKind: modeling.aggregate
+          targetKind: architecture.component
+        - sourceKind: modeling.service
+          targetKind: architecture.component
+        - sourceKind: modeling.repository
+          targetKind: architecture.component
+        - sourceKind: modeling.anti-corruption-layer
+          targetKind: architecture.component
+
+    - name: publishes
+      displayName: "Publishes"
+      reverseDisplayName: "Published By"
+      constraints:
+        - sourceKind: modeling.aggregate
+          targetKind: modeling.event
+
+    - name: subscribes-to
+      displayName: "Subscribes To"
+      reverseDisplayName: "Subscribed To By"
+      constraints:
+        - sourceKind: modeling.aggregate
+          targetKind: modeling.event
+        - sourceKind: modeling.service
+          targetKind: modeling.event
+        - sourceKind: modeling.bounded-context
+          targetKind: modeling.event
+
+    - name: translates
+      displayName: "Translates"
+      reverseDisplayName: "Translated By"
+      constraints:
+        - sourceKind: modeling.anti-corruption-layer
+          targetKind: modeling.bounded-context
+
+    - name: shares-kernel-with
+      displayName: "Shares Kernel With"
+      reverseDisplayName: "Shares Kernel With"
+      constraints:
+        - sourceKind: modeling.bounded-context
+          targetKind: modeling.bounded-context
+
+    - name: manages-aggregate
+      displayName: "Manages Aggregate"
+      reverseDisplayName: "Managed By"
+      constraints:
+        - sourceKind: modeling.repository
+          targetKind: modeling.aggregate

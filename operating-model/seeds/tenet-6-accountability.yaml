@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-6-accountability
+spec:
+  displayName: "Product owns the mess; architecture guides the cleanup"
+  order: 6
+  statement: |
+    Product owns the mess; architecture guides the cleanup. Anything unclear lives in product by default. Product leadership is accountable for separation, with the architecture office providing guardrails and enforcement.
+  rationale: |
+    Ambiguous ownership without a clear default creates conflict and stalemate. The product-as-default rule keeps teams moving while creating clear accountability for eventual resolution.
+  layerRefs:
+    - "!name ppm-layer-product"

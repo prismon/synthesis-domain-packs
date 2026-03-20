@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tech-stack.service
+metadata:
+  name: ts-docker
+spec:
+  displayName: "Docker"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  serviceType: self-hosted
+  license: "Apache-2.0"
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "Reproducible development environments"
+    - "Container-based deployment"
+  description: "Container runtime for dev and deployment"

@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.permission
+metadata:
+  name: perm-tenant-domain-write
+spec:
+  displayName: "Tenant Domain Write Guard"
+  permissionType: rbac
+  enforcementPoint: "service/domain.go:canWriteTenantDomain"
+  roleRequired: platform_admin
+  description: "CRUD operations on items with kind 'tenants' require platform_admin. Prevents tenant_admin from modifying the tenant registry."
+  componentRef: "!name ss-domain-service"
+  containerRef: "!name ss-backend"

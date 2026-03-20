@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-hierarchy-board
+spec:
+  displayName: "Hierarchy Board"
+  description: "Kanban-style board showing hierarchical relationships between items"
+  layoutType: hierarchy-board
+  icon: layers
+  componentKind: react
+  requiredTraits:
+    - Hierarchical

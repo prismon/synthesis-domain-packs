@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-git-sync-repository
+spec:
+  displayName: "Git Sync Repository"
+  endpointType: mcp-tool
+  toolName: "sync_git_repository"
+  parameters:
+    required: [owner, repo]
+    optional: [provider, token]
+  description: "Calls GitHub API to sync repository, branches, and PRs as domain items."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-git-plugin"

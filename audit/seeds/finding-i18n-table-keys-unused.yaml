@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-i18n-table-keys-unused
+spec:
+  displayName: "i18n Table Keys Defined But Not Used"
+  severity: info
+  category: convention
+  description: "table.* i18n keys (table.search, table.columns, table.addItem, table.noItems, table.itemCount) are defined in src/locales/en.ts but DomainTable.tsx uses hardcoded English strings instead."
+  recommendation: "Replace hardcoded English strings in DomainTable.tsx with t() calls using the existing table.* i18n keys."
+  sourceFile: "src/locales/en.ts"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-domain-editor"

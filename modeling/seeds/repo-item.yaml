@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: modeling.repository
+metadata:
+  name: repo-item
+spec:
+  displayName: "Item Repository"
+  description: "Persistence layer for domain items. Implements CRUD operations against PostgreSQL with tenant-scoped RLS. Handles JSON serialization of the spec map."
+  aggregateRef: "!name domain-item"
+  componentRef: "!name ss-repository"
+  lifecycleState: active
+  storageStrategy: relational
+  queryMethods: |
+    - FindByKindAndName(tenantID, kind, name) -> Item
+    - ListByKind(tenantID, kind) -> []Item
+    - ListAll(tenantID) -> []Item
+    - Create(item) -> Item
+    - Update(item) -> Item
+    - Delete(tenantID, kind, name) -> error

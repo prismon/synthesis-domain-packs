@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: tech-stack.service
+metadata:
+  name: ts-nodejs
+spec:
+  displayName: "Node.js"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  serviceType: self-hosted
+  version: "22"
+  license: "MIT"
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "JavaScript/TypeScript runtime"
+    - "NPM ecosystem access"
+  description: "Runtime for frontend build tools and agent sidecar"

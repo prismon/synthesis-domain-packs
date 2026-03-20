@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: product-manager
+spec:
+  displayName: "Product Manager"
+  role: "Stakeholder"
+  description: "Defines product strategy, prioritizes the backlog, and uses value stream maps and feature tracking to align delivery with business outcomes."
+  usesRefs:
+    - "!name synthesis"

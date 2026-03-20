@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: modeling.entity
+metadata:
+  name: entity-definition
+spec:
+  displayName: "Definition"
+  description: "The schema entity for a domain kind. Loaded from domain.yaml files or created via MCP tools."
+  aggregateRef: "!name domain-definition"
+  identityField: "(tenant_id, name)"
+  isAggregateRoot: true
+  keyBusinessRules: |
+    - Definitions can be loaded from YAML (domain packs) or created dynamically via MCP
+    - Trait composition is resolved at query time, not stored
+    - Field order matters for UI rendering

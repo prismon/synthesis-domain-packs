@@ -1,0 +1,33 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-verification-matrix
+spec:
+  displayName: "Verification Matrix"
+  description: "Test cases with verification method and status — the right side of the V-model closing the loop back to requirements"
+  itemGroup:
+    kinds:
+      - mbse.test-case
+  viewComponentRef: "!name vc-table"
+  layoutConfig:
+    columns:
+      - field: testId
+        label: "Test ID"
+        width: 110
+      - field: displayName
+        label: "Test Case"
+        width: 220
+      - field: method
+        label: "Method"
+        width: 110
+      - field: level
+        label: "Level"
+        width: 100
+      - field: testStatus
+        label: "Status"
+        width: 100
+      - field: status
+        label: "Tracking"
+        width: 100
+    sortField: testId
+    sortDirection: asc

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-define-goals
+spec:
+  displayName: "Define Goals"
+  description: "Define measurable feature goals that align business outcomes with customer impact."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 12
+  opsInScope: false

@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-ai-c4-generation
+spec:
+  displayName: "AI C4 Model Generation"
+  description: "Generate C4 system, container, and component models from codebase analysis, README files, or natural language descriptions — producing valid domain items with correct relationships."
+  segmentRef: "!name seg-ai-architecture-modeling"
+  status: planned
+  priority: p1

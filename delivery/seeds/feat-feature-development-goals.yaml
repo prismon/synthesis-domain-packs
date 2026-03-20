@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-feature-development-goals
+spec:
+  displayName: "Goals"
+  description: "Desired business, customer, product, or technical outcomes that define success for feature development."
+  segmentRef: seg-define-goals
+  problemStatement: "Feature work can ship without clear outcome definitions, which weakens prioritization and post-release evaluation."
+  successMetrics: "Every candidate feature includes explicit outcome targets before build starts."
+  acceptanceCriteria: "Goals are documented, measurable, and referenced in release and learning decisions."
+  status: active

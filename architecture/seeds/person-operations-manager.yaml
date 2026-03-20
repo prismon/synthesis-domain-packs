@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: operations-manager
+spec:
+  displayName: "Operations Manager"
+  role: "Stakeholder"
+  description: "Manages day-to-day business operations, uses value stream maps to identify process bottlenecks, and tracks delivery metrics to ensure operational efficiency across teams."
+  usesRefs:
+    - "!name synthesis"

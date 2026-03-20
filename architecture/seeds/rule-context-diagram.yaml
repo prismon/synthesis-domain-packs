@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: system.rule
+metadata:
+  name: review-context-diagram
+spec:
+  displayName: "Review Context Diagram Changes"
+  description: "Require human review for any mutation to Context Diagram objects (systems, external systems, people)."
+  selector:
+    matchKinds:
+      - architecture.system
+      - architecture.external-system
+      - architecture.person
+  actions:
+    - type: requireReview
+      approvers:
+        roles:
+          - tenant_admin
+        minApprovers: 1
+        selfApprovalPolicy: denyIfSoleApprover
+  enabled: true
+  priority: 100

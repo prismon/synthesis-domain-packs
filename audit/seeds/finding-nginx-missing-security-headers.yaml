@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-nginx-missing-security-headers
+spec:
+  displayName: "Nginx Missing Security Headers (CSP, HSTS, X-Frame-Options)"
+  severity: warning
+  category: security
+  description: "deploy/nginx/default.conf is missing critical security headers: no X-Frame-Options (clickjacking), no X-Content-Type-Options: nosniff, no Content-Security-Policy, no Strict-Transport-Security (HSTS), and no X-XSS-Protection. Plain HTTP on port 80 with no automatic HTTPS redirect."
+  recommendation: "Add security headers to nginx config: X-Frame-Options DENY, X-Content-Type-Options nosniff, Content-Security-Policy with strict policy, Strict-Transport-Security for HSTS, and configure HTTPS redirect."
+  sourceFile: "deploy/nginx/default.conf"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

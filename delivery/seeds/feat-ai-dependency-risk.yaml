@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-ai-dependency-risk
+spec:
+  displayName: "AI Dependency Risk Analysis"
+  description: "Cross-reference architecture dependencies with delivery status to surface risk — highly-coupled components with stalled features, single-owner systems, and unvalidated integration points."
+  segmentRef: "!name seg-ai-process-intelligence"
+  status: planned
+  priority: p2

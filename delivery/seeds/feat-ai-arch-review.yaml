@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-ai-arch-review
+spec:
+  displayName: "AI Architecture Review"
+  description: "AI-powered review of architecture models — detecting missing dependencies, circular references, orphaned components, and suggesting structural improvements based on C4 best practices."
+  segmentRef: "!name seg-ai-architecture-modeling"
+  status: planned
+  priority: p2

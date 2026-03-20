@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.permission
+metadata:
+  name: perm-rls-items
+spec:
+  displayName: "RLS on Domain Items"
+  permissionType: rls
+  enforcementPoint: "migrations/001_initial_schema.up.sql"
+  roleRequired: tenant_user
+  description: "Row-level security on domain_items table isolates data by tenant_id via current_setting('app.tenant_id')"
+  componentRef: "!name ss-repository"
+  containerRef: "!name ss-database"

@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: mbse.activity
+metadata:
+  name: activity-render-view
+spec:
+  displayName: "Render View"
+  description: "Dispatch view configuration to registered React or Web Component renderer with layout config and drill-down rules"
+  activityType: call-behavior
+  inputs: |
+    viewConfig: system.view spec
+    items: []DomainItem (filtered by itemGroup)
+  outputs: |
+    renderedView: React.ReactElement | HTMLElement
+  preconditions: "View component registered in viewRegistry"
+  postconditions: "Interactive diagram rendered with drill-down navigation"
+  allocatedToBlockRef: "!name block-frontend"

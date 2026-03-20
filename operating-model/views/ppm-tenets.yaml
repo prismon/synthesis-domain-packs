@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ppm-tenets
+spec:
+  displayName: "Operating Model Tenets"
+  description: "Decision tenets that guide Platform-Product-Market tradeoffs"
+  itemGroup:
+    kinds:
+      - ppm.tenet
+  viewComponentRef: "!name vc-domain-table"

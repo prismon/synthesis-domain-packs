@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-ai-agent-integration
+spec:
+  displayName: "AI Agent Integration"
+  description: "MCP-native AI agent access to the domain — tool-based CRUD, schema-aware prompts, and agent-driven domain updates via the Model Context Protocol."
+  valueStreamRef: "!name vs-ai-enablement"
+  status: active
+  affectedComponentRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-domain-service"

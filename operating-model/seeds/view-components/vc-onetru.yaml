@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-onetru
+spec:
+  displayName: "OneTru View"
+  description: "Platform-Product-Market layered operating model view showing layers, tenets, and capabilities"
+  layoutType: onetru
+  icon: layers
+  componentKind: web-component
+  webComponentTag: synth-onetru-view

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-c4-diagrams
+spec:
+  displayName: "C4 Diagram Rendering"
+  description: "Interactive C4 context, container, component, and code diagrams with auto-layout, drill-down navigation, and relationship edges."
+  valueStreamRef: "!name vs-architecture-viz"
+  fundingModel: percent
+  fundingValue: 50
+  opsInScope: false

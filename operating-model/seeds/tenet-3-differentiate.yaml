@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-3-differentiate
+spec:
+  displayName: "Products differentiate; markets configure"
+  order: 3
+  statement: |
+    Products differentiate; markets configure. Business logic and differentiated experiences belong in products. Local variation belongs in configuration, not custom engineering.
+  rationale: |
+    Custom market code creates fragmentation and requires independent release trains. Configuration-first market adaptation allows the company to scale globally without proportional engineering growth.
+  layerRefs:
+    - "!name ppm-layer-product"
+    - "!name ppm-layer-market"

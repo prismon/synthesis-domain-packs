@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: modeling.event
+metadata:
+  name: event-item-updated
+spec:
+  displayName: "Item Updated"
+  description: "Emitted when an existing domain item's spec is modified. Carries both before and after snapshots for diffing."
+  aggregateRef: "!name domain-item"
+  lifecycleState: active
+  triggerConditions: "An update-item MCP tool call changes at least one field in the item's spec."
+  payloadSchema: |
+    { tenantId: string, kind: string, name: string, before: object, after: object, updatedBy: string }
+  consumers: "Frontend query cache, future audit log service, future webhook dispatcher."

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-perf-sub-second
+spec:
+  displayName: "Sub-Second Query Response"
+  description: "The system shall return domain item queries in under 500ms for datasets up to 10,000 items per tenant."
+  reqId: "SYS-REQ-008"
+  reqType: performance
+  level: system
+  verificationMethod: test
+  risk: medium
+  rationale: "Interactive model exploration requires responsive queries. Latency above 1s breaks flow state."
+  derivedFromNeeds:
+    - "!name need-unified-delivery-intelligence"

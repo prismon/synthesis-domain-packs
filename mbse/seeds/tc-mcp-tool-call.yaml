@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.test-case
+metadata:
+  name: tc-mcp-tool-call
+spec:
+  displayName: "MCP Tool Call Round-Trip"
+  description: "Verify end-to-end MCP tool call from frontend through backend to database and back"
+  testId: "TC-SYS-003"
+  method: test
+  level: system
+  testProcedure: |
+    1. Frontend calls callTool('list_items', {kind: 'architecture.system'})
+    2. Verify JSON-RPC request sent over HTTP
+    3. Backend processes request with tenant context
+    4. Database query executes with RLS
+    5. Response returns as JSON-RPC result
+    6. Frontend receives typed DomainItem array
+  expectedResult: "Items returned matching tenant context, response under 500ms"
+  testStatus: passed
+  verifiesReqs:
+    - "!name req-mcp-protocol"
+    - "!name req-perf-sub-second"

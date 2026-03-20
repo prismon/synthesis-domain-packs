@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-update-definition
+spec:
+  displayName: "Domain Update Definition"
+  endpointType: mcp-tool
+  toolName: "update_definition"
+  parameters:
+    required: [uid, version]
+    optional: [displayName, description, traits, fields, providerType, preferredViewRef]
+  description: "Updates an existing domain definition with optimistic concurrency."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: architecture.external-system
+metadata:
+  name: ss-postgresql
+spec:
+  displayName: "PostgreSQL Database"
+  description: "Persistent storage for domain definitions, items, and tenant metadata. Uses row-level security for multi-tenant data isolation."
+  technology: "PostgreSQL 16"

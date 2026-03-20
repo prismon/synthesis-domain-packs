@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: modeling.shared-kernel
+metadata:
+  name: shared-kernel-type-identity
+spec:
+  displayName: "Type Identity Kernel"
+  description: "Shared identifiers (kind names, trait names, field types) used across Domain, Trait, and Reference contexts to ensure consistent type references."
+  contextRefs:
+    - "!name domain-context"
+    - "!name trait-context"
+    - "!name reference-context"
+  sharedModelDescription: |
+    - Kind names (e.g. 'systems', 'components', 'features') used as string identifiers
+    - Trait names (e.g. 'Ownable', 'Trackable') used in definition composition
+    - Field type enumeration (string, ref, ref-list, enum, boolean, number, text, etc.)
+  changeProtocol: "Adding new kinds or traits requires updating the domain.yaml and reloading. Renaming existing identifiers requires a migration."

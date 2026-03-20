@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-c4-drill-down
+spec:
+  displayName: "C4 Drill-Down Navigation"
+  description: "Click any node in a C4 diagram to drill into the next level — system to containers, container to components, component to code."
+  segmentRef: "!name seg-c4-diagrams"
+  implementedByRefs:
+    - "!name ss-view-renderer"
+  problemStatement: "Users must manually navigate between C4 levels via the sidebar, losing context of where they came from."
+  acceptanceCriteria: "Double-click a node to drill down. Breadcrumb trail shows navigation path. Back button returns to previous level."
+  status: active

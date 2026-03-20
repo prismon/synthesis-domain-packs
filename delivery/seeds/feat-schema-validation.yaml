@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-schema-validation
+spec:
+  displayName: "Server-Side Schema Validation"
+  description: "Backend validates item specs against the resolved schema before persisting, rejecting unknown fields and type mismatches."
+  segmentRef: "!name seg-definition-management"
+  implementedByRefs:
+    - "!name ss-trait-system"
+    - "!name ss-domain-service"
+  problemStatement: "Invalid data can be persisted if the frontend validation is bypassed (e.g. via MCP tool calls from AI agents)."
+  acceptanceCriteria: "All writes are validated server-side. Errors include field name, expected type, and actual value."
+  status: active

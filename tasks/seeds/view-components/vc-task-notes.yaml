@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-task-notes
+spec:
+  displayName: "Task Notes"
+  description: "Two-panel view with item list on the left and markdown notes on the right"
+  layoutType: task-notes
+  icon: file-text
+  componentKind: react

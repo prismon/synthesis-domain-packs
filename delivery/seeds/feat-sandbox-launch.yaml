@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-sandbox-launch
+spec:
+  displayName: "Sandbox Session Lifecycle"
+  description: "Launch Docker-native AI agent sessions from a template, monitor their status, and terminate them cleanly."
+  segmentRef: "!name seg-agent-execution"
+  implementedByRefs:
+    - "!name ss-sandbox-orchestrator"
+  problemStatement: "Agents need isolated execution environments that can be provisioned on demand and torn down after use."
+  acceptanceCriteria: "launch_sandbox_session provisions a running container; get_sandbox_status reflects live phase; terminate_sandbox_session tears down cleanly."
+  status: active

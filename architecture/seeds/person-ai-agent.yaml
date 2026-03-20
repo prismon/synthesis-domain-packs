@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: ai-agent
+spec:
+  displayName: "AI Agent (LLM)"
+  role: "MCP Client"
+  description: "An LLM-powered agent (e.g. Claude) that programmatically queries and manages domain items via the MCP protocol. Uses tools like list-items, get-item, create-item, and update-item."
+  usesRefs:
+    - "!name synthesis"

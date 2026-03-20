@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.allocation
+metadata:
+  name: alloc-render-to-frontend
+spec:
+  displayName: "View Rendering → Frontend"
+  description: "All view rendering (C4 diagrams, tables, hierarchy boards) is allocated to the React frontend SPA"
+  allocationType: function-to-structure
+  sourceRef: "Render View (activity)"
+  targetRef: "Frontend SPA (block)"
+  rationale: "Client-side rendering enables interactive drill-down without server round-trips for layout."
+  confidence: confirmed

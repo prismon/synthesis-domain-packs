@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: conversation.message
+metadata:
+  name: msg-arch-intro
+spec:
+  displayName: "Architecture channel created"
+  channelRef: "!name architecture-discussion"
+  author: "Synthesis"
+  authorKind: system
+  body: "This channel is for architecture decisions and C4 diagram reviews. Post RFCs and ADRs here for team discussion."
+  sentAt: "2026-03-01T09:00:00Z"

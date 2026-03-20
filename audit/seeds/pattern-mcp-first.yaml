@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-mcp-first
+spec:
+  displayName: "MCP-First Communication"
+  patternCategory: communication
+  description: "All frontend-backend communication uses the Model Context Protocol (MCP) over Streamable HTTP. No REST endpoints exist for data access. The frontend's callTool() function in src/lib/mcp/client.ts is the single communication layer. This enables AI agents and human users to interact through the same API surface."
+  componentRefs:
+    - "!name ss-mcp-client"
+    - "!name ss-mcp-server"
+  containerRefs:
+    - "!name ss-frontend"
+    - "!name ss-backend"

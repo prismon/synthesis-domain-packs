@@ -1,0 +1,105 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: conversation
+  version: 5
+spec:
+  displayName: "Conversations"
+  description: "Slack-like channels and messages for team communication and automated domain activity feeds"
+  icon: "message-circle"
+  color: "#06b6d4"
+  definitions:
+    - name: conversation.channel
+      displayName: "Channels"
+      description: "Conversation channels for team discussion, automated feeds, and integration messages"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: text
+          required: false
+          description: "What this channel is for"
+        - name: channelType
+          type: enum
+          required: false
+          description: "Channel type"
+          enumValues:
+            - discussion
+            - activity-feed
+            - integration
+        - name: isArchived
+          type: boolean
+          required: false
+          description: "Whether the channel is archived"
+      providerType: manual
+
+    - name: conversation.message
+      displayName: "Messages"
+      description: "Individual messages within a conversation channel"
+      preferredWidgetTag: synth-widget-default
+      traits: []
+      fields:
+        - name: channelRef
+          type: ref
+          required: false
+          description: "The channel this message belongs to"
+          targetKind: conversation.channel
+          critical: true
+        - name: sessionRef
+          type: string
+          required: false
+          description: "Agent world session that produced this message"
+        - name: author
+          type: string
+          required: false
+          description: "Display name of the message author"
+        - name: authorKind
+          type: enum
+          required: false
+          description: "Whether the author is a person, system, integration, or agent"
+          enumValues:
+            - person
+            - system
+            - integration
+            - agent
+        - name: body
+          type: text
+          required: true
+          description: "Message body text (supports markdown)"
+        - name: itemRef
+          type: string
+          required: false
+          description: "Optional reference to a domain item (kind/name)"
+        - name: sentAt
+          type: string
+          required: false
+          description: "ISO timestamp when the message was sent"
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: conversation.message
+          targetKind: conversation.channel
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: parentChannel
+          targetField: childMessages

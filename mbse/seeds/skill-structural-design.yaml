@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-structural-design
+spec:
+  displayName: "Structural Architecture Design"
+  description: "Decomposing systems into blocks, defining interfaces, and creating Block Definition Diagrams (BDD) and Internal Block Diagrams (IBD)."
+  category: structural-design
+  proficiencyLevels: |
+    Novice: Can create basic block hierarchies with properties
+    Practitioner: Designs multi-level structural models with typed ports, flow specifications, and parametric bindings
+    Expert: Architects cross-domain structural models with allocation tables, trade-study integration, and model libraries
+  tools:
+    - "Cameo Systems Modeler"
+    - "Enterprise Architect"
+    - "Rhapsody"
+    - "Capella"
+    - "Synthesis MBSE"
+  certifications:
+    - "OMG OCSMP Model Builder Fundamental"
+    - "OMG OCSMP Model Builder Intermediate"
+  maturity: mature

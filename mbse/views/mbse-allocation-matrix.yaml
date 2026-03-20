@@ -1,0 +1,33 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-allocation-matrix
+spec:
+  displayName: "Allocation Matrix"
+  description: "Cross-concern allocations — function to structure, logical to physical, requirement to block"
+  itemGroup:
+    kinds:
+      - mbse.allocation
+  viewComponentRef: "!name vc-table"
+  layoutConfig:
+    columns:
+      - field: displayName
+        label: "Allocation"
+        width: 200
+      - field: allocationType
+        label: "Type"
+        width: 160
+      - field: sourceRef
+        label: "From"
+        width: 180
+      - field: targetRef
+        label: "To"
+        width: 180
+      - field: confidence
+        label: "Confidence"
+        width: 110
+      - field: status
+        label: "Status"
+        width: 100
+    sortField: allocationType
+    sortDirection: asc

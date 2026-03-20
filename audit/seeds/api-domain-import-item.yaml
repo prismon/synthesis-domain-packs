@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-import-item
+spec:
+  displayName: "Domain Import Item"
+  endpointType: mcp-tool
+  toolName: "import_item"
+  parameters:
+    required: [content]
+    optional: []
+  description: "Creates or updates a domain item from frontmatter markdown."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

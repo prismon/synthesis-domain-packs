@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-wildcard-redirect-uri
+spec:
+  displayName: "Wildcard Redirect URI Expansion Too Permissive for Localhost"
+  severity: warning
+  category: security
+  description: "dcr_proxy.go lines 179-184 expands localhost redirect URIs to wildcard patterns (e.g., http://localhost -> http://localhost/*). This matches any port and path on localhost, allowing authorization code interception from unrelated services running on the same host."
+  recommendation: "Restrict wildcard expansion to the specific port specified in the registration. Require explicit port in redirect URIs. Consider using exact-match redirect URIs instead of wildcards."
+  sourceFile: "backend/internal/tenant/dcr_proxy.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-tenant-middleware"

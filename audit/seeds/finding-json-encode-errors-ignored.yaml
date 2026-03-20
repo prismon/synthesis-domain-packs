@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-json-encode-errors-ignored
+spec:
+  displayName: "JSON Encode Errors Ignored in HTTP Handlers"
+  severity: warning
+  category: security
+  description: "In cmd/domain-service/main.go lines 316 and 322, json.NewEncoder(w).Encode() return values are discarded. If encoding fails, the client receives a partial or invalid JSON response with an HTTP 200 status, leading to silent data corruption."
+  recommendation: "Capture the error return from json.Encode(). If encoding fails, log the error and return an appropriate HTTP error status. Consider using a helper function that consistently handles JSON encoding errors."
+  sourceFile: "backend/cmd/domain-service/main.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

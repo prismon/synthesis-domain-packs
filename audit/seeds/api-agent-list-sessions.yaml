@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-agent-list-sessions
+spec:
+  displayName: "Agent List Sessions"
+  endpointType: mcp-tool
+  toolName: "list_sandbox_session"
+  parameters:
+    required: []
+    optional: [phase]
+  description: "Lists sandbox sessions for the current tenant, optionally filtered by phase."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

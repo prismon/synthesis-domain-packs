@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-dynamic-feature-management
+spec:
+  displayName: "Dynamic Feature Management"
+  description: "Continuously discover, design, release, and optimize product features based on customer outcomes and market signals."
+  productRef: synthesis-product
+  status: active
+  touchesContainerRefs:
+    - ss-frontend
+    - ss-backend

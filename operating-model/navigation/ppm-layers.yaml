@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: ppm-layers
+spec:
+  title: "Layers"
+  icon: "layers"
+  viewRef: "ppm-overview"
+  order: 1

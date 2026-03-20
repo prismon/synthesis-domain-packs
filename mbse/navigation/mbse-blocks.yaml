@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-blocks
+spec:
+  title: "Block Definition"
+  icon: "boxes"
+  viewRef: "mbse-block-hierarchy"
+  order: 3

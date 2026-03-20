@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: git.branch
+metadata:
+  name: backend-main
+spec:
+  displayName: "main"
+  repoRef: "!name synthesis-backend"
+  headCommitSha: "f6a7b8c"
+  isDefault: true
+  isProtected: true

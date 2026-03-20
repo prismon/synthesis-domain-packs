@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: audit-db-schemas
+spec:
+  title: "Database Schemas"
+  icon: "database"
+  kind: "audit.db-schema"
+  order: 12

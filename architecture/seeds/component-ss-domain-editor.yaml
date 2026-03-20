@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-domain-editor
+spec:
+  displayName: "Domain Editor"
+  description: "Table-based domain item editor with inline editing, row detail panels, field type renderers (ref selects, date pickers, enums), dirty state tracking, and optimistic updates."
+  technology: "React / Tanstack Table"
+  containerRef: "!name ss-frontend"
+  usesRefs:
+    - "!name ss-mcp-client"

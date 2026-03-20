@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-conversation-timeline
+spec:
+  displayName: "Conversation Timeline"
+  description: "Chronological timeline of conversation messages"
+  layoutType: conversation-timeline
+  icon: message-square
+  componentKind: react

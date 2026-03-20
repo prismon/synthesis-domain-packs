@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-mcp-client
+spec:
+  displayName: "MCP Client"
+  description: "HTTP client for the MCP JSON-RPC protocol. Manages session lifecycle, initialization handshake, and provides a typed callTool<T>() function used by all React Query hooks for data fetching."
+  technology: "TypeScript"
+  containerRef: "!name ss-frontend"

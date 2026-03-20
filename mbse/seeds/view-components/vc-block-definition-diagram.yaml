@@ -1,0 +1,19 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-block-definition-diagram
+spec:
+  displayName: "Block Definition Diagram"
+  description: "SysML Block Definition Diagram showing structural decomposition with typed block nodes, composition edges, and interface connections"
+  layoutType: block-definition-diagram
+  icon: boxes
+  componentKind: web-component
+  webComponentTag: synth-block-definition-diagram
+  webComponentModule: "/domain-assets/mbse/view-components/block-definition-diagram.js"
+  defaultItemGroup:
+    kinds:
+      - mbse.block
+      - mbse.interface
+  defaultDrillDown:
+    - nodeKind: mbse.block
+      targetViewName: mbse-internal-block

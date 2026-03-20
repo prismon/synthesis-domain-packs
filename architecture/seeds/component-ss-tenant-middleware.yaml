@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-tenant-middleware
+spec:
+  displayName: "Tenant Middleware"
+  description: "HTTP middleware that resolves tenant context from requests. Supports OIDC JWT validation (production) and header-based resolution (development). Attaches TenantContext to request scope."
+  technology: "Go / go-oidc"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-domain-service"

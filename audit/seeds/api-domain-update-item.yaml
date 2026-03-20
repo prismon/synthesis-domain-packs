@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-update-item
+spec:
+  displayName: "Domain Update Item"
+  endpointType: mcp-tool
+  toolName: "update_item"
+  parameters:
+    required: [uid, version]
+    optional: [name, spec, markdown]
+  description: "Updates an existing domain item."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

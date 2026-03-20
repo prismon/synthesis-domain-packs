@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: conversation-timeline
+spec:
+  displayName: "Conversations"
+  description: "Slack-like channel view with real-time messages from team discussion and automated domain activity feeds."
+  itemGroup:
+    kinds:
+      - conversation.channel
+      - conversation.message
+  viewComponentRef: "!name vc-conversation-timeline"
+  layoutConfig:
+    channelKind: conversation.channel
+    messageKind: conversation.message
+    defaultChannel: general

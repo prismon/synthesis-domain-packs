@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-chat-bubble-unconditional
+spec:
+  displayName: "Chat Bubble Renders Unconditionally"
+  severity: warning
+  category: convention
+  description: "ChatWindow renders for all users even without enterprise agents. The floating chat bubble appears unconditionally. Should be gated by enterprise plugin or agent availability."
+  recommendation: "Gate the ChatWindow component behind a check for enterprise plugin availability or active agent configuration. Hide the chat bubble when no agents are configured."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-domain-editor"

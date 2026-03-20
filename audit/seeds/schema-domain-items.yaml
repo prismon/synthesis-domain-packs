@@ -1,0 +1,25 @@
+apiVersion: synthesis/v1
+kind: audit.db-schema
+metadata:
+  name: schema-domain-items
+spec:
+  displayName: "Domain Items Table"
+  tableName: "domain_items"
+  columns:
+    uid: "TEXT PRIMARY KEY"
+    tenant_id: "TEXT NOT NULL"
+    api_version: "TEXT NOT NULL DEFAULT 'synthesis/v1'"
+    kind: "TEXT NOT NULL"
+    name: "TEXT NOT NULL"
+    version: "BIGINT NOT NULL DEFAULT 1"
+    labels: "JSONB NOT NULL DEFAULT '{}'"
+    annotations: "JSONB NOT NULL DEFAULT '{}'"
+    spec: "JSONB NOT NULL DEFAULT '{}'"
+    status: "JSONB NOT NULL DEFAULT '{}'"
+    created_at: "TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+    updated_at: "TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+  indexes:
+    idx_items_tenant_kind: "tenant_id, kind"
+    unique_tenant_kind_name: "UNIQUE(tenant_id, kind, name)"
+  rlsPolicy: "CREATE POLICY tenant_isolation ON domain_items FOR ALL USING (tenant_id = current_setting('app.tenant_id', true)) WITH CHECK (tenant_id = current_setting('app.tenant_id', true))"
+  componentRef: "!name ss-repository"

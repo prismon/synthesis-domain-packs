@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: git.repository
+metadata:
+  name: synthesis-backend
+spec:
+  displayName: "Synthesis Backend"
+  description: "Go microservice with MCP server, traits engine, and multi-tenant domain system"
+  defaultBranch: main
+  visibility: private
+  language: Go
+  cloneUrl: "https://github.com/prismon/synthesis-backend.git"
+  provider: github
+  starCount: 5
+  openIssueCount: 3

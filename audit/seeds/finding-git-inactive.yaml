@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-git-inactive
+spec:
+  displayName: "Git Domain Pack Not Loaded by Any Tenant"
+  severity: info
+  category: convention
+  description: "git domain pack exists in backend/data/domains/git/ but no tenant includes it in their tenant.yaml. Definitions and seeds exist but are never loaded."
+  recommendation: "Either add git to a tenant configuration to activate it, or document it as an optional/experimental domain pack."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

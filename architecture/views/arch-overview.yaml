@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: arch-overview
+spec:
+  displayName: "Architecture Overview"
+  description: "Graphical landscape of all architecture systems, people, and external dependencies"
+  viewComponentRef: "!name vc-architecture-overview"
+  itemGroup:
+    kinds:
+      - architecture.system
+      - architecture.person
+      - architecture.external-system
+  drillDown:
+    - nodeKind: architecture.system
+      targetViewComponent: vc-c4-context

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-query-metrics
+spec:
+  displayName: "Enterprise Query Metrics"
+  endpointType: mcp-tool
+  toolName: "query_enterprise_metric"
+  parameters:
+    required: []
+    optional: [kind]
+  description: "Evaluates all metrics via MetricEngine."
+  permissionRequired: tenant_user
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

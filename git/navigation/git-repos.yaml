@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: git-repositories
+spec:
+  title: "Git Repositories"
+  icon: "git-branch"
+  viewRef: "git-repo-hierarchy"
+  order: 4

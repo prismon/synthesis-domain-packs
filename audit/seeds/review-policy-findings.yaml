@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: system.review-policy
+metadata:
+  name: review-audit-findings
+spec:
+  targetKind: audit.findings
+  requireReviewForCreate: false
+  requireReviewForUpdate: true
+  requireReviewForDelete: true
+  criticalFieldsOnly: true
+  autoExpireHours: 72
+  selfApprovalAllowed: false

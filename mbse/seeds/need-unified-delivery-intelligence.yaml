@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.stakeholder-need
+metadata:
+  name: need-unified-delivery-intelligence
+spec:
+  displayName: "Unified Delivery Intelligence"
+  description: "Engineering leaders need a single platform that unifies fragmented delivery tools (Jira, GitHub, architecture docs, observability) into a coherent, traceable system model."
+  source: "Engineering VP, Product Leadership"
+  priority: critical
+  rationale: "Teams currently waste 30% of time context-switching between disconnected tools. Decisions lack traceability. Architecture drift goes undetected."
+  acceptanceCriteria: "All delivery artifacts (features, components, domains) visible in one place with bidirectional traceability."
+  category: mission

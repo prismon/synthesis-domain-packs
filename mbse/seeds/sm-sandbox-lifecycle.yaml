@@ -1,0 +1,36 @@
+apiVersion: synthesis/v1
+kind: mbse.state-machine
+metadata:
+  name: sm-sandbox-lifecycle
+spec:
+  displayName: "Sandbox Session Lifecycle"
+  description: "State machine describing the lifecycle of an AI agent sandbox session"
+  ownerBlockRef: "!name block-sandbox-engine"
+  states: |
+    Idle — No session active
+    Launching — Container being created and initialized
+    Running — Agent executing in container
+    Awaiting Review — Agent output pending human review
+    Terminated — Session cleaned up and resources released
+    Failed — Session errored during execution
+  transitions: |
+    Idle -> Launching [launch_sandbox_session called]
+    Launching -> Running [container ready] / notify agent
+    Launching -> Failed [container creation error] / log error
+    Running -> Awaiting Review [agent proposes changes] / buffer changeset
+    Running -> Terminated [terminate_sandbox_session called] / cleanup container
+    Running -> Failed [execution timeout or OOM] / cleanup container
+    Awaiting Review -> Running [review complete] / resume agent
+    Awaiting Review -> Terminated [all changes reviewed] / cleanup container
+    Failed -> Idle [acknowledged] / release resources
+    Terminated -> Idle [cleanup complete]
+  initialState: "Idle"
+  events: |
+    launch_sandbox_session
+    container_ready
+    container_error
+    agent_proposes_changes
+    review_complete
+    terminate_sandbox_session
+    execution_timeout
+    cleanup_complete

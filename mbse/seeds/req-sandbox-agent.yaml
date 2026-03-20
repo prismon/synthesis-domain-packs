@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-sandbox-agent
+spec:
+  displayName: "Sandboxed Agent Execution"
+  description: "The system shall provide isolated Docker execution environments for AI agents with session management, message streaming, and resource cleanup."
+  reqId: "SYS-REQ-007"
+  reqType: functional
+  level: subsystem
+  verificationMethod: test
+  risk: high
+  rationale: "AI agents need isolated execution environments to prevent resource exhaustion and security breaches."
+  derivedFromNeeds:
+    - "!name need-ai-acceleration"
+    - "!name need-multi-tenant-isolation"

@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-mcp-protocol
+spec:
+  displayName: "MCP-First Communication"
+  description: "The system shall use Model Context Protocol (MCP) over Streamable HTTP as the sole frontend-backend communication mechanism."
+  reqId: "SYS-REQ-001"
+  reqType: interface
+  level: system
+  verificationMethod: test
+  risk: medium
+  rationale: "MCP enables both human UI and AI agents to use the same API surface, ensuring feature parity and auditability."
+  derivedFromNeeds:
+    - "!name need-unified-delivery-intelligence"
+    - "!name need-ai-acceleration"

@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: arch-architecture
+spec:
+  title: "Architecture"
+  icon: "network"
+  viewRef: "arch-overview"
+  order: 2

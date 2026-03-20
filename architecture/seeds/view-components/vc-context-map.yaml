@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-context-map
+spec:
+  displayName: "Context Map"
+  description: "DDD context map showing bounded context relationships"
+  layoutType: context-map
+  icon: map
+  componentKind: react

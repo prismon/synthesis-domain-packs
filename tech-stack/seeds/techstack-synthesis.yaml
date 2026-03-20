@@ -1,0 +1,7 @@
+apiVersion: synthesis/v1
+kind: tech-stack.stack
+metadata:
+  name: synthesis-tech-stack
+spec:
+  displayName: "Synthesis Tech Stack"
+  description: "Technology portfolio for the Synthesis delivery intelligence platform"

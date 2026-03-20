@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-release-dynamically
+spec:
+  displayName: "Release Dynamically"
+  description: "Release incrementally with runtime controls, progressive exposure, and rollback safety."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 10
+  opsInScope: true

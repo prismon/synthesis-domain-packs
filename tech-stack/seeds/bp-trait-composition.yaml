@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: tech-stack.blueprint
+metadata:
+  name: ts-trait-composition
+spec:
+  displayName: "Trait Composition"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  patternType: architectural
+  openSourceAdoption: internal
+  approved: approved
+  strengths:
+    - "Reusable behavioral field injection"
+    - "Schema composition without inheritance"
+  description: "Domain definitions compose traits (Ownable, Trackable, etc.) that inject fields"

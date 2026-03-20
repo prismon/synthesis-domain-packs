@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: modeling.event
+metadata:
+  name: event-item-created
+spec:
+  displayName: "Item Created"
+  description: "Emitted when a new domain item is persisted. Triggers cache invalidation on the frontend and future audit log entries."
+  aggregateRef: "!name domain-item"
+  lifecycleState: active
+  triggerConditions: "A create-item MCP tool call successfully persists a new item."
+  payloadSchema: |
+    { tenantId: string, kind: string, name: string, spec: object, createdBy: string }
+  consumers: "Frontend query cache (React Query invalidation), future audit log service."

@@ -1,0 +1,53 @@
+apiVersion: synthesis/v1
+kind: audit.design-document
+metadata:
+  name: doc-security-model
+spec:
+  displayName: "Security Model"
+  documentType: security-model
+  description: "Authentication, authorization, and tenant isolation security model"
+  systemRef: "!name synthesis"
+  lifecycleState: published
+markdown: |
+  # Security Model
+
+  ## Authentication
+
+  ### Resolver Modes (in priority order)
+  1. **Multi-realm OIDC** — `OIDC_ISSUER_URL` contains `{realm}` placeholder.
+     Uses `MultiRealmJWTResolver`. Extracts realm from JWT issuer, verifies
+     tenant registration, resolves role from People domain items.
+  2. **Single-issuer OIDC** — `OIDC_ISSUER_URL` set without `{realm}`.
+     Uses `JWTResolver`. Tenant from `org_id` claim, role from `role` claim.
+  3. **Dev headers** — Default fallback (no OIDC configured). `HeaderResolver`
+     reads `X-Tenant-ID`, `X-Tenant-Slug` headers. Role is `tenant_admin`
+     for registered tenants.
+
+  ## Authorization
+
+  ### Role Model
+  | Role | Read | Write | Admin | Platform |
+  |---|---|---|---|---|
+  | `tenant_user` | Yes | No | No | No |
+  | `tenant_admin` | Yes | Yes | Yes | No |
+  | `platform_admin` | Yes | Yes | Yes | Yes |
+
+  ### Enforcement Points
+  - `requireWrite(ctx)` — gates all Create/Update/Delete operations
+  - `canWriteTenantDomain(ctx)` — gates tenant registry writes (platform_admin only)
+  - Read operations have NO permission check (all authenticated users can read)
+
+  ### Impersonation
+  `X-Impersonate-Role` header allows platform_admin to downgrade to lower roles.
+  Escalation is prevented (only downgrades honored).
+
+  ## Tenant Isolation
+  - **Database**: PostgreSQL RLS with `FORCE ROW LEVEL SECURITY`
+  - **Application**: `tenant.Middleware` sets tenant context per request
+  - **Session**: `app.tenant_id` set via `set_config()` per transaction
+
+  ## Known Gaps
+  - Dev mode HeaderResolver trusts client-supplied role/tier headers
+  - Frontend has no RBAC — all UI elements visible to all users
+  - Agent chat has no rate limiting (BudgetManager exists but unwired)
+  - Lifecycle state transitions are modeled but not enforced

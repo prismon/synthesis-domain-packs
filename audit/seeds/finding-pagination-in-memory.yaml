@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-pagination-in-memory
+spec:
+  displayName: "Pagination Applied In-Memory Instead of SQL LIMIT/OFFSET"
+  severity: warning
+  category: performance
+  description: "auto_tools.go line 330 has TODO: 'Push pagination to repository layer for SQL-level LIMIT/OFFSET.' Currently all items are fetched into memory before pagination is applied. This is inefficient for large datasets and will cause memory pressure as data grows."
+  recommendation: "Push pagination parameters (offset, limit) to the repository layer and use SQL LIMIT/OFFSET clauses. This prevents loading entire result sets into memory."
+  sourceFile: "backend/internal/mcpserver/auto_tools.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

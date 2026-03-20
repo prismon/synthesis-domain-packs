@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-verification-validation
+spec:
+  displayName: "Verification & Validation"
+  description: "Designing test cases, verification matrices, and V&V plans that trace back to requirements using TIDA methods (Test, Inspection, Demonstration, Analysis)."
+  category: verification-validation
+  proficiencyLevels: |
+    Novice: Can write basic test procedures for individual requirements
+    Practitioner: Designs verification matrices with TIDA coverage and integration test strategies
+    Expert: Architects V&V programs with risk-based test prioritization, automated regression, and certification evidence packages
+  tools:
+    - "Cameo Requirements Modeler"
+    - "IBM DOORS"
+    - "TestRail"
+    - "Playwright"
+    - "Synthesis MBSE"
+  certifications:
+    - "ISTQB Advanced"
+    - "INCOSE CSEP"
+  maturity: mature

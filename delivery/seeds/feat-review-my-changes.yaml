@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-review-my-changes
+spec:
+  displayName: "My Changes"
+  description: "List all pending and historical changes submitted by the current user, scoped to their identity."
+  segmentRef: "!name seg-review-workflow"
+  implementedByRefs:
+    - "!name ss-review-engine"
+  problemStatement: "Contributors need to track the status of changes they have submitted for review."
+  acceptanceCriteria: "list_my_review_change returns only changes belonging to the authenticated user."
+  status: active

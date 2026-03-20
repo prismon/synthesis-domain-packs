@@ -1,0 +1,38 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: audit-system
+spec:
+  displayName: "Synthesis Platform — Audit"
+  description: "System-level audit overview with drill-down to container audits"
+  itemGroup:
+    kinds:
+      - audit.finding
+      - audit.design-document
+      - audit.design-pattern
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: audit.finding
+        groupByField: severity
+        label: "System Findings"
+      - kind: audit.design-document
+        groupByField: documentType
+        label: "Design Documents"
+      - kind: audit.design-pattern
+        groupByField: patternCategory
+        label: "Design Patterns"
+    filterByRef:
+      field: systemRef
+      value: synthesis
+    showDescriptions: true
+  drillDown:
+    - nodeKind: architecture.container
+      nodeFilter: ss-backend
+      targetViewName: audit-backend
+    - nodeKind: architecture.container
+      nodeFilter: ss-frontend
+      targetViewName: audit-frontend
+    - nodeKind: architecture.container
+      nodeFilter: ss-database
+      targetViewName: audit-database

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: mbse.block
+metadata:
+  name: block-database
+spec:
+  displayName: "PostgreSQL Database"
+  description: "PostgreSQL with row-level security policies for multi-tenant data isolation"
+  blockType: software
+  parentBlockRef: "!name block-synthesis-platform"
+  properties: |
+    engine: PostgreSQL 16
+    isolation: Row-Level Security
+    schema: domain_items, tenant_configs
+  technology: "PostgreSQL 16"

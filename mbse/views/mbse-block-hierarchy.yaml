@@ -1,0 +1,24 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-block-hierarchy
+spec:
+  displayName: "Block Definition Diagram"
+  description: "SysML Block Definition Diagram showing structural decomposition of blocks with typed nodes, composition edges, interface connections, and flow relationships"
+  itemGroup:
+    kinds:
+      - mbse.block
+      - mbse.interface
+  viewComponentRef: "!name vc-block-definition-diagram"
+  layoutConfig:
+    blockKind: mbse.block
+    interfaceKind: mbse.interface
+    blockColor: "#0891b2"
+    interfaceColor: "#f59e0b"
+    showProperties: true
+    showDescriptions: true
+  drillDown:
+    - nodeKind: mbse.block
+      targetViewName: mbse-internal-block
+    - nodeKind: mbse.interface
+      targetViewName: mbse-interface-matrix

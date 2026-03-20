@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: mbse.stakeholder-need
+metadata:
+  name: need-extensible-domain-model
+spec:
+  displayName: "Extensible Domain Model"
+  description: "Platform architects need a trait-based schema system where new domain types compose reusable behaviors (trackable, ownable, hierarchical) without code changes."
+  source: "Platform Architecture Team"
+  priority: important
+  rationale: "Every organization has unique domain vocabularies. A fixed schema cannot serve diverse enterprise modeling needs."
+  acceptanceCriteria: "New domain packs can be created via YAML configuration alone. Traits compose automatically. No backend code changes required."
+  category: operational

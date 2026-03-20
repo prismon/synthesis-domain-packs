@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-c4-component
+spec:
+  displayName: "C4 Component Diagram"
+  description: "C4 model Level 3 — shows components within a container"
+  layoutType: c4-component
+  icon: cpu
+  componentKind: react
+  requiredFields:
+    containerRef:
+      type: ref
+  defaultLayoutConfig:
+    componentKind: architecture.component
+    containerKind: architecture.container
+  defaultItemGroup:
+    kinds:
+      - architecture.component
+      - architecture.container

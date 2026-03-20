@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: modeling.context-map
+metadata:
+  name: context-map-synthesis
+spec:
+  displayName: "Synthesis Context Map"
+  description: "Strategic overview of how the five bounded contexts in Synthesis interact. The Domain Context is the core, with Trait and Reference contexts providing field schemas and relationships."
+  contextRefs:
+    - "!name domain-context"
+    - "!name tenant-context"
+    - "!name trait-context"
+    - "!name view-context"
+    - "!name reference-context"
+  integrationPatternsOverview: "MCP serves as the integration backbone. The Domain Context exposes tools via MCP's Open Host Service. Trait and Reference contexts share a kernel of type identifiers."

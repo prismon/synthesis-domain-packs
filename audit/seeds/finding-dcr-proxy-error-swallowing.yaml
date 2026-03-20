@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dcr-proxy-error-swallowing
+spec:
+  displayName: "DCR Proxy Swallows json.Marshal and io.ReadAll Errors"
+  severity: critical
+  category: security
+  description: "In dcr_proxy.go line 111, json.Marshal() error is discarded with _ assignment. If marshaling fails, an empty body is sent to Keycloak. At line 121, io.ReadAll() error is similarly discarded, meaning upstream response read failures result in empty responses forwarded to the client without any error indication."
+  recommendation: "Check both error return values. Return HTTP 400 for marshal failures and HTTP 502 Bad Gateway for upstream read failures. Log errors for observability."
+  sourceFile: "backend/internal/tenant/dcr_proxy.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-tenant-middleware"

@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: platform-engineer
+spec:
+  displayName: "Platform Engineer"
+  role: "End User"
+  description: "Uses the Synthesis web UI to manage domain definitions, create and edit items, explore C4 architecture diagrams, and configure tenant domains."
+  usesRefs:
+    - "!name synthesis"

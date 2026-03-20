@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-agent-chat
+spec:
+  displayName: "Agent Chat"
+  endpointType: mcp-tool
+  toolName: "chat_sandbox_session"
+  parameters:
+    required: [message]
+    optional: [templateRef, sessionId, model]
+  description: "Sends a message to a Claude agent; launches a new sandbox session or reuses an existing one."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

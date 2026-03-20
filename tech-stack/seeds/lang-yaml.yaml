@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: tech-stack.language
+metadata:
+  name: ts-yaml
+spec:
+  displayName: "YAML"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  paradigm: scripting
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "Human-readable configuration"
+    - "Domain pack definitions"
+  description: "Domain pack definitions, seed data, and configuration"

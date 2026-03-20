@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-build-integrate
+spec:
+  displayName: "Build and Integrate"
+  description: "Implement the feature and integrate dependencies across services, APIs, and user experiences."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 14
+  opsInScope: true

@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tasks.task
+metadata:
+  name: task-hot-reload-domains
+spec:
+  displayName: "Validate domain pack hot-reload on file change"
+  status: todo
+  priority: p2
+  list: "Platform Work"
+  flagged: false
+  notes: |
+    Confirm that modifying a `domain.yaml` in `backend/data/domains/` triggers
+    a reload without restarting the backend process.
+
+    Acceptance: change `version` field, confirm the domain service picks up the new version
+    within 2 seconds and returns updated definitions via `list-definitions`.

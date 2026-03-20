@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-budget-manager-unwired
+spec:
+  displayName: "BudgetManager Implemented But Never Wired"
+  severity: warning
+  category: design-gap
+  description: "BudgetManager exists with full implementation and tests in enterprise/agent/budget.go but is never instantiated or connected to ChatHandler. Agents have no rate limiting."
+  recommendation: "Instantiate BudgetManager in the ChatHandler constructor and enforce budget checks before each agent invocation."
+  sourceFile: "enterprise/agent/budget.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

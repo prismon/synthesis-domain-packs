@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.permission
+metadata:
+  name: perm-cardinality-controller
+spec:
+  displayName: "Cardinality Admission Controller"
+  permissionType: admission
+  enforcementPoint: "admission/cardinality.go:Validate"
+  roleRequired: tenant_user
+  description: "Validates that ref and ref-list fields do not exceed max cardinality declared in ReferenceConstraints. Enforces maximum only (min not checked)."
+  componentRef: "!name ss-reference-engine"
+  containerRef: "!name ss-backend"

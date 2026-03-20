@@ -1,0 +1,23 @@
+apiVersion: synthesis/v1
+kind: tasks.ticket
+metadata:
+  name: ticket-changeset-sse
+spec:
+  displayName: "Add SSE notification on changeset submit"
+  status: done
+  priority: p2
+  issueType: improvement
+  storyPoints: 2
+  sprint: "Sprint 11"
+  labels:
+    - backend
+    - changesets
+  componentRefs:
+    - "!name ss-mcp-server"
+  acceptanceCriteria: |
+    - Submitting a changeset via MCP emits an SSE event to subscribed clients
+    - Frontend review queue refreshes automatically without polling
+    - Event payload includes `changesetId`, `tenantId`, and `submittedBy`
+  reporter: "josh"
+  resolution: "Implemented in commit 2eb444d."
+  lifecycleState: active

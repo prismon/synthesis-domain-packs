@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-analyze-competitive-examples
+spec:
+  displayName: "Analyze Competitive Examples"
+  description: "Analyze competitor and market examples to shape strategy, positioning, and differentiation."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 10
+  opsInScope: false

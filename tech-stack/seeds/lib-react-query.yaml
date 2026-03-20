@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-react-query
+spec:
+  displayName: "React Query"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  packageManager: npm
+  license: "MIT"
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "Server state caching and invalidation"
+    - "Automatic background refetching"
+  description: "Server state management for MCP data"

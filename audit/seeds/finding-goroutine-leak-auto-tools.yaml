@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-goroutine-leak-auto-tools
+spec:
+  displayName: "Background Goroutine Leak in Auto-Tool Registry"
+  severity: warning
+  category: design-gap
+  description: "auto_tools.go lines 73-80 launches a goroutine with context.WithoutCancel that calls ListDefinitions. If this call blocks indefinitely, the goroutine leaks permanently. Errors are silently discarded with 'return // best-effort', providing no observability into failures."
+  recommendation: "Add a timeout context (e.g., 5 seconds) to the background goroutine. Log errors instead of silently returning. Consider using an errgroup or similar pattern for managed background work."
+  sourceFile: "backend/internal/mcpserver/auto_tools.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

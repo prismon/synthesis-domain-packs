@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-git-plugin
+spec:
+  displayName: "Git Plugin"
+  description: "Analyzes repository structure and syncs branches, pull requests, and metadata from GitHub into the domain model."
+  technology: "Go"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-domain-service"

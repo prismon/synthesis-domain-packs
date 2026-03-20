@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: mbse.interface
+metadata:
+  name: iface-oidc-jwt
+spec:
+  displayName: "OIDC JWT Token Exchange"
+  description: "Frontend authenticates via OIDC, backend validates JWT and extracts tenant/role claims"
+  interfaceType: api
+  direction: inout
+  sourceBlockRef: "!name block-frontend"
+  targetBlockRef: "!name block-oidc-auth"
+  protocol: "OIDC / OAuth 2.0"
+  dataFormat: "JWT (RS256)"

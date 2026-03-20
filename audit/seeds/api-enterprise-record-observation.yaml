@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-record-observation
+spec:
+  displayName: "Enterprise Record Observation"
+  endpointType: mcp-tool
+  toolName: "record_enterprise_observation"
+  parameters:
+    required: [metricRef, value]
+    optional: [timestamp, source]
+  description: "Records a metric observation."
+  permissionRequired: tenant_admin
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

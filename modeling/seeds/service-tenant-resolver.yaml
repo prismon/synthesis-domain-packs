@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: modeling.service
+metadata:
+  name: service-tenant-resolver
+spec:
+  displayName: "Tenant Resolver"
+  description: "Resolves the current tenant from the HTTP request hostname or OIDC token claims. Injects tenant_id into the database session for RLS enforcement."
+  boundedContextRef: "!name tenant-context"
+  componentRef: "!name ss-tenant-middleware"
+  lifecycleState: active
+  inputDescription: "HTTP request with Host header and optional Authorization bearer token."
+  outputDescription: "Resolved tenant ID set on the request context and database session."
+  dependencies: "Tenant registry (loaded from tenant.yaml manifests at startup)."

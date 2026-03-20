@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: mbse.constraint
+metadata:
+  name: constraint-tenant-scale
+spec:
+  displayName: "Tenant Scale Budget"
+  description: "Maximum items per tenant before performance degradation"
+  equation: "items_per_tenant <= 10000 AND concurrent_tenants <= 100"
+  parameters: |
+    items_per_tenant: total domain items (all kinds) per tenant
+    concurrent_tenants: simultaneous active tenants
+    connection_pool: pgx pool size per instance
+  constraintType: budget
+  analysisMethod: "Load testing with k6"
+  constrainsBlocks:
+    - "!name block-database"
+    - "!name block-backend"

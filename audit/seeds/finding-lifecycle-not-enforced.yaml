@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-lifecycle-not-enforced
+spec:
+  displayName: "Lifecycle State Machine Modeled But Not Enforced"
+  severity: warning
+  category: design-gap
+  description: "LifecycleDefinition and TransitionGate types exist in domain/types.go but no admission controller validates state transitions. Lifecycle state machine is modeled but not enforced."
+  recommendation: "Implement an admission controller that validates lifecycle state transitions against the defined state machine before persisting changes."
+  sourceFile: "backend/internal/domain/types.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-domain-service"

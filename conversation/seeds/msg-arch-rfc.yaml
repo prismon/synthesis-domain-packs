@@ -1,0 +1,25 @@
+apiVersion: synthesis/v1
+kind: conversation.message
+metadata:
+  name: msg-arch-rfc
+spec:
+  displayName: "MCP Protocol RFC"
+  channelRef: "!name architecture-discussion"
+  author: "Platform Engineer"
+  authorKind: person
+  body: |
+    **RFC: MCP Session Management**
+
+    Currently the frontend MCP client creates a new session on every page load.
+    Proposal: persist the session ID in localStorage and reconnect on reload.
+
+    Pros:
+    - Faster page loads (no initialize round-trip)
+    - Server can cache tenant context per session
+
+    Cons:
+    - Session expiry handling becomes more complex
+    - Need to handle stale session gracefully
+
+    Thoughts?
+  sentAt: "2026-03-03T11:00:00Z"

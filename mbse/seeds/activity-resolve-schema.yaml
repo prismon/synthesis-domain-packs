@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: mbse.activity
+metadata:
+  name: activity-resolve-schema
+spec:
+  displayName: "Resolve Schema"
+  description: "Three-phase schema resolution: trait fields, reference-kind injected fields, then custom field overrides"
+  activityType: call-behavior
+  inputs: |
+    definition: DomainDefinition
+    traits: TraitRegistry
+    referenceKinds: []ReferenceKind
+  outputs: |
+    resolvedFields: []Field (ordered, deduplicated)
+  preconditions: "Definition has been loaded and traits are registered"
+  postconditions: "Resolved schema contains all trait, reference, and custom fields in correct precedence"
+  allocatedToBlockRef: "!name block-backend"

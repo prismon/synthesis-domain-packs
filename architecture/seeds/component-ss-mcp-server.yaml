@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-mcp-server
+spec:
+  displayName: "MCP Server"
+  description: "Implements the Model Context Protocol over stateful HTTP streaming. Registers 13 domain tools, parses JSON-RPC requests, and delegates to the Domain Service."
+  technology: "Go / mcp-go"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-domain-service"

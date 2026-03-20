@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ts-table-synthesis
+spec:
+  displayName: "Synthesis Technologies"
+  description: "Table listing all technologies in the Synthesis tech stack"
+  itemGroup:
+    kinds:
+      - tech-stack.language
+      - tech-stack.library
+      - tech-stack.service
+      - tech-stack.blueprint
+  viewComponentRef: "!name vc-table"

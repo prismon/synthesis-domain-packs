@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-definition-management
+spec:
+  displayName: "Definition & Schema Management"
+  description: "Domain definition lifecycle — trait composition, field schemas, and domain pack loading."
+  valueStreamRef: "!name vs-domain-management"
+  fundingModel: percent
+  fundingValue: 30
+  opsInScope: false

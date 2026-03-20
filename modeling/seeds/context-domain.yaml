@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: modeling.bounded-context
+metadata:
+  name: domain-context
+spec:
+  displayName: "Domain Context"
+  description: "Owns the complete lifecycle of domain definitions and items. Authoritative source for item spec data, field schemas, and trait-resolved schemas."
+  systemRef: "!name synthesis"
+  lifecycleState: active
+  integrationPatterns:
+    - "Open Host Service (MCP)"
+    - "Published Language (JSON-RPC)"
+  teamResponsibility: "The platform team owns all domain mutations. Items are created/updated via MCP tools, validated against resolved schemas, and persisted with tenant isolation."
+  ubiquitousLanguageNotes: |
+    - Item: a single domain entry (e.g. a system, component, feature) with a kind, name, and spec
+    - Definition: the schema declaration for a kind, including traits and custom fields
+    - Kind: the type identifier for a definition (e.g. 'systems', 'components', 'features')
+    - Spec: the user-defined fields on an item, validated against the resolved schema

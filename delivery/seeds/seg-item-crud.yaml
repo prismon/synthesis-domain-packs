@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-item-crud
+spec:
+  displayName: "Item CRUD Operations"
+  description: "Create, read, update, and delete domain items with field validation against trait-resolved schemas."
+  valueStreamRef: "!name vs-domain-management"
+  fundingModel: percent
+  fundingValue: 40
+  opsInScope: false

@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-table
+spec:
+  displayName: "Table"
+  description: "Tabular view of domain items with sorting and filtering"
+  layoutType: table
+  icon: table
+  componentKind: react

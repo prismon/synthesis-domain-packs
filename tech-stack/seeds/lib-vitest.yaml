@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-vitest
+spec:
+  displayName: "Vitest"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: fix
+  packageManager: npm
+  license: "MIT"
+  openSourceAdoption: moderate
+  approved: approved
+  strengths:
+    - "Vite-native test runner"
+    - "Jest-compatible API"
+  description: "Frontend unit testing framework"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: modeling.value-object
+metadata:
+  name: vo-field-schema
+spec:
+  displayName: "Field Schema"
+  description: "An immutable field declaration with name, type, required flag, description, and type-specific properties (enumValues, targetKind, etc.)."
+  aggregateRef: "!name domain-definition"
+  equalitySemantics: "Two fields are equal if they share the same name and type within the same definition."
+  immutabilityNotes: "Fields are loaded from YAML and treated as immutable. Changes require a new domain pack version."
+  exampleValues: |
+    - { name: "technology", type: "string", required: false }
+    - { name: "systemRef", type: "ref", targetKind: "architecture.system", required: true }
+    - { name: "status", type: "enum", enumValues: ["active", "deprecated"], required: false }

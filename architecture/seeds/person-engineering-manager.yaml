@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: architecture.person
+metadata:
+  name: engineering-manager
+spec:
+  displayName: "Engineering Manager"
+  role: "Stakeholder"
+  description: "Reviews value stream maps, tracks feature delivery progress, and uses architecture views for capacity planning and technical decision-making."
+  usesRefs:
+    - "!name synthesis"

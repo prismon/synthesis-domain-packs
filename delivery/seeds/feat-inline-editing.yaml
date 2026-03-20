@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-inline-editing
+spec:
+  displayName: "Inline Cell Editing"
+  description: "Click-to-edit cells in the domain table with type-aware renderers for strings, enums, refs, dates, and booleans."
+  segmentRef: "!name seg-item-crud"
+  implementedByRefs:
+    - "!name ss-domain-editor"
+  problemStatement: "Users must open a detail panel to edit any field, creating friction for bulk data entry."
+  acceptanceCriteria: "All field types support inline editing. Changes auto-save with optimistic UI updates. Undo is supported via Ctrl+Z."
+  status: active

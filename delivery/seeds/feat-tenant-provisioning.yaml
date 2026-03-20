@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-tenant-provisioning
+spec:
+  displayName: "Declarative Tenant Provisioning"
+  description: "Tenants are declared in YAML manifests specifying display name, hostnames, tier, and which domains to load."
+  segmentRef: "!name seg-domain-composition"
+  implementedByRefs:
+    - "!name ss-domain-loader"
+    - "!name ss-tenant-middleware"
+  problemStatement: "Adding a new tenant requires database scripts and code changes."
+  acceptanceCriteria: "New tenant is created by adding a tenant.yaml file. Backend loads it on startup. No DB migration needed."
+  status: active

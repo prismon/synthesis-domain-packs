@@ -1,0 +1,23 @@
+apiVersion: synthesis/v1
+kind: tasks.ticket
+metadata:
+  name: ticket-task-notes-view
+spec:
+  displayName: "Build TaskNotes two-panel view"
+  status: todo
+  priority: p2
+  issueType: story
+  storyPoints: 3
+  sprint: "Sprint 12"
+  labels:
+    - frontend
+    - views
+  componentRefs:
+    - "!name ss-view-renderer"
+  acceptanceCriteria: |
+    - Left panel lists all tasks with status badge and display name
+    - Right panel renders selected item's `notes` field as markdown
+    - Clicking an item in the left panel opens it in the right panel
+    - Metadata badges (status, priority, dueDate, flagged) displayed above markdown
+  reporter: "josh"
+  lifecycleState: active

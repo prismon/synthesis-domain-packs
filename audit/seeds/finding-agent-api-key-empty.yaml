@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-agent-api-key-empty
+spec:
+  displayName: "Agent API Key Hardcoded Empty"
+  severity: critical
+  category: security
+  description: "Agent API key hardcoded empty in enterprise/agent/chat.go line 139, option.WithAPIKey(\"\"). Anthropic API key not loaded from config."
+  recommendation: "Load the Anthropic API key from environment variable or secret management system. Never hardcode empty or placeholder API keys."
+  sourceFile: "enterprise/agent/chat.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

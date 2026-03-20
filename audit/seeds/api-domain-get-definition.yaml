@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-get-definition
+spec:
+  displayName: "Domain Get Definition"
+  endpointType: mcp-tool
+  toolName: "get_definition"
+  parameters:
+    required: [uid]
+    optional: []
+  description: "Gets a single domain definition by UID."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

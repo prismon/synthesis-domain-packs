@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.container
+metadata:
+  name: ss-backend
+spec:
+  displayName: "Backend API"
+  description: "Go HTTP server implementing the MCP protocol. Handles domain CRUD operations, multi-tenant isolation, OIDC JWT validation, starter pack loading, and spec validation against trait-defined field schemas."
+  technology: "Go / Chi / mcp-go"
+  systemRef: "!name synthesis"
+  usesRefs:
+    - "!name ss-database"

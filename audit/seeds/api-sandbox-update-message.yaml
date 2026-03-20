@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-sandbox-update-message
+spec:
+  displayName: "Sandbox Update Message"
+  endpointType: mcp-tool
+  toolName: "update_sandbox_message"
+  parameters:
+    required: [messageName, body]
+    optional: []
+  description: "Updates the body of an existing conversation message; used for streaming token-by-token responses."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

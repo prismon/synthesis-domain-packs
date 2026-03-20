@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-traceability
+spec:
+  title: "Traceability"
+  icon: "git-branch"
+  viewRef: "mbse-traceability-graph"
+  order: 6

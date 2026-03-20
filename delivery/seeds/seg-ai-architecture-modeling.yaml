@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-ai-architecture-modeling
+spec:
+  displayName: "AI-Assisted Architecture Modeling"
+  description: "AI-powered generation and refinement of C4 architecture models — suggesting system boundaries, container decomposition, and component relationships from codebase analysis and conversation."
+  valueStreamRef: "!name vs-ai-enablement"
+  status: active
+  affectedComponentRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-view-renderer"

@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.state-machine
+metadata:
+  name: sm-review-item
+spec:
+  displayName: "Review Item Lifecycle"
+  description: "State machine for a single HITL review change item"
+  ownerBlockRef: "!name block-backend"
+  states: |
+    Pending — Change proposed, awaiting review
+    Approved — Reviewer accepted the change
+    Rejected — Reviewer rejected the change
+    Applied — Approved change applied to canonical store
+  transitions: |
+    Pending -> Approved [approve_review_change] / mark approved
+    Pending -> Rejected [reject_review_change] / log rejection reason
+    Approved -> Applied [apply changeset] / upsert domain item
+  initialState: "Pending"
+  events: |
+    approve_review_change
+    reject_review_change
+    apply_changeset

@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-systems-integration
+spec:
+  displayName: "Systems Integration"
+  description: "Integrating subsystems through allocation matrices, interface verification, and incremental build-up testing following the V-model right side."
+  category: systems-integration
+  proficiencyLevels: |
+    Novice: Can follow integration test procedures and document results
+    Practitioner: Plans integration sequences, manages interface verification, and resolves integration defects
+    Expert: Architects integration strategies for complex multi-vendor systems with concurrent engineering and CI/CD pipelines
+  tools:
+    - "Cameo Systems Modeler"
+    - "Jenkins/GitLab CI"
+    - "Synthesis MBSE"
+  certifications:
+    - "INCOSE CSEP"
+    - "INCOSE ESEP"
+  maturity: stable

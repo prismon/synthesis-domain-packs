@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-activities
+spec:
+  title: "Activities"
+  icon: "network"
+  viewRef: "mbse-activity-flow"
+  order: 8

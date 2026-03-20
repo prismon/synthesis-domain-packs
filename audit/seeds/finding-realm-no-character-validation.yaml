@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-realm-no-character-validation
+spec:
+  displayName: "Realm Parameter Not Validated for Character Set"
+  severity: warning
+  category: security
+  description: "In dcr_proxy.go line 285 and keycloak/admin.go lines 84-129, realm and slug parameters are interpolated into URL paths via fmt.Sprintf without explicit character set validation. While LookupSlug provides some validation, there is no explicit regex check ensuring realm matches ^[a-z0-9-]+$, leaving potential for path traversal or URL injection if validation is bypassed."
+  recommendation: "Add explicit regex validation that realm/slug parameters match ^[a-z0-9-]+$ before using them in URL path construction. Apply this validation at the earliest point of entry."
+  sourceFile: "backend/internal/tenant/dcr_proxy.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-tenant-middleware"

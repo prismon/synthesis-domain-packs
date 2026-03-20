@@ -1,0 +1,26 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: task-kanban-view
+spec:
+  displayName: "Tasks Board"
+  description: "Kanban board of all tasks grouped by status"
+  itemGroup:
+    kinds:
+      - tasks.task
+  viewComponentRef: "!name vc-task-kanban"
+  layoutConfig:
+    statusColumns:
+      - key: todo
+        label: "To Do"
+        color: "#6b7280"
+      - key: in-progress
+        label: "In Progress"
+        color: "#f59e0b"
+      - key: done
+        label: "Done"
+        color: "#10b981"
+      - key: cancelled
+        label: "Cancelled"
+        color: "#ef4444"
+    showFlagged: true

@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: tasks.task
+metadata:
+  name: task-write-e2e-tests
+spec:
+  displayName: "Write Playwright E2E tests for MCP tools"
+  status: in-progress
+  priority: p2
+  list: "Platform Work"
+  flagged: true
+  notes: |
+    Cover the 13 registered MCP tools end-to-end:
+    - `list-items`, `get-item`, `create-item`, `update-item`, `delete-item`
+    - `list-definitions`, `get-definition`
+    - `add-reference`, `remove-reference`, `list-references`
+
+    Use `https://demo.technicaldetails.org` — never localhost.
+    Short timeouts to fail fast (5 s per assertion).

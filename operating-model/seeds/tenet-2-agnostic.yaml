@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-2-agnostic
+spec:
+  displayName: "Platforms are agnostic by design"
+  order: 2
+  statement: |
+    Platforms are agnostic by design. The platform does not encode product logic or market differences. That ignorance is what allows it to scale.
+  rationale: |
+    A platform that understands business lines or geographies cannot serve all of them equally. Agnosticism is not a limitation — it is the source of the platform's scalability.
+  layerRefs:
+    - "!name ppm-layer-platform"

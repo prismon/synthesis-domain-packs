@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-ai-enablement
+spec:
+  displayName: "AI-Enabled Software Development"
+  description: "AI acceleration of unified software development — architecture modeling, process automation, and developer workflows powered by MCP-native AI agent integration across the entire delivery lifecycle."
+  productRef: "!name synthesis-product"
+  status: active
+  priority: p0
+  touchesContainerRefs:
+    - "!name ss-backend"
+    - "!name ss-frontend"
+    - "!name ss-database"

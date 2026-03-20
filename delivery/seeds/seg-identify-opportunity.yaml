@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-identify-opportunity
+spec:
+  displayName: "Identify Opportunity"
+  description: "Identify unmet customer, business, or technical opportunities worth pursuing as candidate features."
+  valueStreamRef: vs-dynamic-feature-management
+  fundingModel: percent
+  fundingValue: 10
+  opsInScope: false

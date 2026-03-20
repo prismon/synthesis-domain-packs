@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-view-registrations-type-safety
+spec:
+  displayName: "All View Registrations Bypass Type Safety with 'as any'"
+  severity: info
+  category: convention
+  description: "builtin-registrations.ts uses 'as any' type assertions on all 12 view component registrations (lines 17-94). This suppresses TypeScript errors system-wide for view components, hiding potential prop mismatches and type errors that would otherwise be caught at compile time."
+  recommendation: "Define a proper ViewComponent generic type that accommodates the different prop shapes. Replace 'as any' with proper type assertions or fix the underlying type incompatibilities."
+  sourceFile: "src/lib/views/builtin-registrations.ts"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-view-renderer"

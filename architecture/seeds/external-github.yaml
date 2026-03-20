@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: architecture.external-system
+metadata:
+  name: github
+spec:
+  displayName: "GitHub"
+  technology: "SaaS"
+  description: "Source code hosting, CI/CD via GitHub Actions, and pull request workflows. Synthesis source code and tenant configurations are version-controlled here."

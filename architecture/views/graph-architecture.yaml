@@ -1,0 +1,24 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: graph-architecture
+spec:
+  displayName: "Architecture Graph"
+  description: "Interactive graph visualization of architecture relationships"
+  itemGroup:
+    kinds:
+      - architecture.system
+      - architecture.container
+      - architecture.component
+      - architecture.person
+      - architecture.external-system
+  viewComponentRef: "!name vc-graph"
+  layoutConfig:
+    nodeColors:
+      architecture.system: "#4f46e5"
+      architecture.container: "#0891b2"
+      architecture.component: "#059669"
+      architecture.person: "#d97706"
+      architecture.external-system: "#64748b"
+    showLabels: true
+    edgeOpacity: 0.5

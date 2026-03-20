@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-platform-context
+spec:
+  displayName: "Platform Context & Identity"
+  description: "Generate rich developer context from live domain data, resolve token budgets, and introspect session identity for running agents."
+  segmentRef: "!name seg-agent-execution"
+  implementedByRefs:
+    - "!name ss-mcp-server"
+  problemStatement: "Agents and developers need a snapshot of platform state, security posture, and user identity without building custom queries."
+  acceptanceCriteria: "generate_synthesis_context returns structured context; get_synthesis_session returns authenticated identity claims; resolve_synthesis_budget returns the active budget."
+  status: active

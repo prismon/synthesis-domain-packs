@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-sandbox-orchestrator
+spec:
+  displayName: "Sandbox Orchestrator"
+  description: "Manages AI agent session lifecycle using Docker containers. Handles session launch, message routing, exec injection, and teardown."
+  technology: "Go / Docker SDK"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-domain-service"

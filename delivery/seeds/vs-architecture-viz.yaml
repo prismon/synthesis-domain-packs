@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-architecture-viz
+spec:
+  displayName: "Architecture Visualization"
+  description: "Interactive C4 model diagrams — context, container, component, and code views with drill-down navigation, relationship edges, and auto-layout via React Flow."
+  productRef: "!name synthesis-product"
+  status: active
+  touchesContainerRefs:
+    - "!name ss-frontend"

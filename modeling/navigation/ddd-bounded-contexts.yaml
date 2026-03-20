@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: ddd-bounded-contexts
+spec:
+  title: "Bounded Contexts"
+  icon: "layers"
+  viewRef: "ddd-bounded-context"
+  order: 2

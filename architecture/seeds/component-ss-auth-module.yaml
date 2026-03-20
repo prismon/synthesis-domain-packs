@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-auth-module
+spec:
+  displayName: "Auth Module"
+  description: "OIDC authentication flow using oidc-client-ts. Provides AuthContext with login/logout/token state, protected route guards, silent token renewal, and callback handling."
+  technology: "React / oidc-client-ts"
+  containerRef: "!name ss-frontend"

@@ -1,0 +1,32 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ticket-kanban-view
+spec:
+  displayName: "Tickets Board"
+  description: "Kanban board of all tickets grouped by status"
+  itemGroup:
+    kinds:
+      - tasks.ticket
+  viewComponentRef: "!name vc-task-kanban"
+  layoutConfig:
+    statusColumns:
+      - key: backlog
+        label: "Backlog"
+        color: "#6b7280"
+      - key: todo
+        label: "To Do"
+        color: "#8b5cf6"
+      - key: in-progress
+        label: "In Progress"
+        color: "#f59e0b"
+      - key: in-review
+        label: "In Review"
+        color: "#3b82f6"
+      - key: done
+        label: "Done"
+        color: "#10b981"
+      - key: cancelled
+        label: "Cancelled"
+        color: "#ef4444"
+    showFlagged: false

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-mcp-client
+spec:
+  displayName: "MCP Client (Frontend)"
+  description: "TypeScript MCP client with callTool() abstraction, session management, automatic reconnection, and React Query integration for cache invalidation."
+  valueStreamRef: "!name vs-mcp-integration"
+  fundingModel: percent
+  fundingValue: 50
+  opsInScope: false

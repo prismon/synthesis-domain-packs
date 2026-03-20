@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-domain-loader
+spec:
+  displayName: "Domain Loader"
+  description: "Reads domain.yaml definitions, seeds, views, and navigation from the filesystem. Supports both core domains (shipped with the binary) and tenant-local domains. Skips items whose definitions are missing to tolerate enterprise-only packs in open-source builds."
+  technology: "Go"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-domain-service"

@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: modeling.bounded-context
+metadata:
+  name: reference-context
+spec:
+  displayName: "Reference Context"
+  description: "Manages all inter-item relationships as first-class system.reference items. Enforces reference-kind constraints including source/target kind restrictions and cardinality."
+  systemRef: "!name synthesis"
+  lifecycleState: active
+  integrationPatterns:
+    - "Published Language (reference-kinds)"
+  teamResponsibility: "The platform team owns reference-kind definitions. Reference kinds are declared in domain.yaml and merged across domains."
+  ubiquitousLanguageNotes: |
+    - Reference: a first-class relationship between two domain items (stored as system.reference kind)
+    - Reference Kind: vocabulary for relationships (parent, uses, supports, depends-on, etc.)
+    - Constraint: rules on which source/target kinds and cardinalities are valid for a reference kind
+    - Ref Field: a field type (ref or ref-list) that stores references to other items

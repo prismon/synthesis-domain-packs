@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-evaluate-rules
+spec:
+  displayName: "Enterprise Evaluate Rules"
+  endpointType: mcp-tool
+  toolName: "evaluate_enterprise_rule"
+  parameters:
+    required: []
+    optional: []
+  description: "Evaluates all on-demand rules (stub - returns count only)."
+  permissionRequired: tenant_admin
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

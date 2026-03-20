@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-no-frontend-rbac
+spec:
+  displayName: "No Role-Based Rendering in Frontend"
+  severity: warning
+  category: security
+  description: "No role-based rendering of UI elements. isAdmin is computed as !isOidcEnabled meaning dev mode = admin, OIDC mode = never admin. All authenticated users see all features."
+  recommendation: "Implement proper RBAC in the frontend by deriving roles from the OIDC token claims or a dedicated roles endpoint. Gate admin-only UI elements behind role checks."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
+  componentRef: "!name ss-auth-module"

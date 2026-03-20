@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-simulate-twin
+spec:
+  displayName: "Enterprise Simulate Twin"
+  endpointType: mcp-tool
+  toolName: "simulate_enterprise_twin"
+  parameters:
+    required: [name, baselineName, overrides]
+    optional: []
+  description: "Clones a baseline digital-twin snapshot with overrides for simulation."
+  permissionRequired: tenant_admin
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

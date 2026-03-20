@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-markdown-in-spec
+spec:
+  displayName: "Markdown Content Stored Inside Spec JSONB Column"
+  severity: info
+  category: convention
+  description: "Markdown content for items is stored inside the spec JSONB column rather than a dedicated column. The markdown column does not exist in the database schema."
+  recommendation: "Consider adding a dedicated markdown column if full-text search or large content performance becomes a concern. Current approach works but may not scale for large documents."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-database"
+  componentRef: "!name ss-repository"

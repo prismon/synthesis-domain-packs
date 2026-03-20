@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-git-analyze-recipe
+spec:
+  displayName: "Git Analyze Repository Returns Recipe Instead of Results"
+  severity: info
+  category: design-gap
+  description: "git_analyze_repository MCP tool returns a JSON \"recipe\" of subsequent tool calls rather than performing analysis directly. Requires the MCP caller to execute multiple follow-up calls."
+  recommendation: "Either document the recipe pattern as an intentional orchestration design, or refactor to perform analysis directly and return consolidated results."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-mcp-server"

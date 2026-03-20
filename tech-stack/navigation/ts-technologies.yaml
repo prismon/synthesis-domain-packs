@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: ts-technologies
+spec:
+  title: "Technologies"
+  icon: "cpu"
+  viewRef: ts-table-synthesis
+  order: 51

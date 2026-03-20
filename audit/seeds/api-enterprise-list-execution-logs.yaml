@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-list-execution-logs
+spec:
+  displayName: "Enterprise List Execution Logs"
+  endpointType: mcp-tool
+  toolName: "list_enterprise_execution_log"
+  parameters:
+    required: []
+    optional: [executorRef]
+  description: "Lists execution log items, optionally filtered by executor reference."
+  permissionRequired: tenant_user
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

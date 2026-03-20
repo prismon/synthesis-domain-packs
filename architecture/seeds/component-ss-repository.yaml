@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-repository
+spec:
+  displayName: "Repository Layer"
+  description: "Data access layer implementing the Repository interface. Provides PostgreSQL and in-memory implementations with tenant-scoped factory pattern. Handles optimistic concurrency via version tracking."
+  technology: "Go / pgx"
+  containerRef: "!name ss-backend"

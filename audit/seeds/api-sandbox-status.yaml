@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-sandbox-status
+spec:
+  displayName: "Sandbox Status"
+  endpointType: mcp-tool
+  toolName: "get_sandbox_status"
+  parameters:
+    required: [sessionName]
+    optional: []
+  description: "Queries the sandbox provider for live state and syncs the session domain item."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

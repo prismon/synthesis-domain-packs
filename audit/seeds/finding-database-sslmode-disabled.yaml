@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-database-sslmode-disabled
+spec:
+  displayName: "Database Connections Use sslmode=disable"
+  severity: warning
+  category: security
+  description: "All DATABASE_URL values in docker-compose.yml and Makefile use sslmode=disable. Database connections are unencrypted, allowing network eavesdropping of all SQL queries and results including tenant data. The security-rls-model.md doc mentions needing sslmode=require for production but it is not enforced."
+  recommendation: "Use sslmode=require or sslmode=verify-full for all production database connections. Keep sslmode=disable only for local development with explicit documentation."
+  sourceFile: "docker-compose.yml"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-database"

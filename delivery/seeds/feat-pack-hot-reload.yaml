@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-pack-hot-reload
+spec:
+  displayName: "Domain Pack Hot Reload"
+  description: "Watch domain pack directories for changes and reload definitions, seeds, and views without restarting the backend."
+  segmentRef: "!name seg-domain-packs"
+  implementedByRefs:
+    - "!name ss-domain-loader"
+  problemStatement: "Changing seed data or adding new definitions requires a backend restart during development."
+  acceptanceCriteria: "File watcher detects changes in domains/ directory. Modified packs are reloaded within 2 seconds."
+  status: proposed

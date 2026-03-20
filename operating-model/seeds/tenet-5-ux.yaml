@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: ppm.tenet
+metadata:
+  name: ppm-tenet-5-ux
+spec:
+  displayName: "User experience follows user need"
+  order: 5
+  statement: |
+    User experience follows user need. Generic, internal experiences live in the platform. Differentiated, persona-specific experiences belong in products. Users should not notice moving between platform and product experiences.
+  rationale: |
+    Misplacing UX ownership creates disjointed experiences and duplicated design work. Aligning ownership to user need ensures coherent experiences without unnecessary platform complexity.
+  layerRefs:
+    - "!name ppm-layer-platform"
+    - "!name ppm-layer-product"

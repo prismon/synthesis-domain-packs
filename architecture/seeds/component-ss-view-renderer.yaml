@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-view-renderer
+spec:
+  displayName: "View Renderer"
+  description: "Extensible view system with a layout type registry. Dispatches to built-in React views (C4 diagrams, hierarchy boards) or web component bridges. Renders interactive diagrams via React Flow."
+  technology: "React / React Flow"
+  containerRef: "!name ss-frontend"
+  usesRefs:
+    - "!name ss-mcp-client"

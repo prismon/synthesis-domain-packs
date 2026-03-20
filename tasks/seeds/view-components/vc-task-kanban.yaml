@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-task-kanban
+spec:
+  displayName: "Task Kanban"
+  description: "Kanban board grouping tasks or tickets into status columns"
+  layoutType: task-kanban
+  icon: columns
+  componentKind: react

@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: conversation.message
+metadata:
+  name: msg-activity-2
+spec:
+  displayName: "Containers created"
+  channelRef: "!name domain-activity"
+  author: "Synthesis"
+  authorKind: system
+  body: "**Created** containers `ss-frontend`, `ss-backend`, `ss-database` in system Synthesis."
+  itemRef: "!name containers/ss-backend"
+  sentAt: "2026-03-01T10:05:00Z"

@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-row-level-security
+spec:
+  displayName: "Row-Level Security Isolation"
+  patternCategory: security
+  description: "PostgreSQL row-level security with FORCE ROW LEVEL SECURITY on all three tables. Tenant isolation is enforced at the database level via set_config('app.tenant_id', tenantID, true) per transaction. Even application-level bugs cannot leak cross-tenant data."
+  componentRefs:
+    - "!name ss-repository"
+  containerRefs:
+    - "!name ss-database"

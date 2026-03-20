@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-view-registry
+spec:
+  displayName: "View Registry and Renderer"
+  patternCategory: architectural
+  description: "Views are registered in a singleton ViewRegistry with react and web-component types. Built-in views (C4 diagrams, hierarchy board, class diagram, context map) are registered at startup. Enterprise plugins add views at runtime. ViewRenderer dispatches to the correct component based on layoutType."
+  componentRefs:
+    - "!name ss-view-renderer"
+  containerRefs:
+    - "!name ss-frontend"

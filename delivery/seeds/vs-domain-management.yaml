@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-domain-management
+spec:
+  displayName: "Domain Management"
+  description: "Core domain CRUD lifecycle — create, read, update, and delete domain items with trait-based schema validation, reference integrity, and multi-tenant isolation."
+  productRef: "!name synthesis-product"
+  status: active
+  touchesContainerRefs:
+    - "!name ss-backend"
+    - "!name ss-frontend"
+    - "!name ss-database"

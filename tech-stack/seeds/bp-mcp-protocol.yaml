@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tech-stack.blueprint
+metadata:
+  name: ts-mcp-protocol
+spec:
+  displayName: "MCP Protocol"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  patternType: integration
+  openSourceAdoption: niche
+  approved: approved
+  strengths:
+    - "Standardized AI tool protocol"
+    - "Streamable HTTP transport"
+    - "Auto-generated per-kind tools"
+  description: "All frontend-backend communication uses Model Context Protocol"

@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-class-diagram
+spec:
+  displayName: "Class Diagram"
+  description: "UML-style class diagram showing domain model relationships"
+  layoutType: class-diagram
+  icon: box
+  componentKind: react
+  requiredFields:
+    boundedContextRef:
+      type: ref

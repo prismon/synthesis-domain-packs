@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-trait-composition
+spec:
+  displayName: "Trait-Based Schema Composition"
+  description: "The system shall support composing domain definitions from reusable behavioral traits that inject fields, validation rules, and reference constraints into the schema at runtime."
+  reqId: "SYS-REQ-002"
+  reqType: functional
+  level: system
+  verificationMethod: test
+  risk: low
+  rationale: "Trait composition enables domain extensibility without code changes, supporting the extensible domain model need."
+  derivedFromNeeds:
+    - "!name need-extensible-domain-model"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-enterprise-plugins
+spec:
+  displayName: "Enterprise Plugin System"
+  patternCategory: deployment
+  description: "Enterprise features are gated by Go build tags and Vite aliases. The enterprise build tag activates plugins_enterprise.go which registers 4 traits, 1 admission controller, 11 MCP tools, and 1 HTTP handler. Frontend uses @enterprise/plugin Vite alias that resolves to a stub or real plugin module."
+  componentRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-domain-editor"
+  containerRefs:
+    - "!name ss-frontend"
+    - "!name ss-backend"

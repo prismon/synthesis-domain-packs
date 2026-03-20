@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: tasks.task
+metadata:
+  name: task-setup-oidc
+spec:
+  displayName: "Configure OIDC issuer for demo tenant"
+  status: done
+  priority: p1
+  list: "Platform Work"
+  flagged: false
+  completedAt: "2026-03-01T10:00:00Z"
+  notes: |
+    Set `VITE_OIDC_ISSUER_URL` and `VITE_OIDC_CLIENT_ID` in the frontend env.
+
+    Verified Keycloak realm is reachable at `https://demo-auth.technicaldetails.org`.
+    Cloudflared tunnel confirmed forwarding correctly.

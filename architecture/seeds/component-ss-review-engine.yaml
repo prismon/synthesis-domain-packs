@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: architecture.component
+metadata:
+  name: ss-review-engine
+spec:
+  displayName: "Review Engine"
+  description: "Intercepts domain write operations and queues them as pending changes. Enforces approval workflows before mutations are applied to the domain."
+  technology: "Go"
+  containerRef: "!name ss-backend"
+  usesRefs:
+    - "!name ss-domain-service"

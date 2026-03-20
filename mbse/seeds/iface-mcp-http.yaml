@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: mbse.interface
+metadata:
+  name: iface-mcp-http
+spec:
+  displayName: "MCP over Streamable HTTP"
+  description: "Primary frontend-backend interface using JSON-RPC over HTTP with SSE streaming"
+  interfaceType: api
+  direction: inout
+  sourceBlockRef: "!name block-frontend"
+  targetBlockRef: "!name block-backend"
+  protocol: "JSON-RPC 2.0 / SSE"
+  dataFormat: "application/json"
+  bandwidth: "< 500ms p99 latency"

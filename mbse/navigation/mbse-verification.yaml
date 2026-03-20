@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: mbse-verification
+spec:
+  title: "Verification"
+  icon: "shield-check"
+  viewRef: "mbse-verification-matrix"
+  order: 5

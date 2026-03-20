@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-bulk-import
+spec:
+  displayName: "Bulk YAML Import"
+  description: "Import multiple domain items from YAML files or clipboard paste, with validation against the resolved schema."
+  segmentRef: "!name seg-item-crud"
+  problemStatement: "Users can only create items one at a time through the UI. Migrating existing domains requires manual data entry."
+  acceptanceCriteria: "YAML paste or file upload creates multiple items atomically. Validation errors are reported per-item with line numbers."
+  status: proposed

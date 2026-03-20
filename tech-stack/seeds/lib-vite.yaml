@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: tech-stack.library
+metadata:
+  name: ts-vite
+spec:
+  displayName: "Vite"
+  techStackRef: "!name synthesis-tech-stack"
+  ring: invest
+  packageManager: npm
+  version: "6.x"
+  license: "MIT"
+  openSourceAdoption: widely-adopted
+  approved: approved
+  strengths:
+    - "Fast HMR development server"
+    - "ESM-native build pipeline"
+  description: "Frontend build tool and dev server"

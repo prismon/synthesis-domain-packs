@@ -1,0 +1,350 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: audit
+  version: 4
+spec:
+  displayName: "As-Built Audit"
+  description: "As-built system audit — findings, API endpoints, database schemas, permissions, design patterns, and design documents"
+  icon: "shield-check"
+  color: "#f59e0b"
+  dependencies:
+    - name: architecture
+  definitions:
+    - name: audit.finding
+      displayName: "Audit Findings"
+      description: "Individual audit observations with severity, category, and references to affected architecture items"
+      preferredWidgetTag: synth-widget-default
+      preferredViewRef: audit-findings-table
+      traits:
+        - traitName: Trackable
+        - traitName: Lifecycle
+        - traitName: Governable
+      fields:
+        - name: severity
+          type: enum
+          required: true
+          description: "Severity level of the finding"
+          enumValues:
+            - critical
+            - warning
+            - info
+            - note
+        - name: category
+          type: enum
+          required: true
+          description: "Classification of the finding"
+          enumValues:
+            - security
+            - design-gap
+            - dead-code
+            - data-quality
+            - performance
+            - convention
+        - name: description
+          type: text
+          required: true
+          description: "Detailed description of the finding"
+        - name: recommendation
+          type: text
+          required: false
+          description: "Suggested remediation or action"
+        - name: sourceFile
+          type: string
+          required: false
+          description: "File path where the finding was observed"
+        - name: systemRef
+          type: ref
+          required: false
+          description: "Affected system"
+          targetKind: architecture.system
+        - name: containerRef
+          type: ref
+          required: false
+          description: "Affected container"
+          targetKind: architecture.container
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Affected component"
+          targetKind: architecture.component
+      providerType: manual
+
+    - name: audit.api-endpoint
+      displayName: "API Endpoints"
+      description: "Directory of all MCP tools and HTTP endpoints exposed by the system"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: endpointType
+          type: enum
+          required: true
+          description: "Type of endpoint"
+          enumValues:
+            - mcp-tool
+            - http-endpoint
+        - name: toolName
+          type: string
+          required: true
+          description: "MCP tool name or HTTP method + path"
+        - name: parameters
+          type: object
+          required: false
+          description: "Parameter definitions as JSON"
+        - name: description
+          type: text
+          required: false
+          description: "What this endpoint does"
+        - name: permissionRequired
+          type: enum
+          required: false
+          description: "Minimum role required to call this endpoint"
+          enumValues:
+            - none
+            - tenant_user
+            - tenant_admin
+            - platform_admin
+        - name: buildTag
+          type: string
+          required: false
+          description: "Build tag gating this endpoint (e.g. enterprise)"
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Component that implements this endpoint"
+          targetKind: architecture.component
+      providerType: manual
+
+    - name: audit.db-schema
+      displayName: "Database Schemas"
+      description: "Database tables, columns, indexes, and row-level security policies"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: tableName
+          type: string
+          required: true
+          description: "Database table name"
+        - name: columns
+          type: object
+          required: false
+          description: "Column definitions as JSON"
+        - name: indexes
+          type: object
+          required: false
+          description: "Index definitions as JSON"
+        - name: rlsPolicy
+          type: text
+          required: false
+          description: "Row-level security policy SQL"
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Component that owns this table"
+          targetKind: architecture.component
+      providerType: manual
+
+    - name: audit.permission
+      displayName: "Permissions"
+      description: "Authorization checks, RBAC rules, middleware, and admission controllers"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+      fields:
+        - name: permissionType
+          type: enum
+          required: true
+          description: "Type of permission enforcement"
+          enumValues:
+            - middleware
+            - rbac
+            - rls
+            - admission
+        - name: enforcementPoint
+          type: string
+          required: true
+          description: "File and function where enforcement occurs"
+        - name: roleRequired
+          type: enum
+          required: false
+          description: "Minimum role required"
+          enumValues:
+            - tenant_user
+            - tenant_admin
+            - platform_admin
+        - name: description
+          type: text
+          required: false
+          description: "What this permission check enforces"
+        - name: componentRef
+          type: ref
+          required: false
+          description: "Component containing the enforcement"
+          targetKind: architecture.component
+        - name: containerRef
+          type: ref
+          required: false
+          description: "Container containing the enforcement"
+          targetKind: architecture.container
+      providerType: manual
+
+    - name: audit.design-pattern
+      displayName: "Design Patterns"
+      description: "Architectural and implementation patterns observed in the system"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: patternCategory
+          type: enum
+          required: true
+          description: "Category of the pattern"
+          enumValues:
+            - architectural
+            - data
+            - communication
+            - security
+            - deployment
+        - name: description
+          type: text
+          required: true
+          description: "Description of the pattern and how it is applied"
+        - name: componentRefs
+          type: ref-list
+          required: false
+          description: "Components that implement this pattern"
+          targetKind: architecture.component
+        - name: containerRefs
+          type: ref-list
+          required: false
+          description: "Containers where this pattern is used"
+          targetKind: architecture.container
+      providerType: manual
+
+    - name: audit.design-document
+      displayName: "Design Documents"
+      description: "Generated design documentation for systems, containers, and components"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Ownable
+        - traitName: Lifecycle
+        - traitName: Governable
+        - traitName: Agentic
+      fields:
+        - name: documentType
+          type: enum
+          required: true
+          description: "Type of design document"
+          enumValues:
+            - architecture-overview
+            - api-reference
+            - schema-reference
+            - security-model
+            - trait-reference
+            - domain-pack-reference
+            - impact-analysis
+            - custom
+        - name: description
+          type: text
+          required: false
+          description: "Brief summary of the document"
+        - name: systemRef
+          type: ref
+          required: false
+          description: "System this document covers"
+          targetKind: architecture.system
+        - name: containerRef
+          type: ref
+          required: false
+          description: "Container this document covers"
+          targetKind: architecture.container
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      preferredWidgetTag: synth-widget-default
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      preferredWidgetTag: synth-widget-default
+      providerType: manual
+
+  referenceKinds:
+    - name: audits
+      displayName: "Audits"
+      reverseDisplayName: "Audited By"
+      constraints:
+        - sourceKind: audit.finding
+          targetKind: architecture.system
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: systemRef
+          targetField: auditFindings
+        - sourceKind: audit.finding
+          targetKind: architecture.container
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: containerRef
+          targetField: auditFindings
+        - sourceKind: audit.finding
+          targetKind: architecture.component
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: componentRef
+          targetField: auditFindings
+    - name: documents
+      displayName: "Documents"
+      reverseDisplayName: "Documented By"
+      constraints:
+        - sourceKind: audit.design-document
+          targetKind: architecture.system
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: systemRef
+          targetField: designDocuments
+        - sourceKind: audit.design-document
+          targetKind: architecture.container
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: containerRef
+          targetField: designDocuments
+    - name: implements-endpoint
+      displayName: "Implements"
+      reverseDisplayName: "Implemented By"
+      constraints:
+        - sourceKind: audit.api-endpoint
+          targetKind: architecture.component
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: componentRef
+          targetField: apiEndpoints
+    - name: enforces
+      displayName: "Enforces"
+      reverseDisplayName: "Enforced By"
+      constraints:
+        - sourceKind: audit.permission
+          targetKind: architecture.component
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: componentRef
+          targetField: permissionChecks
+    - name: owns-schema
+      displayName: "Owns Schema"
+      reverseDisplayName: "Schema Owned By"
+      constraints:
+        - sourceKind: audit.db-schema
+          targetKind: architecture.component
+          sourceCardinality: "0..1"
+          targetCardinality: "0..*"
+          sourceField: componentRef
+          targetField: dbSchemas

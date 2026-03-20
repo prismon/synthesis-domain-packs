@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-rls-tenant-isolation
+spec:
+  displayName: "Row-Level Security Tenant Isolation"
+  description: "The system shall enforce tenant isolation at the PostgreSQL level using row-level security policies. No application-layer tenant filtering shall be the sole barrier."
+  reqId: "SYS-REQ-003"
+  reqType: security
+  level: system
+  verificationMethod: test
+  risk: high
+  rationale: "Database-level enforcement is the gold standard for multi-tenant isolation in enterprise SaaS."
+  derivedFromNeeds:
+    - "!name need-multi-tenant-isolation"

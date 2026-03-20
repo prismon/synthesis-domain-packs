@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: architecture.container
+metadata:
+  name: ss-database
+spec:
+  displayName: "PostgreSQL Store"
+  description: "Relational database storing domain definitions, items, and tenant metadata. Enforces multi-tenant isolation via row-level security policies scoped by tenant_id."
+  technology: "PostgreSQL 16"
+  systemRef: "!name synthesis"

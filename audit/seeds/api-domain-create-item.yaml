@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-create-item
+spec:
+  displayName: "Domain Create Item"
+  endpointType: mcp-tool
+  toolName: "create_item"
+  parameters:
+    required: [kind, name, spec]
+    optional: [markdown]
+  description: "Creates a new domain item."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

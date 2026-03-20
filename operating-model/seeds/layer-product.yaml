@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: ppm.layer
+metadata:
+  name: ppm-layer-product
+spec:
+  displayName: "Product"
+  layerType: product
+  purpose: |
+    Turns platform capabilities into coherent, differentiated solutions that address specific business problems. Products define business logic, solution behavior, and experiences aligned to particular user personas. Products are intentionally the default holding zone for anything unclear — product leadership is accountable for actively reducing this ambiguity over time.
+  accountabilityModel: |
+    Product leadership is accountable for the full product layer including the ambiguous "mess" that has not yet been sorted into platform or market. The architecture office provides guardrails and enforcement, identifying logic ready for platform promotion and market-specific behavior ready for externalization into configuration.
+  uxOwnership: |
+    Differentiated, external user experiences tailored to specific user personas. Any interface targeted at an external user persona is owned by the product, along with the business logic and workflows that differentiate that experience.
+  apiIntegration: |
+    Products assemble and orchestrate platform capabilities. They do not become alternative integration endpoints — all consumers integrate directly with platform APIs.
+  defaultSortingRule: |
+    Everything that is not cleanly reusable (platform) and not cleanly configurable (market) belongs in the product layer by default. The product layer should shrink over time as capabilities mature.

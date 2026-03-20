@@ -1,0 +1,19 @@
+apiVersion: synthesis/v1
+kind: mbse.use-case
+metadata:
+  name: usecase-ai-audit
+spec:
+  displayName: "AI-Driven Architecture Audit"
+  description: "An AI agent analyzes the codebase, proposes audit findings, and submits them for human review through the HITL workflow."
+  actor: "AI Agent (Sandbox)"
+  preconditions: "Sandbox session launched with audit template. Agent has MCP access to domain items."
+  postconditions: "Audit findings submitted as pending changes. Human reviewer has been notified."
+  mainFlow: |
+    1. Agent launches sandbox session with audit template
+    2. Agent queries existing architecture items via MCP
+    3. Agent analyzes code repository for drift
+    4. Agent proposes new audit.finding items via changeset
+    5. System buffers changes as pending review
+    6. Human reviewer approves or rejects each finding
+    7. Approved findings become canonical domain items
+  scope: system

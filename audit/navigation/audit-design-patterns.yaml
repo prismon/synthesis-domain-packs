@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: audit-design-patterns
+spec:
+  title: "Design Patterns"
+  icon: "puzzle"
+  kind: "audit.design-pattern"
+  order: 14

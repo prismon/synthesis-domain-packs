@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-ai-bottleneck-detection
+spec:
+  displayName: "AI Bottleneck Detection"
+  description: "Analyze value stream segments, feature status, and delivery metrics to identify process bottlenecks, stalled work items, and capacity constraints across teams."
+  segmentRef: "!name seg-ai-process-intelligence"
+  status: planned
+  priority: p2

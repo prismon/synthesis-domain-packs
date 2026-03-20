@@ -1,0 +1,20 @@
+apiVersion: synthesis/v1
+kind: mbse.skill
+metadata:
+  name: skill-stakeholder-engagement
+spec:
+  displayName: "Stakeholder Engagement"
+  description: "Eliciting needs from diverse stakeholders, facilitating ConOps workshops, and translating operational concepts into formal needs and use cases."
+  category: stakeholder-engagement
+  proficiencyLevels: |
+    Novice: Can conduct structured interviews and document needs
+    Practitioner: Facilitates ConOps workshops, creates operational scenarios, and maps needs to mission objectives
+    Expert: Manages stakeholder conflicts, negotiates requirement priorities, and designs participatory modeling sessions
+  tools:
+    - "Miro"
+    - "Cameo Collaborator"
+    - "Synthesis MBSE"
+  certifications:
+    - "INCOSE ASEP"
+    - "BABoK CBAP"
+  maturity: mature

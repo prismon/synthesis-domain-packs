@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-rls-policies
+spec:
+  displayName: "Row-Level Security Policies"
+  description: "PostgreSQL RLS policies ensuring each tenant can only read and write their own domain data."
+  segmentRef: "!name seg-tenant-isolation"
+  implementedByRefs:
+    - "!name ss-repository"
+    - "!name ss-tenant-middleware"
+  problemStatement: "Without RLS, a bug in the application layer could leak data between tenants."
+  acceptanceCriteria: "All domain tables have RLS enabled. Tenant_id is set via session variable, not application code."
+  status: active

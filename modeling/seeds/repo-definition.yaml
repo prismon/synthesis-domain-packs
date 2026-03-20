@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: modeling.repository
+metadata:
+  name: repo-definition
+spec:
+  displayName: "Definition Repository"
+  description: "Persistence layer for domain definitions. Stores definition metadata and field schemas. Supports both file-loaded and dynamically created definitions."
+  aggregateRef: "!name domain-definition"
+  componentRef: "!name ss-repository"
+  lifecycleState: active
+  storageStrategy: relational
+  queryMethods: |
+    - FindByName(tenantID, name) -> Definition
+    - ListAll(tenantID) -> []Definition
+    - Upsert(definition) -> Definition

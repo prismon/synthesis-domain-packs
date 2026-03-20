@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: nav-dashboard
+spec:
+  title: "Status Board"
+  icon: "layout-dashboard"
+  viewRef: "dashboard-default"
+  order: 0

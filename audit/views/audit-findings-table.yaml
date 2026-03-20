@@ -1,0 +1,29 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: audit-findings-table
+spec:
+  displayName: "Audit Findings — Table"
+  description: "Tabular view of audit findings with severity-based row coloring"
+  itemGroup:
+    kinds:
+      - audit.finding
+  viewComponentRef: "!name vc-table"
+  layoutConfig:
+    rowColorRules:
+      - field: severity
+        operator: equals
+        value: critical
+        color: red
+      - field: severity
+        operator: equals
+        value: warning
+        color: amber
+      - field: severity
+        operator: equals
+        value: info
+        color: blue
+      - field: severity
+        operator: equals
+        value: note
+        color: green

@@ -1,0 +1,28 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: audit-overview
+spec:
+  displayName: "Audit Overview"
+  description: "Overview of all audit findings, API endpoints, schemas, permissions, and design patterns"
+  itemGroup:
+    kinds:
+      - audit.finding
+      - audit.api-endpoint
+      - audit.db-schema
+      - audit.permission
+      - audit.design-pattern
+      - audit.design-document
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: audit.finding
+        groupByField: severity
+        label: "Findings by Severity"
+      - kind: audit.api-endpoint
+        groupByField: endpointType
+        label: "API Endpoints"
+      - kind: audit.design-pattern
+        groupByField: patternCategory
+        label: "Design Patterns"
+    showDescriptions: true

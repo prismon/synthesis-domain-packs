@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: mbse.test-case
+metadata:
+  name: tc-trait-resolution
+spec:
+  displayName: "Trait Schema Resolution Test"
+  description: "Verify three-phase schema resolution produces correct field ordering and deduplication"
+  testId: "TC-SYS-002"
+  method: test
+  level: component
+  testProcedure: |
+    1. Create definition with Ownable + Trackable traits and custom 'technology' field
+    2. Call resolveSchema()
+    3. Assert owners, ownerTeam fields present (from Ownable)
+    4. Assert status, priority, assignees, dueDate fields present (from Trackable)
+    5. Assert technology field present (custom)
+    6. Assert no duplicate fields
+    7. Assert correct field ordering: traits first, then custom
+  expectedResult: "Resolved schema contains all trait + custom fields in correct order without duplicates"
+  testStatus: passed
+  verifiesReqs:
+    - "!name req-trait-composition"

@@ -1,0 +1,16 @@
+apiVersion: synthesis/v1
+kind: modeling.bounded-context
+metadata:
+  name: trait-context
+spec:
+  displayName: "Trait Context"
+  description: "Behavioral composition system — traits inject fields into domain definitions. The schema resolver merges trait fields with custom fields to produce the full item schema."
+  systemRef: "!name synthesis"
+  lifecycleState: active
+  integrationPatterns:
+    - "Published Language (trait registry)"
+  teamResponsibility: "The platform team owns the built-in trait registry. Traits are immutable once published. New traits follow a proposal/review process."
+  ubiquitousLanguageNotes: |
+    - Trait: a named behavior (Ownable, Trackable, etc.) that injects fields into any definition composing it
+    - Schema Resolution: merging trait-injected fields with custom definition fields
+    - Field: a typed attribute (string, ref, enum, etc.) on a domain item

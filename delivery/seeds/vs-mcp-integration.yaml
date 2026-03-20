@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-mcp-integration
+spec:
+  displayName: "MCP Protocol Integration"
+  description: "Model Context Protocol server and client — JSON-RPC over Streamable HTTP enabling AI agents and the frontend SPA to interact with the domain via a unified tool-based API."
+  productRef: "!name synthesis-product"
+  status: active
+  touchesContainerRefs:
+    - "!name ss-backend"
+    - "!name ss-frontend"

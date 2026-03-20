@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-review-approve
+spec:
+  displayName: "Review Approve"
+  endpointType: mcp-tool
+  toolName: "approve_review_change"
+  parameters:
+    required: [uid]
+    optional: [comment]
+  description: "Approves a pending change and applies it to the domain."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-review-engine"

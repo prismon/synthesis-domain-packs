@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dev-mode-trusts-headers
+spec:
+  displayName: "Dev Mode Trusts Client-Supplied Tenant Headers"
+  severity: warning
+  category: security
+  description: "HeaderResolver without Lookup trusts X-Tenant-Role and X-Tenant-Tier from HTTP client. Any caller can claim platform_admin in dev mode."
+  recommendation: "Add server-side validation of tenant role and tier claims. Never trust client-supplied headers for authorization decisions, even in dev mode."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
+  componentRef: "!name ss-tenant-middleware"

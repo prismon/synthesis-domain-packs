@@ -1,0 +1,49 @@
+apiVersion: synthesis/v1
+kind: audit.design-document
+metadata:
+  name: doc-system-overview
+spec:
+  displayName: "Synthesis Platform — Architecture Overview"
+  documentType: architecture-overview
+  description: "Complete as-built overview of the Synthesis platform architecture"
+  systemRef: "!name synthesis"
+  lifecycleState: published
+markdown: |
+  # Synthesis Platform — Architecture Overview
+
+  ## System Description
+  Synthesis is a trait-based delivery intelligence platform with MCP-first architecture.
+  It provides a human-driven, AI-accelerated domain system that unifies fragmented delivery tools.
+
+  ## Architecture Stack
+  - **Frontend**: React 18 + TypeScript + Vite + Tailwind + shadcn/ui
+  - **Backend**: Go microservice with MCP (Model Context Protocol) over Streamable HTTP
+  - **Database**: PostgreSQL with row-level security for multi-tenancy
+
+  ## Key Numbers (As-Built)
+  | Category | Count |
+  |---|---|
+  | MCP Tools | 27 (16 core + 2 git + 9 enterprise + 2 agent) |
+  | Database Tables | 3 (definitions, items, edges) |
+  | Built-in Traits | 16 (12 Go + 4 enterprise) |
+  | Domain Packs | 4 (architecture, delivery, modeling, git) |
+  | Domain Definitions | ~30 across all domains |
+  | Admission Controllers | 4 (cardinality, edge-sync, rules, tenant-provisioning) |
+  | Frontend Routes | 9 (3 auth + 6 app) |
+  | View Types | 8 (C4 context/container/component, hierarchy-board, class-diagram, context-map, app-landscape, git-repo) |
+
+  ## Communication Model
+  All frontend-backend communication uses MCP over Streamable HTTP.
+  No REST endpoints exist for data access. The single exception is
+  `GET /agent/stream/{streamId}` for SSE agent chat streaming (enterprise only).
+
+  ## Multi-Tenancy Model
+  - PostgreSQL RLS with `app.tenant_id` session config per transaction
+  - Three roles: `tenant_user` (read-only), `tenant_admin` (read-write), `platform_admin` (full access)
+  - Three resolver modes: Multi-realm OIDC (Keycloak), Single-issuer OIDC, Dev headers
+  - Tenant provisioning via Keycloak Admin API (optional)
+
+  ## Domain Pack System
+  YAML-based domain packs bundle definitions, reference kinds, seeds, views, and navigation.
+  Core packs ship with the binary. Tenants can add local packs in `tenants/<slug>/domains/`.
+  The loader performs idempotent upserts with domain version tracking.

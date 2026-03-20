@@ -1,0 +1,23 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: mbse-internal-block
+spec:
+  displayName: "Internal Block Diagram"
+  description: "Interfaces and flows between blocks — the SysML IBD showing ports, connectors, and item flows as a reference graph"
+  itemGroup:
+    kinds:
+      - mbse.block
+      - mbse.interface
+  viewComponentRef: "!name vc-reference-graph"
+  focusKind: mbse.block
+  layoutConfig:
+    nodeKinds:
+      - mbse.block
+    edgeKinds:
+      - mbse.interface
+    edgeSourceField: sourceBlockRef
+    edgeTargetField: targetBlockRef
+    edgeLabelField: interfaceType
+    showLabels: true
+    layout: force

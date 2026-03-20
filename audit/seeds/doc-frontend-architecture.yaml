@@ -1,0 +1,53 @@
+apiVersion: synthesis/v1
+kind: audit.design-document
+metadata:
+  name: doc-frontend-architecture
+spec:
+  displayName: "Frontend SPA — Architecture Reference"
+  documentType: architecture-overview
+  description: "React frontend architecture including routes, hooks, components, and view system"
+  containerRef: "!name ss-frontend"
+  lifecycleState: published
+markdown: |
+  # Frontend SPA — Architecture Reference
+
+  ## Tech Stack
+  React 18, TypeScript (strict), Vite, Tailwind CSS, shadcn/ui, TanStack Table,
+  React Flow, React Query, React Hook Form + Zod, react-i18next, oidc-client-ts.
+
+  ## Route Map
+  | Path | Component | Notes |
+  |---|---|---|
+  | `/` | Index | Redirects to /dashboard or renders Login |
+  | `/auth/callback` | AuthCallback | OIDC redirect handler |
+  | `/auth/silent-renew` | SilentRenew | OIDC token renewal |
+  | `/dashboard` | Dashboard | Placeholder |
+  | `/domains` | DomainListing | Grid of definition cards |
+  | `/domains/:kind` | DomainView | Table + detail panel |
+  | `/views` | ViewsListing | Grid of all views |
+  | `/views/:viewName` | ViewDetail | Renders view with ?focus= param |
+  | `/developer` | Developer | 6-tab system inspector |
+  | `/timeline` | Dashboard | Stub (dead route) |
+  | `/settings` | Dashboard | Stub (dead route) |
+
+  ## Data Access Layer
+  All data flows through MCP via `callTool()` in `src/lib/mcp/client.ts`.
+  React Query hooks in `src/hooks/use-domain.ts` wrap all tool calls.
+  Query keys follow `['items', kind]` / `['definitions']` convention.
+
+  ## Component Hierarchy
+  - `RootLayout` → `AuthProvider` → `ImpersonationProvider` → `AppLayout`
+  - `AppLayout` → `AppSidebar` + `TopToolbar` + main content + `ChatWindow`
+  - Domain: `DomainTable` (TanStack + virtualization) + `DomainDetailPanel`
+  - Views: `ViewRenderer` dispatches to registered view components
+  - Developer: 6 tabs (Definitions, Items, Views, Navigation, Cache, MCP)
+
+  ## View System
+  8 built-in view types registered in `builtin-registrations.ts`:
+  c4-context, c4-container, c4-component, hierarchy-board, class-diagram,
+  context-map, application-landscape, git-repo-diagram.
+  Enterprise plugins add views at runtime via `loadPlugins()`.
+
+  ## Enterprise Plugin System
+  `@enterprise/plugin` Vite alias resolves to stub or real module.
+  Plugin manifest provides: traits, views, middleware, hooks (React component slots).

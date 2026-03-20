@@ -1,0 +1,37 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: arch-component-hierarchy
+spec:
+  displayName: "Architecture — Component Hierarchy"
+  description: "Hierarchical board showing Systems → Containers → Components"
+  itemGroup:
+    kinds:
+      - architecture.system
+      - architecture.container
+      - architecture.component
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: architecture.system
+        label: Systems
+        color: "#6366f1"
+      - kind: architecture.container
+        label: Containers
+        color: "#8b5cf6"
+      - kind: architecture.component
+        label: Components
+        color: "#a78bfa"
+    refChain:
+      - from: architecture.component
+        field: containerRef
+        to: architecture.container
+      - from: architecture.container
+        field: systemRef
+        to: architecture.system
+    expandByDefault: true
+  drillDown:
+    - nodeKind: architecture.system
+      targetViewComponent: vc-c4-container
+    - nodeKind: architecture.container
+      targetViewComponent: vc-c4-component

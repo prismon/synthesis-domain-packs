@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-keycloak-ssl-required-none
+spec:
+  displayName: "Keycloak Realm sslRequired Set to None"
+  severity: warning
+  category: security
+  description: "Demo realm JSON has sslRequired set to 'none', allowing non-HTTPS OIDC flows. Combined with DCR policy that accepts registrations from any host (host-sending-registration-request-must-match: false) and max-clients: 200, this creates a permissive auth surface."
+  recommendation: "Set sslRequired to 'external' or 'all' for production realms. Restrict DCR policy host matching. Lower max-clients to a reasonable limit."
+  sourceFile: "synthesis-keycloak/realms/demo-realm.json"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

@@ -1,0 +1,18 @@
+apiVersion: synthesis/v1
+kind: mbse.activity
+metadata:
+  name: activity-load-domain
+spec:
+  displayName: "Load Domain Packs"
+  description: "Parse YAML domain packs, resolve traits, merge reference kinds, and load seeds with two-pass name resolution"
+  activityType: call-behavior
+  inputs: |
+    domainsDir: filesystem path
+    options: LoaderOptions (WithSeeds, tenant overrides)
+  outputs: |
+    definitions: []DomainDefinition
+    items: []DomainItem
+    referenceKinds: []ReferenceKind
+  preconditions: "Domain YAML files exist in configured directory"
+  postconditions: "All definitions registered, seeds loaded, !name references resolved"
+  allocatedToBlockRef: "!name block-backend"

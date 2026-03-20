@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-evaluate-twin
+spec:
+  displayName: "Enterprise Evaluate Twin"
+  endpointType: mcp-tool
+  toolName: "evaluate_enterprise_twin"
+  parameters:
+    required: [twinName]
+    optional: []
+  description: "Runs MetricEngine against a digital-twin snapshot."
+  permissionRequired: tenant_user
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

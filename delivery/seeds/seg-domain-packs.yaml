@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-domain-packs
+spec:
+  displayName: "Domain Packs"
+  description: "Filesystem-based domain packs containing definitions, seeds, views, and navigation. Core packs ship with the platform; tenants can define local domain packs."
+  valueStreamRef: "!name vs-domain-extensibility"
+  fundingModel: percent
+  fundingValue: 30
+  opsInScope: false

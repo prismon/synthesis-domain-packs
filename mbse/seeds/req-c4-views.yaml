@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: mbse.requirement
+metadata:
+  name: req-c4-views
+spec:
+  displayName: "C4 Architecture Visualization"
+  description: "The system shall render interactive C4 context, container, and component diagrams with drill-down navigation between levels."
+  reqId: "SYS-REQ-006"
+  reqType: functional
+  level: subsystem
+  verificationMethod: demonstration
+  risk: low
+  rationale: "C4 is the industry standard for communicating software architecture at multiple abstraction levels."
+  derivedFromNeeds:
+    - "!name need-unified-delivery-intelligence"

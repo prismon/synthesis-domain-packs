@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: delivery.product
+metadata:
+  name: synthesis-product
+spec:
+  displayName: "Synthesis Platform"
+  description: "Trait-based delivery intelligence platform with MCP-first architecture. Unifies fragmented delivery tools into a single domain system with C4 architecture views, value stream mapping, and domain modeling."
+  tier: platform
+  dependsOnSystemRefs:
+    - "!name synthesis"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-trait-composition
+spec:
+  displayName: "Trait-Based Schema Composition"
+  patternCategory: architectural
+  description: "Domain definitions compose behavioral traits (Hierarchical, Trackable, Ownable, etc.) that inject fields into the schema. Schema resolution merges trait fields, reference-kind fields, and custom fields in three phases. Both Go backend and TypeScript frontend implement identical resolution logic."
+  componentRefs:
+    - "!name ss-trait-system"
+    - "!name ss-schema-resolver"
+  containerRefs:
+    - "!name ss-frontend"
+    - "!name ss-backend"

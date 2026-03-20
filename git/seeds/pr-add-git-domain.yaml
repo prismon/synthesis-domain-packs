@@ -1,0 +1,17 @@
+apiVersion: synthesis/v1
+kind: git.pull-request
+metadata:
+  name: pr-add-git-domain
+spec:
+  displayName: "feat: add Git domain domain model"
+  repoRef: "!name synthesis"
+  sourceBranch: feature/git
+  targetBranch: main
+  prNumber: 42
+  description: "Adds repositories, branches, pull requests, and repo files as first-class domain items with specialized viewers and GitHub sync."
+  mergeStatus: open
+  reviewStatus: review-required
+  lifecycleState: open
+  additions: 1250
+  deletions: 45
+  changedFiles: 28

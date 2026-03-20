@@ -1,0 +1,27 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: audit-database
+spec:
+  displayName: "PostgreSQL Store — Audit"
+  description: "Audit findings, schemas, and RLS policies for the database container"
+  itemGroup:
+    kinds:
+      - audit.finding
+      - audit.db-schema
+      - audit.permission
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: audit.finding
+        groupByField: severity
+        label: "Findings"
+      - kind: audit.db-schema
+        label: "Schemas"
+      - kind: audit.permission
+        groupByField: permissionType
+        label: "Permissions"
+    filterByRef:
+      field: containerRef
+      value: ss-database
+    showDescriptions: true

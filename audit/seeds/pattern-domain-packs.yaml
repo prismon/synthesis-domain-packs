@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-domain-packs
+spec:
+  displayName: "YAML Domain Packs"
+  patternCategory: architectural
+  description: "YAML-based domain packs bundle definitions, reference kinds, seeds, views, and navigation items. Core packs ship with the binary (architecture, value-stream-mapping, domain-modeling). Tenants can add local packs. The loader performs idempotent upserts and skips enterprise-only definitions gracefully."
+  componentRefs:
+    - "!name ss-domain-loader"
+  containerRefs:
+    - "!name ss-backend"

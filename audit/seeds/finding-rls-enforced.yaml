@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-rls-enforced
+spec:
+  displayName: "Row-Level Security Enforced at Database Level"
+  severity: note
+  category: security
+  description: "Row-level security is enforced at the PostgreSQL level with FORCE ROW LEVEL SECURITY on all three tables. Tenant isolation is robust even if application code has bugs."
+  recommendation: "No action required. Continue enforcing RLS at the database level as the primary tenant isolation mechanism."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-database"
+  componentRef: "!name ss-repository"

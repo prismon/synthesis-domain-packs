@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-domain-composition
+spec:
+  displayName: "Domain Composition"
+  description: "Tenants compose their domain from core and local domains declared in tenant.yaml manifests. Domains bring definitions, seeds, views, and navigation."
+  valueStreamRef: "!name vs-multi-tenancy"
+  fundingModel: percent
+  fundingValue: 50
+  opsInScope: false

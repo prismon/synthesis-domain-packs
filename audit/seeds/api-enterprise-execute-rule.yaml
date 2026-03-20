@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-enterprise-execute-rule
+spec:
+  displayName: "Enterprise Execute Rule"
+  endpointType: mcp-tool
+  toolName: "execute_enterprise_rule"
+  parameters:
+    required: [ruleName]
+    optional: []
+  description: "Runs a single rule on-demand."
+  permissionRequired: tenant_admin
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

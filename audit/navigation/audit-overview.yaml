@@ -1,0 +1,9 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: audit-overview
+spec:
+  title: "Audit Overview"
+  icon: "shield-check"
+  viewRef: "audit-overview"
+  order: 10

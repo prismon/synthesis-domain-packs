@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-review-reject
+spec:
+  displayName: "Review Reject"
+  endpointType: mcp-tool
+  toolName: "reject_review_change"
+  parameters:
+    required: [uid, comment]
+    optional: []
+  description: "Rejects a pending change with a required explanatory comment."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-review-engine"

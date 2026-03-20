@@ -1,0 +1,415 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: tech-stack
+  version: 4
+spec:
+  displayName: "Tech Stack"
+  description: "Technology portfolio radar — languages, libraries, services, and blueprints with FIRE lifecycle management"
+  icon: "layers"
+  color: "#ec4899"
+  dependencies:
+    - name: architecture
+      reason: "Links tech items to components and capabilities"
+    - name: delivery
+      reason: "Links tech items to features and products"
+  definitions:
+    - name: tech-stack.stack
+      displayName: "Tech Stacks"
+      description: "Top-level technology portfolio container for a project or product"
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: description
+          type: string
+          required: false
+          description: "What this tech stack covers"
+        - name: projectRef
+          type: ref
+          required: false
+          description: "Product this tech stack belongs to"
+          targetKind: delivery.product
+      providerType: manual
+
+    - name: tech-stack.language
+      displayName: "Languages"
+      description: "Programming languages and runtimes"
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: techStackRef
+          type: ref
+          required: true
+          critical: true
+          description: "Parent tech stack"
+          targetKind: tech-stack.stack
+        - name: ring
+          type: enum
+          required: true
+          description: "FIRE lifecycle position"
+          enumValues:
+            - fix
+            - invest
+            - reduce
+            - eliminate
+        - name: paradigm
+          type: enum
+          required: false
+          description: "Programming paradigm"
+          enumValues:
+            - oop
+            - functional
+            - multi-paradigm
+            - scripting
+        - name: version
+          type: string
+          required: false
+          description: "Current version in use"
+        - name: license
+          type: string
+          required: false
+          description: "License identifier (e.g., MIT, Apache-2.0)"
+        - name: openSourceAdoption
+          type: enum
+          required: false
+          description: "Community adoption level"
+          enumValues:
+            - widely-adopted
+            - moderate
+            - niche
+            - internal
+        - name: cveCount
+          type: number
+          required: false
+          description: "Open CVE count"
+        - name: approved
+          type: enum
+          required: true
+          description: "Approval status"
+          enumValues:
+            - approved
+            - approved-with-use-case
+            - not-approved
+        - name: strengths
+          type: string-list
+          required: false
+          description: "Things this technology solves well"
+        - name: description
+          type: string
+          required: false
+          description: "What this language is used for in this project"
+      providerType: manual
+
+    - name: tech-stack.library
+      displayName: "Libraries"
+      description: "Package dependencies — frameworks, SDKs, component libraries"
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: techStackRef
+          type: ref
+          required: true
+          critical: true
+          description: "Parent tech stack"
+          targetKind: tech-stack.stack
+        - name: ring
+          type: enum
+          required: true
+          description: "FIRE lifecycle position"
+          enumValues:
+            - fix
+            - invest
+            - reduce
+            - eliminate
+        - name: packageManager
+          type: string
+          required: false
+          description: "Package manager (npm, go modules, pip, etc.)"
+        - name: latestVersion
+          type: string
+          required: false
+          description: "Latest available version"
+        - name: version
+          type: string
+          required: false
+          description: "Current version in use"
+        - name: license
+          type: string
+          required: false
+          description: "License identifier"
+        - name: openSourceAdoption
+          type: enum
+          required: false
+          description: "Community adoption level"
+          enumValues:
+            - widely-adopted
+            - moderate
+            - niche
+            - internal
+        - name: cveCount
+          type: number
+          required: false
+          description: "Open CVE count"
+        - name: approved
+          type: enum
+          required: true
+          description: "Approval status"
+          enumValues:
+            - approved
+            - approved-with-use-case
+            - not-approved
+        - name: strengths
+          type: string-list
+          required: false
+          description: "Things this library solves well"
+        - name: description
+          type: string
+          required: false
+          description: "What this library is used for in this project"
+      providerType: manual
+
+    - name: tech-stack.service
+      displayName: "Services"
+      description: "Infrastructure and platform services — databases, cloud services, SaaS tools"
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: techStackRef
+          type: ref
+          required: true
+          critical: true
+          description: "Parent tech stack"
+          targetKind: tech-stack.stack
+        - name: ring
+          type: enum
+          required: true
+          description: "FIRE lifecycle position"
+          enumValues:
+            - fix
+            - invest
+            - reduce
+            - eliminate
+        - name: serviceType
+          type: enum
+          required: false
+          description: "Service delivery model"
+          enumValues:
+            - saas
+            - paas
+            - iaas
+            - self-hosted
+            - managed
+        - name: version
+          type: string
+          required: false
+          description: "Current version in use"
+        - name: license
+          type: string
+          required: false
+          description: "License identifier"
+        - name: openSourceAdoption
+          type: enum
+          required: false
+          description: "Community adoption level"
+          enumValues:
+            - widely-adopted
+            - moderate
+            - niche
+            - internal
+        - name: cveCount
+          type: number
+          required: false
+          description: "Open CVE count"
+        - name: approved
+          type: enum
+          required: true
+          description: "Approval status"
+          enumValues:
+            - approved
+            - approved-with-use-case
+            - not-approved
+        - name: strengths
+          type: string-list
+          required: false
+          description: "Things this service solves well"
+        - name: description
+          type: string
+          required: false
+          description: "What this service is used for in this project"
+      providerType: manual
+
+    - name: tech-stack.blueprint
+      displayName: "Blueprints & Patterns"
+      description: "Architectural patterns, design blueprints, integration strategies"
+      traits:
+        - traitName: Ownable
+        - traitName: Linkable
+      fields:
+        - name: techStackRef
+          type: ref
+          required: true
+          critical: true
+          description: "Parent tech stack"
+          targetKind: tech-stack.stack
+        - name: ring
+          type: enum
+          required: true
+          description: "FIRE lifecycle position"
+          enumValues:
+            - fix
+            - invest
+            - reduce
+            - eliminate
+        - name: patternType
+          type: enum
+          required: false
+          description: "Pattern classification"
+          enumValues:
+            - architectural
+            - design
+            - integration
+            - deployment
+        - name: version
+          type: string
+          required: false
+          description: "Current version in use"
+        - name: license
+          type: string
+          required: false
+          description: "License identifier"
+        - name: openSourceAdoption
+          type: enum
+          required: false
+          description: "Community adoption level"
+          enumValues:
+            - widely-adopted
+            - moderate
+            - niche
+            - internal
+        - name: cveCount
+          type: number
+          required: false
+          description: "Open CVE count"
+        - name: approved
+          type: enum
+          required: true
+          description: "Approval status"
+          enumValues:
+            - approved
+            - approved-with-use-case
+            - not-approved
+        - name: strengths
+          type: string-list
+          required: false
+          description: "Things this pattern solves well"
+        - name: description
+          type: string
+          required: false
+          description: "What this pattern is used for in this project"
+      providerType: manual
+
+    - name: system.view
+      displayName: "Views"
+      description: "Visual layouts for displaying domain items"
+      traits:
+        - traitName: Viewable
+      providerType: manual
+
+    - name: system.nav-item
+      displayName: "Navigation"
+      description: "Sidebar navigation items defined by domains"
+      providerType: manual
+
+  referenceKinds:
+    - name: parent
+      displayName: "Parent Of"
+      reverseDisplayName: "Child Of"
+      constraints:
+        - sourceKind: tech-stack.language
+          targetKind: tech-stack.stack
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: techStackRef
+          targetField: childLanguages
+        - sourceKind: tech-stack.library
+          targetKind: tech-stack.stack
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: techStackRef
+          targetField: childLibraries
+        - sourceKind: tech-stack.service
+          targetKind: tech-stack.stack
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: techStackRef
+          targetField: childServices
+        - sourceKind: tech-stack.blueprint
+          targetKind: tech-stack.stack
+          sourceCardinality: "1"
+          targetCardinality: "0..*"
+          sourceField: techStackRef
+          targetField: childBlueprints
+    - name: uses-technology
+      displayName: "Uses Technology"
+      reverseDisplayName: "Used By"
+      constraints:
+        - sourceKind: architecture.component
+          targetKind: tech-stack.language
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: architecture.component
+          targetKind: tech-stack.library
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: architecture.component
+          targetKind: tech-stack.service
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: architecture.component
+          targetKind: tech-stack.blueprint
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+    - name: depends-on-technology
+      displayName: "Depends On"
+      reverseDisplayName: "Depended On By"
+      constraints:
+        - sourceKind: delivery.feature
+          targetKind: tech-stack.language
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: delivery.feature
+          targetKind: tech-stack.library
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: delivery.feature
+          targetKind: tech-stack.service
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: delivery.feature
+          targetKind: tech-stack.blueprint
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+    - name: uses-capability
+      displayName: "Uses Capability"
+      reverseDisplayName: "Capability Used By"
+      constraints:
+        - sourceKind: tech-stack.language
+          targetKind: architecture.capability
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: tech-stack.library
+          targetKind: architecture.capability
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: tech-stack.service
+          targetKind: architecture.capability
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"
+        - sourceKind: tech-stack.blueprint
+          targetKind: architecture.capability
+          sourceCardinality: "0..*"
+          targetCardinality: "0..*"

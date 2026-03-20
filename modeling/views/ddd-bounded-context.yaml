@@ -1,0 +1,66 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: ddd-bounded-context
+spec:
+  displayName: "Bounded Context Internals"
+  description: "Tactical view of a bounded context: aggregates, entities, value objects, events, services, and repositories"
+  itemGroup:
+    kinds:
+      - modeling.bounded-context
+      - modeling.aggregate
+      - modeling.entity
+      - modeling.value-object
+      - modeling.event
+      - modeling.service
+      - modeling.repository
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: modeling.bounded-context
+        label: Bounded Context
+        color: "#0f766e"
+      - kind: modeling.aggregate
+        label: Aggregates
+        color: "#0369a1"
+      - kind: modeling.entity
+        label: Entities
+        color: "#1d4ed8"
+      - kind: modeling.value-object
+        label: Value Objects
+        color: "#6d28d9"
+      - kind: modeling.event
+        label: Domain Events
+        color: "#b45309"
+      - kind: modeling.service
+        label: Domain Services
+        color: "#065f46"
+      - kind: modeling.repository
+        label: Repositories
+        color: "#7f1d1d"
+    refChain:
+      - from: modeling.aggregate
+        field: boundedContextRef
+        to: modeling.bounded-context
+      - from: modeling.entity
+        field: aggregateRef
+        to: modeling.aggregate
+      - from: modeling.value-object
+        field: aggregateRef
+        to: modeling.aggregate
+      - from: modeling.event
+        field: aggregateRef
+        to: modeling.aggregate
+      - from: modeling.service
+        field: boundedContextRef
+        to: modeling.bounded-context
+      - from: modeling.repository
+        field: aggregateRef
+        to: modeling.aggregate
+    showRelationships: true
+    expandByDefault: true
+  drillDown:
+    - nodeKind: modeling.bounded-context
+      targetViewName: ddd-bounded-context
+    - nodeKind: modeling.aggregate
+      targetViewComponent: vc-class-diagram

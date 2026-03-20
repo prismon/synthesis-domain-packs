@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-domain-list-traits
+spec:
+  displayName: "Domain List Traits"
+  endpointType: mcp-tool
+  toolName: "list_trait"
+  parameters:
+    required: []
+    optional: []
+  description: "Lists all trait definitions available in the system."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

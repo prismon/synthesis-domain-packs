@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.design-pattern
+metadata:
+  name: pattern-reference-system
+spec:
+  displayName: "First-Class Reference System"
+  patternCategory: data
+  description: "All relationships between domain items are modeled as first-class domain-edges with typed reference kinds. Reference kinds declare cardinality constraints and field injection rules. The EdgeSyncController admission webhook keeps the edge table in sync with ref fields on items."
+  componentRefs:
+    - "!name ss-reference-engine"
+    - "!name ss-domain-service"
+  containerRefs:
+    - "!name ss-backend"

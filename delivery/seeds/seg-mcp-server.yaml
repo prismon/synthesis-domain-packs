@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: delivery.segment
+metadata:
+  name: seg-mcp-server
+spec:
+  displayName: "MCP Server (Backend)"
+  description: "Go implementation of the MCP protocol — JSON-RPC tool registration, request parsing, streaming HTTP transport, and delegation to the domain service layer."
+  valueStreamRef: "!name vs-mcp-integration"
+  fundingModel: percent
+  fundingValue: 50
+  opsInScope: false

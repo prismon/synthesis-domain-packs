@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: delivery.value-stream
+metadata:
+  name: vs-domain-extensibility
+spec:
+  displayName: "Domain Extensibility"
+  description: "Trait system, domain packs, enterprise plugins, and the view registry — enabling teams to extend the domain with custom definitions, behavioral traits, and visualization layouts."
+  productRef: "!name synthesis-product"
+  status: active
+  touchesContainerRefs:
+    - "!name ss-backend"
+    - "!name ss-frontend"

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: tasks.task
+metadata:
+  name: task-update-claude-md
+spec:
+  displayName: "Update CLAUDE.md with Sandboxes rename"
+  status: done
+  priority: p3
+  list: "Docs"
+  flagged: false
+  completedAt: "2026-03-10T15:30:00Z"
+  notes: |
+    Reflect the rename from "Agent Worlds" to "Sandboxes" in CLAUDE.md.
+    Updated MCP tool names: `sandbox_chat`, `sandbox_launch`, `sandbox_terminate`, `sandbox_post_message`.
+    Updated kind names: `sandbox.template`, `sandbox.session`, `sandbox.resource`.

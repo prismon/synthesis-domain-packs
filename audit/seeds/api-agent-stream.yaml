@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-agent-stream
+spec:
+  displayName: "Agent Stream"
+  endpointType: http-endpoint
+  toolName: "GET /agent/stream/{streamId}"
+  parameters:
+    required: [streamId]
+    optional: []
+  description: "SSE stream for agent responses."
+  permissionRequired: tenant_user
+  buildTag: enterprise
+  componentRef: "!name ss-mcp-server"

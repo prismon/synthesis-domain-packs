@@ -1,0 +1,47 @@
+apiVersion: synthesis/v1
+kind: system.view
+metadata:
+  name: vsm-overview
+spec:
+  displayName: "Value Stream Overview"
+  description: "Hierarchical board showing the full Product → Value Stream → Segment → Feature tree"
+  itemGroup:
+    kinds:
+      - delivery.product
+      - delivery.value-stream
+      - delivery.segment
+      - delivery.feature
+  viewComponentRef: "!name vc-hierarchy-board"
+  layoutConfig:
+    levels:
+      - kind: delivery.product
+        label: Products
+        color: "#6366f1"
+      - kind: delivery.value-stream
+        label: Value Streams
+        color: "#8b5cf6"
+      - kind: delivery.segment
+        label: Segments
+        color: "#a78bfa"
+      - kind: delivery.feature
+        label: Features
+        color: "#c4b5fd"
+    refChain:
+      - from: delivery.feature
+        field: segmentRef
+        to: delivery.segment
+      - from: delivery.segment
+        field: valueStreamRef
+        to: delivery.value-stream
+      - from: delivery.value-stream
+        field: productRef
+        to: delivery.product
+    showRelationships: true
+    expandByDefault: true
+  drillDown:
+    - nodeKind: delivery.product
+      targetViewName: vsm-overview
+    - nodeKind: delivery.value-stream
+      targetViewName: vsm-overview
+    - nodeKind: delivery.segment
+      targetViewName: vsm-overview

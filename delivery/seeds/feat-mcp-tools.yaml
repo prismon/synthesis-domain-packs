@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-mcp-tools
+spec:
+  displayName: "MCP Tool Registration"
+  description: "13 domain tools registered via the MCP protocol — list-items, get-item, create-item, update-item, delete-item, list-definitions, and more."
+  segmentRef: "!name seg-mcp-server"
+  implementedByRefs:
+    - "!name ss-mcp-server"
+    - "!name ss-domain-service"
+  problemStatement: "AI agents need a structured API to interact with the domain without building custom REST clients."
+  acceptanceCriteria: "All 13 tools are discoverable via MCP tool listing. Each tool has a JSON schema for inputs."
+  status: active

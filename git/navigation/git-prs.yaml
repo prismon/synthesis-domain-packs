@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: system.nav-item
+metadata:
+  name: git-pull-requests
+spec:
+  title: "Pull Requests"
+  icon: "git-pull-request"
+  viewRef: ""
+  kind: "git.pull-request"
+  order: 5

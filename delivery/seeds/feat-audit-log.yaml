@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: delivery.feature
+metadata:
+  name: feat-audit-log
+spec:
+  displayName: "Domain Audit Log"
+  description: "Record all domain mutations with actor, timestamp, and before/after snapshots."
+  segmentRef: "!name seg-item-crud"
+  implementedByRefs:
+    - "!name ss-domain-service"
+    - "!name ss-repository"
+  problemStatement: "No visibility into who changed domain items or when changes occurred."
+  acceptanceCriteria: "Every create, update, and delete is logged. Audit entries include tenant, actor, and diff. Queryable via MCP tool."
+  status: proposed
