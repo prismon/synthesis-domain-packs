@@ -2,7 +2,7 @@ apiVersion: synthesis/v1
 kind: Domain
 metadata:
   name: tech-stack
-  version: 4
+  version: 5
 spec:
   displayName: "Tech Stack"
   description: "Technology portfolio radar — languages, libraries, services, and blueprints with FIRE lifecycle management"
@@ -30,6 +30,30 @@ spec:
           required: false
           description: "Product this tech stack belongs to"
           targetKind: delivery.product
+        - name: rings
+          type: array
+          required: false
+          description: "Ordered ring names for this radar (e.g. Adopt, Trial, Assess, Hold or Fix, Invest, Reduce, Eliminate)"
+      providerType: manual
+
+    - name: tech-stack.use-case
+      displayName: "Technology Use Cases"
+      description: "A quadrant / area of technology concern within a stack (e.g. Languages, Data Storage, ML Frameworks)"
+      traits:
+        - traitName: Linkable
+      fields:
+        - name: displayName
+          type: string
+          required: true
+          description: "Quadrant label shown on the radar"
+        - name: stackRef
+          type: ref
+          required: true
+          description: "Parent tech stack"
+          targetKind: tech-stack.stack
+        - name: description
+          type: string
+          required: false
       providerType: manual
 
     - name: tech-stack.language
@@ -39,21 +63,16 @@ spec:
         - traitName: Ownable
         - traitName: Linkable
       fields:
-        - name: techStackRef
+        - name: useCaseRef
           type: ref
           required: true
           critical: true
-          description: "Parent tech stack"
-          targetKind: tech-stack.stack
+          description: "Use-case (quadrant) this technology belongs to"
+          targetKind: tech-stack.use-case
         - name: ring
-          type: enum
+          type: string
           required: true
-          description: "FIRE lifecycle position"
-          enumValues:
-            - fix
-            - invest
-            - reduce
-            - eliminate
+          description: "Current lifecycle ring (must match a ring defined on the parent stack)"
         - name: paradigm
           type: enum
           required: false
@@ -84,18 +103,14 @@ spec:
           type: number
           required: false
           description: "Open CVE count"
-        - name: approved
-          type: enum
-          required: true
-          description: "Approval status"
-          enumValues:
-            - approved
-            - approved-with-use-case
-            - not-approved
         - name: strengths
           type: string-list
           required: false
           description: "Things this technology solves well"
+        - name: scores
+          type: map
+          required: false
+          description: "Evaluation dimension scores (dimension name → 0–10). Used by the radar graph view."
         - name: description
           type: string
           required: false
@@ -109,21 +124,16 @@ spec:
         - traitName: Ownable
         - traitName: Linkable
       fields:
-        - name: techStackRef
+        - name: useCaseRef
           type: ref
           required: true
           critical: true
-          description: "Parent tech stack"
-          targetKind: tech-stack.stack
+          description: "Use-case (quadrant) this technology belongs to"
+          targetKind: tech-stack.use-case
         - name: ring
-          type: enum
+          type: string
           required: true
-          description: "FIRE lifecycle position"
-          enumValues:
-            - fix
-            - invest
-            - reduce
-            - eliminate
+          description: "Current lifecycle ring (must match a ring defined on the parent stack)"
         - name: packageManager
           type: string
           required: false
@@ -153,18 +163,14 @@ spec:
           type: number
           required: false
           description: "Open CVE count"
-        - name: approved
-          type: enum
-          required: true
-          description: "Approval status"
-          enumValues:
-            - approved
-            - approved-with-use-case
-            - not-approved
         - name: strengths
           type: string-list
           required: false
           description: "Things this library solves well"
+        - name: scores
+          type: map
+          required: false
+          description: "Evaluation dimension scores (dimension name → 0–10). Used by the radar graph view."
         - name: description
           type: string
           required: false
@@ -178,21 +184,16 @@ spec:
         - traitName: Ownable
         - traitName: Linkable
       fields:
-        - name: techStackRef
+        - name: useCaseRef
           type: ref
           required: true
           critical: true
-          description: "Parent tech stack"
-          targetKind: tech-stack.stack
+          description: "Use-case (quadrant) this technology belongs to"
+          targetKind: tech-stack.use-case
         - name: ring
-          type: enum
+          type: string
           required: true
-          description: "FIRE lifecycle position"
-          enumValues:
-            - fix
-            - invest
-            - reduce
-            - eliminate
+          description: "Current lifecycle ring (must match a ring defined on the parent stack)"
         - name: serviceType
           type: enum
           required: false
@@ -224,18 +225,14 @@ spec:
           type: number
           required: false
           description: "Open CVE count"
-        - name: approved
-          type: enum
-          required: true
-          description: "Approval status"
-          enumValues:
-            - approved
-            - approved-with-use-case
-            - not-approved
         - name: strengths
           type: string-list
           required: false
           description: "Things this service solves well"
+        - name: scores
+          type: map
+          required: false
+          description: "Evaluation dimension scores (dimension name → 0–10). Used by the radar graph view."
         - name: description
           type: string
           required: false
@@ -249,21 +246,16 @@ spec:
         - traitName: Ownable
         - traitName: Linkable
       fields:
-        - name: techStackRef
+        - name: useCaseRef
           type: ref
           required: true
           critical: true
-          description: "Parent tech stack"
-          targetKind: tech-stack.stack
+          description: "Use-case (quadrant) this technology belongs to"
+          targetKind: tech-stack.use-case
         - name: ring
-          type: enum
+          type: string
           required: true
-          description: "FIRE lifecycle position"
-          enumValues:
-            - fix
-            - invest
-            - reduce
-            - eliminate
+          description: "Current lifecycle ring (must match a ring defined on the parent stack)"
         - name: patternType
           type: enum
           required: false
@@ -294,18 +286,14 @@ spec:
           type: number
           required: false
           description: "Open CVE count"
-        - name: approved
-          type: enum
-          required: true
-          description: "Approval status"
-          enumValues:
-            - approved
-            - approved-with-use-case
-            - not-approved
         - name: strengths
           type: string-list
           required: false
           description: "Things this pattern solves well"
+        - name: scores
+          type: map
+          required: false
+          description: "Evaluation dimension scores (dimension name → 0–10). Used by the radar graph view."
         - name: description
           type: string
           required: false
@@ -325,34 +313,6 @@ spec:
       providerType: manual
 
   referenceKinds:
-    - name: parent
-      displayName: "Parent Of"
-      reverseDisplayName: "Child Of"
-      constraints:
-        - sourceKind: tech-stack.language
-          targetKind: tech-stack.stack
-          sourceCardinality: "1"
-          targetCardinality: "0..*"
-          sourceField: techStackRef
-          targetField: childLanguages
-        - sourceKind: tech-stack.library
-          targetKind: tech-stack.stack
-          sourceCardinality: "1"
-          targetCardinality: "0..*"
-          sourceField: techStackRef
-          targetField: childLibraries
-        - sourceKind: tech-stack.service
-          targetKind: tech-stack.stack
-          sourceCardinality: "1"
-          targetCardinality: "0..*"
-          sourceField: techStackRef
-          targetField: childServices
-        - sourceKind: tech-stack.blueprint
-          targetKind: tech-stack.stack
-          sourceCardinality: "1"
-          targetCardinality: "0..*"
-          sourceField: techStackRef
-          targetField: childBlueprints
     - name: uses-technology
       displayName: "Uses Technology"
       reverseDisplayName: "Used By"
