@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: tech-stack.use-case
+metadata:
+  name: uc-synthesis-blueprints
+spec:
+  displayName: "Patterns & Protocols"
+  stackRef: "!name synthesis-tech-stack"
+  description: "Architecture patterns and communication protocols"

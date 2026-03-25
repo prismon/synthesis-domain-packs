@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: tech-stack.use-case
+metadata:
+  name: uc-synthesis-services
+spec:
+  displayName: "Infrastructure Services"
+  stackRef: "!name synthesis-tech-stack"
+  description: "Databases, runtimes, and infrastructure"

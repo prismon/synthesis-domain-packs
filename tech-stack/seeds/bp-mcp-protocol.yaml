@@ -4,11 +4,10 @@ metadata:
   name: ts-mcp-protocol
 spec:
   displayName: "MCP Protocol"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-blueprints"
+  ring: Invest
   patternType: integration
   openSourceAdoption: niche
-  approved: approved
   strengths:
     - "Standardized AI tool protocol"
     - "Streamable HTTP transport"

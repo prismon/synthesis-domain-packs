@@ -4,11 +4,10 @@ metadata:
   name: ts-domain-packs
 spec:
   displayName: "Domain Packs"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-blueprints"
+  ring: Invest
   patternType: architectural
   openSourceAdoption: internal
-  approved: approved
   strengths:
     - "YAML-based extensibility"
     - "Bundled definitions + seeds + views + navigation"

@@ -3,5 +3,10 @@ kind: tech-stack.stack
 metadata:
   name: synthesis-tech-stack
 spec:
-  displayName: "Synthesis Tech Stack"
+  displayName: "Synthesis Platform"
   description: "Technology portfolio for the Synthesis delivery intelligence platform"
+  rings:
+    - Fix
+    - Invest
+    - Reduce
+    - Eliminate

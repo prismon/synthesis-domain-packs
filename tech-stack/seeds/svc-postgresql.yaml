@@ -4,14 +4,13 @@ metadata:
   name: ts-postgresql
 spec:
   displayName: "PostgreSQL"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-services"
+  ring: Invest
   serviceType: self-hosted
   version: "16"
   license: "PostgreSQL"
   openSourceAdoption: widely-adopted
   cveCount: 0
-  approved: approved
   strengths:
     - "Row-level security for multi-tenancy"
     - "JSONB for flexible spec storage"

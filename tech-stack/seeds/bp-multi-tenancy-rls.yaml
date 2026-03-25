@@ -4,11 +4,10 @@ metadata:
   name: ts-multi-tenancy-rls
 spec:
   displayName: "Multi-Tenancy with RLS"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: fix
+  useCaseRef: "!name uc-synthesis-blueprints"
+  ring: Fix
   patternType: architectural
   openSourceAdoption: moderate
-  approved: approved
   strengths:
     - "Data isolation without separate databases"
     - "Transparent to application code"

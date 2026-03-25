@@ -4,13 +4,12 @@ metadata:
   name: ts-tailwind
 spec:
   displayName: "Tailwind CSS"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-libraries"
+  ring: Invest
   packageManager: npm
   version: "3.x"
   license: "MIT"
   openSourceAdoption: widely-adopted
-  approved: approved
   strengths:
     - "Utility-first rapid styling"
     - "No CSS file proliferation"

@@ -4,12 +4,11 @@ metadata:
   name: ts-vitest
 spec:
   displayName: "Vitest"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: fix
+  useCaseRef: "!name uc-synthesis-libraries"
+  ring: Fix
   packageManager: npm
   license: "MIT"
   openSourceAdoption: moderate
-  approved: approved
   strengths:
     - "Vite-native test runner"
     - "Jest-compatible API"

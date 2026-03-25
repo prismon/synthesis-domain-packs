@@ -4,16 +4,20 @@ metadata:
   name: ts-go
 spec:
   displayName: "Go"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-languages"
+  ring: Invest
   paradigm: multi-paradigm
   version: "1.23"
   license: "BSD-3-Clause"
   openSourceAdoption: widely-adopted
   cveCount: 0
-  approved: approved
   strengths:
     - "Fast compilation and startup"
     - "Excellent concurrency primitives"
     - "Single binary deployment"
   description: "Backend MCP server and domain service"
+  scores:
+    explainability: 7
+    performance: 8
+    ecosystem: 9
+    learnability: 6

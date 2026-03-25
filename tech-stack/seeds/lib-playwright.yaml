@@ -4,12 +4,11 @@ metadata:
   name: ts-playwright
 spec:
   displayName: "Playwright"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: fix
+  useCaseRef: "!name uc-synthesis-libraries"
+  ring: Fix
   packageManager: npm
   license: "Apache-2.0"
   openSourceAdoption: widely-adopted
-  approved: approved
   strengths:
     - "Cross-browser E2E testing"
     - "Auto-waiting and retries"

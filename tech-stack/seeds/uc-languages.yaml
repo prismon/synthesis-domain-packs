@@ -1,0 +1,8 @@
+apiVersion: synthesis/v1
+kind: tech-stack.use-case
+metadata:
+  name: uc-synthesis-languages
+spec:
+  displayName: "Languages & Runtimes"
+  stackRef: "!name synthesis-tech-stack"
+  description: "Programming languages and runtimes used across the platform"

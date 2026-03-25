@@ -4,16 +4,20 @@ metadata:
   name: ts-typescript
 spec:
   displayName: "TypeScript"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-languages"
+  ring: Invest
   paradigm: multi-paradigm
   version: "5.x"
   license: "Apache-2.0"
   openSourceAdoption: widely-adopted
   cveCount: 0
-  approved: approved
   strengths:
     - "Type safety for large codebases"
     - "Rich IDE tooling and autocompletion"
     - "Gradual adoption from JavaScript"
   description: "Primary frontend language and build tooling"
+  scores:
+    explainability: 7
+    performance: 8
+    ecosystem: 9
+    learnability: 6

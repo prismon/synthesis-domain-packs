@@ -4,12 +4,11 @@ metadata:
   name: ts-mcp-go
 spec:
   displayName: "mcp-go"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-libraries"
+  ring: Invest
   packageManager: "go modules"
   license: "MIT"
   openSourceAdoption: niche
-  approved: approved
   strengths:
     - "Go-native MCP server implementation"
     - "Streamable HTTP transport"

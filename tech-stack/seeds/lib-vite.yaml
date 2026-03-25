@@ -4,13 +4,12 @@ metadata:
   name: ts-vite
 spec:
   displayName: "Vite"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-libraries"
+  ring: Invest
   packageManager: npm
   version: "6.x"
   license: "MIT"
   openSourceAdoption: widely-adopted
-  approved: approved
   strengths:
     - "Fast HMR development server"
     - "ESM-native build pipeline"

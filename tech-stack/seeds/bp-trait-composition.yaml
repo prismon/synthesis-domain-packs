@@ -4,11 +4,10 @@ metadata:
   name: ts-trait-composition
 spec:
   displayName: "Trait Composition"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: invest
+  useCaseRef: "!name uc-synthesis-blueprints"
+  ring: Invest
   patternType: architectural
   openSourceAdoption: internal
-  approved: approved
   strengths:
     - "Reusable behavioral field injection"
     - "Schema composition without inheritance"

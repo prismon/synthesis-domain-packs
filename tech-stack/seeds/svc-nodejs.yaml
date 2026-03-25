@@ -4,13 +4,12 @@ metadata:
   name: ts-nodejs
 spec:
   displayName: "Node.js"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: fix
+  useCaseRef: "!name uc-synthesis-services"
+  ring: Fix
   serviceType: self-hosted
   version: "22"
   license: "MIT"
   openSourceAdoption: widely-adopted
-  approved: approved
   strengths:
     - "JavaScript/TypeScript runtime"
     - "NPM ecosystem access"

@@ -4,11 +4,10 @@ metadata:
   name: ts-sql
 spec:
   displayName: "SQL"
-  techStackRef: "!name synthesis-tech-stack"
-  ring: fix
+  useCaseRef: "!name uc-synthesis-languages"
+  ring: Fix
   paradigm: scripting
   openSourceAdoption: widely-adopted
-  approved: approved
   strengths:
     - "Declarative data querying"
     - "Row-level security policies"
