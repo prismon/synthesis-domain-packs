@@ -1,0 +1,22 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-tech-radar-graph
+spec:
+  displayName: "Tech Radar Graph"
+  description: "Spider chart comparing technologies within a use-case across evaluation dimensions from their scores field"
+  layoutType: tech-radar-graph
+  icon: radar
+  componentKind: web-component
+  requiredFields:
+    - name: stackRef
+      type: ref
+  defaultItemGroup:
+    kinds:
+      - tech-stack.language
+      - tech-stack.library
+      - tech-stack.service
+      - tech-stack.blueprint
+  defaultLayoutConfig:
+    maxItems: 8
+    dimensionOrder: []

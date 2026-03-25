@@ -1,0 +1,21 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-tech-radar
+spec:
+  displayName: "Tech Radar"
+  description: "Dynamic quadrant radar for a tech-stack.stack item — use-cases become quadrants, technologies become blips placed by ring"
+  layoutType: tech-radar
+  icon: radar
+  componentKind: web-component
+  requiredFields:
+    - name: rings
+      type: array
+  defaultItemGroup:
+    kinds:
+      - tech-stack.stack
+      - tech-stack.use-case
+      - tech-stack.language
+      - tech-stack.library
+      - tech-stack.service
+      - tech-stack.blueprint
