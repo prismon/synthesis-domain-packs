@@ -1,0 +1,10 @@
+apiVersion: synthesis/v1
+kind: repository
+metadata:
+  name: synthesis-domain-packs
+spec:
+  displayName: "Synthesis Domain Packs"
+  description: "Core domain knowledge packs for Synthesis"
+  source: https://github.com/prismon/synthesis-domain-packs
+  provides:
+    - type: domain-pack
