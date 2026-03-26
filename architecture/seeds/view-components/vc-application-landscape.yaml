@@ -4,7 +4,108 @@ metadata:
   name: vc-application-landscape
 spec:
   displayName: "Application Landscape"
-  description: "High-level landscape view of applications and their groupings"
+  description: "Grid view of applications grouped by a configurable field (e.g. category, tier, domain)"
   layoutType: application-landscape
-  icon: app-window
-  componentKind: react
+  icon: layout-grid
+  componentKind: inline-react
+  requiredFields:
+    - name: category
+      type: string
+  defaultItemGroup:
+    kinds:
+      - architecture.system
+  defaultLayoutConfig:
+    applicationKind: architecture.system
+    groupByField: category
+markdown: |
+  var h = React.createElement;
+
+  var defaultColors = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+
+  function getGroupColor(index, groups, value) {
+    if (groups) {
+      var match = groups.find(function(g) { return g.value === value; });
+      if (match) return match.color;
+    }
+    return defaultColors[index % defaultColors.length];
+  }
+
+  function getGroupLabel(value, groups) {
+    if (groups) {
+      var match = groups.find(function(g) { return g.value === value; });
+      if (match) return match.label;
+    }
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  function getDisplayName(item) {
+    return item.spec.displayName || item.metadata.name;
+  }
+
+  return function ApplicationLandscape(props) {
+    var config = props.config;
+    var items = props.items;
+    var onInspect = props.onInspect;
+
+    var applicationKind = config.applicationKind || (config.domainRefs && config.domainRefs[0]) || 'architecture.system';
+    var groupByField = config.groupByField || 'category';
+    var groups = config.groups;
+    var appItems = (items && items[applicationKind]) || [];
+
+    var grouped = useMemo(function() {
+      var map = new Map();
+      if (groups) {
+        groups.forEach(function(g) { map.set(g.value, []); });
+      }
+      appItems.forEach(function(item) {
+        var value = (item.spec[groupByField]) || 'uncategorized';
+        var list = map.get(value) || [];
+        list.push(item);
+        map.set(value, list);
+      });
+      return Array.from(map.entries());
+    }, [appItems, groupByField, groups]);
+
+    if (appItems.length === 0) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No applications found. Add items to see them here.'
+      );
+    }
+
+    return h('div', { className: 'space-y-6 p-4' },
+      grouped.map(function(entry, groupIdx) {
+        var value = entry[0];
+        var groupItems = entry[1];
+        var color = getGroupColor(groupIdx, groups, value);
+        var label = getGroupLabel(value, groups);
+
+        return h('div', { key: value },
+          h('div', { className: 'flex items-center gap-2 mb-3' },
+            h('div', { className: 'w-3 h-3 rounded-full', style: { backgroundColor: color } }),
+            h('h3', { className: 'text-sm font-medium text-foreground' }, label),
+            h('span', { className: 'text-xs text-muted-foreground' }, '(' + groupItems.length + ')')
+          ),
+          h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3' },
+            groupItems.map(function(item) {
+              var name = getDisplayName(item);
+              var technology = item.spec.technology;
+              var description = item.spec.description;
+
+              return h('div', {
+                key: item.metadata.uid,
+                className: 'group relative rounded-lg border border-border/50 bg-card p-3 transition-all hover:border-border hover:shadow-md cursor-pointer',
+                style: { borderLeftWidth: '3px', borderLeftColor: color },
+                onClick: function() { if (onInspect) onInspect(item.metadata.uid, item.kind); }
+              },
+                h('h4', { className: 'text-sm font-medium text-foreground leading-tight' }, name),
+                description ? h('p', { className: 'mt-1 text-xs text-muted-foreground line-clamp-2' }, description) : null,
+                technology ? h('div', { className: 'mt-2' },
+                  h('span', { className: 'inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground' }, technology)
+                ) : null
+              );
+            })
+          )
+        );
+      })
+    );
+  };

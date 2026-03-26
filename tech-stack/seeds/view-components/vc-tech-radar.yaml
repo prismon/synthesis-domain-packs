@@ -1,0 +1,110 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-tech-radar
+spec:
+  displayName: "Tech Radar"
+  description: "Technology radar showing adoption rings and use-case quadrants"
+  layoutType: tech-radar
+  icon: radar
+  componentKind: inline-react
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  var ringOrder = ['adopt', 'trial', 'assess', 'hold'];
+  var ringColors = { adopt: '#22c55e', trial: '#3b82f6', assess: '#f59e0b', hold: '#ef4444' };
+  var quadrantColors = ['#6366f1', '#0891b2', '#d97706', '#dc2626'];
+
+  return function TechRadar(props) {
+    var config = props.config;
+    var items = props.items;
+    var onInspect = props.onInspect;
+
+    var stackKind = config.stackKind || 'tech-stack.stack';
+    var useCaseKind = config.useCaseKind || 'tech-stack.use-case';
+    var techKinds = config.techKinds || ['tech-stack.language', 'tech-stack.library', 'tech-stack.service', 'tech-stack.blueprint'];
+
+    var stacks = (items && items[stackKind]) || [];
+    var useCases = (items && items[useCaseKind]) || [];
+
+    var focusStack = config.focusRef
+      ? stacks.find(function(s) { return s.metadata.uid === config.focusRef; })
+      : stacks[0];
+
+    var rings = (focusStack && focusStack.spec.rings) || ringOrder;
+    var quadrants = useCases.slice(0, 4);
+
+    var techItems = [];
+    for (var k = 0; k < techKinds.length; k++) {
+      var kindItems = (items && items[techKinds[k]]) || [];
+      for (var j = 0; j < kindItems.length; j++) techItems.push(kindItems[j]);
+    }
+
+    var blips = useMemo(function() {
+      return techItems.map(function(item, idx) {
+        var ring = item.spec.ring || 'assess';
+        var ringIdx = ringOrder.indexOf(ring);
+        if (ringIdx === -1) ringIdx = 2;
+        var qIdx = 0;
+        if (item.spec.useCaseRef) {
+          for (var q = 0; q < quadrants.length; q++) {
+            if (quadrants[q].metadata.uid === item.spec.useCaseRef) { qIdx = q; break; }
+          }
+        }
+        return { item: item, ring: ring, ringIdx: ringIdx, quadrant: qIdx, index: idx };
+      });
+    }, [techItems, quadrants]);
+
+    if (!techItems.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No technologies found.'
+      );
+    }
+
+    return h('div', { className: 'p-4' },
+      h('div', { className: 'flex gap-3 mb-4' },
+        ringOrder.map(function(ring) {
+          return h('div', { key: ring, className: 'flex items-center gap-1.5' },
+            h('div', { className: 'w-3 h-3 rounded-full', style: { backgroundColor: ringColors[ring] } }),
+            h('span', { className: 'text-xs capitalize' }, ring)
+          );
+        })
+      ),
+
+      quadrants.length > 0 ? h('div', { className: 'flex gap-3 mb-4' },
+        quadrants.map(function(uc, idx) {
+          return h('div', { key: uc.metadata.uid, className: 'flex items-center gap-1.5' },
+            h('div', { className: 'w-3 h-3 rounded', style: { backgroundColor: quadrantColors[idx] } }),
+            h('span', { className: 'text-xs' }, getName(uc))
+          );
+        })
+      ) : null,
+
+      h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 gap-4' },
+        ringOrder.map(function(ring, ringIdx) {
+          var ringBlips = blips.filter(function(b) { return b.ring === ring; });
+          if (!ringBlips.length) return null;
+          return h('div', { key: ring, className: 'rounded-lg border p-3' },
+            h('div', { className: 'flex items-center gap-2 mb-2' },
+              h('div', { className: 'w-2.5 h-2.5 rounded-full', style: { backgroundColor: ringColors[ring] } }),
+              h('span', { className: 'text-sm font-semibold capitalize' }, ring),
+              h('span', { className: 'text-xs text-muted-foreground' }, '(' + ringBlips.length + ')')
+            ),
+            h('div', { className: 'flex flex-wrap gap-1.5' },
+              ringBlips.map(function(blip) {
+                var color = quadrantColors[blip.quadrant] || '#6b7280';
+                return h('span', {
+                  key: blip.item.metadata.uid,
+                  className: 'inline-flex items-center rounded-md px-2 py-1 text-xs cursor-pointer hover:opacity-80 transition-opacity',
+                  style: { backgroundColor: color + '20', color: color, border: '1px solid ' + color + '40' },
+                  onClick: function() { if (onInspect) onInspect(blip.item.metadata.uid, blip.item.kind); }
+                }, getName(blip.item));
+              })
+            )
+          );
+        })
+      )
+    );
+  };

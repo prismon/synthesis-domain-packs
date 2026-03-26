@@ -1,0 +1,106 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-conversation-timeline
+spec:
+  displayName: "Conversation Timeline"
+  description: "Chronological timeline of conversation messages grouped by channel"
+  layoutType: conversation-timeline
+  icon: message-square
+  componentKind: inline-react
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  function formatTime(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  return function ConversationTimeline(props) {
+    var config = props.config;
+    var items = props.items;
+
+    var channelKind = config.channelKind || (config.domainRefs && config.domainRefs[0]) || 'conversation.channel';
+    var messageKind = config.messageKind || 'conversation.message';
+
+    var channels = (items && items[channelKind]) || [];
+    var messages = (items && items[messageKind]) || [];
+
+    var activeChannel = useState(config.defaultChannel || (channels[0] && channels[0].metadata.uid) || null);
+    var activeChannelId = activeChannel[0];
+    var setActiveChannel = activeChannel[1];
+
+    var filteredMessages = useMemo(function() {
+      if (!activeChannelId) return messages;
+      return messages
+        .filter(function(m) { return m.spec.channelRef === activeChannelId; })
+        .sort(function(a, b) { return (a.spec.sentAt || '').localeCompare(b.spec.sentAt || ''); });
+    }, [messages, activeChannelId]);
+
+    var msgCountByChannel = useMemo(function() {
+      var counts = {};
+      messages.forEach(function(m) {
+        var ref = m.spec.channelRef;
+        if (ref) counts[ref] = (counts[ref] || 0) + 1;
+      });
+      return counts;
+    }, [messages]);
+
+    if (!channels.length && !messages.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No conversations found.'
+      );
+    }
+
+    return h('div', { className: 'flex h-[600px] border rounded-lg overflow-hidden' },
+      channels.length > 1 ? h('div', { className: 'w-48 border-r bg-muted/30 overflow-y-auto' },
+        channels.map(function(ch) {
+          var isActive = ch.metadata.uid === activeChannelId;
+          var count = msgCountByChannel[ch.metadata.uid] || 0;
+          return h('div', {
+            key: ch.metadata.uid,
+            className: 'px-3 py-2 text-sm cursor-pointer border-b ' + (isActive ? 'bg-accent font-semibold' : 'hover:bg-accent/50'),
+            onClick: function() { setActiveChannel(ch.metadata.uid); }
+          },
+            h('div', { className: 'truncate' }, getName(ch)),
+            h('div', { className: 'text-[10px] text-muted-foreground' }, count + ' messages')
+          );
+        })
+      ) : null,
+
+      h('div', { className: 'flex-1 overflow-y-auto p-4 space-y-3' },
+        filteredMessages.length === 0
+          ? h('div', { className: 'flex items-center justify-center h-full text-muted-foreground text-sm' }, 'No messages.')
+          : filteredMessages.map(function(msg) {
+              var isSystem = msg.spec.authorKind === 'system';
+              return h('div', {
+                key: msg.metadata.uid,
+                className: 'flex gap-3 ' + (isSystem ? 'opacity-70' : '')
+              },
+                h('div', {
+                  className: 'w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ' +
+                    (isSystem ? 'bg-muted text-muted-foreground' : 'bg-primary/10 text-primary')
+                }, (msg.spec.author || '?')[0].toUpperCase()),
+                h('div', { className: 'flex-1 min-w-0' },
+                  h('div', { className: 'flex items-baseline gap-2' },
+                    h('span', { className: 'text-sm font-semibold' }, msg.spec.author || 'Unknown'),
+                    h('span', { className: 'text-[10px] text-muted-foreground' },
+                      formatDate(msg.spec.sentAt) + ' ' + formatTime(msg.spec.sentAt)
+                    )
+                  ),
+                  h('div', { className: 'text-sm mt-0.5 whitespace-pre-wrap' }, msg.spec.body || '')
+                )
+              );
+            })
+      )
+    );
+  };

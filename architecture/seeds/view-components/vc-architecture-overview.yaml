@@ -4,12 +4,10 @@ metadata:
   name: vc-architecture-overview
 spec:
   displayName: "Architecture Overview"
-  description: "Graphical landscape view of all systems — no single focus item"
+  description: "Graphical landscape view of all systems, people, and external dependencies"
   layoutType: architecture-overview
   icon: layout-grid
-  componentKind: web-component
-  webComponentTag: synth-architecture-overview
-  webComponentModule: "/domain-assets/architecture/view-components/architecture-overview.js"
+  componentKind: inline-react
   defaultItemGroup:
     kinds:
       - architecture.system
@@ -18,3 +16,56 @@ spec:
   defaultDrillDown:
     - nodeKind: architecture.system
       targetViewComponent: vc-c4-context
+markdown: |
+  var h = React.createElement;
+
+  function getDisplayName(item) {
+    return item.spec.displayName || item.metadata.name;
+  }
+
+  return function ArchitectureOverview(props) {
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var systems = (items && items['architecture.system']) || [];
+    var people = (items && items['architecture.person']) || [];
+    var externals = (items && items['architecture.external-system']) || [];
+
+    if (!systems.length && !people.length && !externals.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No architecture items found.'
+      );
+    }
+
+    function renderSection(label, sectionItems, color, kind) {
+      if (!sectionItems.length) return null;
+      return h('div', null,
+        h('div', { className: 'text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2' }, label),
+        h('div', { className: 'flex flex-wrap gap-3' },
+          sectionItems.map(function(item) {
+            return h('div', {
+              key: item.metadata.uid,
+              className: 'rounded-lg border bg-card p-3 cursor-pointer min-w-[160px] max-w-[240px] transition-shadow hover:shadow-md',
+              style: { borderLeftWidth: '3px', borderLeftColor: color },
+              onClick: function() {
+                if (onDrillDown) onDrillDown(item.metadata.uid, item.kind);
+                else if (onInspect) onInspect(item.metadata.uid, item.kind);
+              }
+            },
+              h('div', { className: 'text-sm font-semibold mb-1' }, getDisplayName(item)),
+              item.spec.description
+                ? h('div', { className: 'text-xs text-muted-foreground line-clamp-2' }, item.spec.description)
+                : null
+            );
+          })
+        )
+      );
+    }
+
+    return h('div', { className: 'space-y-6 p-4' },
+      renderSection('Systems', systems, '#6366f1', 'architecture.system'),
+      renderSection('People', people, '#0891b2', 'architecture.person'),
+      renderSection('External Systems', externals, '#94a3b8', 'architecture.external-system')
+    );
+  };

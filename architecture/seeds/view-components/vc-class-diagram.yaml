@@ -7,7 +7,115 @@ spec:
   description: "UML-style class diagram showing domain model relationships"
   layoutType: class-diagram
   icon: box
-  componentKind: react
+  componentKind: inline-react
   requiredFields:
-    boundedContextRef:
+    - name: boundedContextRef
       type: ref
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  var stereotypeColors = {
+    'aggregate': '#6366f1',
+    'entity': '#22c55e',
+    'value-object': '#f59e0b',
+    'service': '#3b82f6',
+    'repository': '#8b5cf6',
+    'event': '#ef4444'
+  };
+
+  return function ClassDiagram(props) {
+    var config = props.config;
+    var items = props.items;
+    var onInspect = props.onInspect;
+
+    var kinds = config.kinds || (config.domainRefs || []);
+    var aggregateKind = config.aggregateKind;
+    var aggregateRefField = config.aggregateRefField || 'aggregateRef';
+
+    var allItems = [];
+    for (var i = 0; i < kinds.length; i++) {
+      var kindItems = (items && items[kinds[i]]) || [];
+      for (var j = 0; j < kindItems.length; j++) {
+        allItems.push(kindItems[j]);
+      }
+    }
+
+    var aggregates = aggregateKind ? ((items && items[aggregateKind]) || []) : [];
+    var members = allItems.filter(function(item) { return item.kind !== aggregateKind; });
+
+    var grouped = useMemo(function() {
+      var map = new Map();
+      aggregates.forEach(function(agg) { map.set(agg.metadata.uid, { aggregate: agg, members: [] }); });
+      map.set('ungrouped', { aggregate: null, members: [] });
+
+      members.forEach(function(item) {
+        var ref = item.spec[aggregateRefField];
+        if (ref && map.has(ref)) {
+          map.get(ref).members.push(item);
+        } else {
+          map.get('ungrouped').members.push(item);
+        }
+      });
+      return Array.from(map.entries()).filter(function(e) {
+        return e[0] === 'ungrouped' ? e[1].members.length > 0 : true;
+      });
+    }, [aggregates, members, aggregateRefField]);
+
+    function getStereotype(item) {
+      var kind = item.kind || '';
+      var parts = kind.split('.');
+      return parts[parts.length - 1] || 'item';
+    }
+
+    function renderClassCard(item) {
+      var stereotype = getStereotype(item);
+      var color = stereotypeColors[stereotype] || '#6b7280';
+      return h('div', {
+        key: item.metadata.uid,
+        className: 'rounded border bg-card font-mono text-xs cursor-pointer hover:shadow-md transition-shadow w-52',
+        onClick: function() { if (onInspect) onInspect(item.metadata.uid, item.kind); }
+      },
+        h('div', {
+          className: 'px-3 py-2 text-center border-b font-semibold',
+          style: { backgroundColor: color + '15', borderTopWidth: '2px', borderTopColor: color }
+        },
+          h('div', { className: 'text-[9px] text-muted-foreground' }, '\u00AB' + stereotype + '\u00BB'),
+          h('div', { className: 'text-sm' }, getName(item))
+        ),
+        item.spec.description ? h('div', { className: 'px-3 py-1.5 text-muted-foreground border-b' }, item.spec.description) : null
+      );
+    }
+
+    if (!allItems.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No domain model items found.'
+      );
+    }
+
+    return h('div', { className: 'flex flex-wrap gap-6 p-6' },
+      grouped.map(function(entry) {
+        var key = entry[0];
+        var group = entry[1];
+        if (group.aggregate) {
+          return h('div', {
+            key: key,
+            className: 'rounded-xl border-2 border-dashed border-indigo-300/40 bg-indigo-50/5 p-4 min-w-[240px]'
+          },
+            h('div', { className: 'text-xs font-semibold uppercase tracking-wider text-indigo-400 mb-3' },
+              '\u00AB' + 'aggregate' + '\u00BB ' + getName(group.aggregate)
+            ),
+            h('div', { className: 'flex flex-wrap gap-3' },
+              [renderClassCard(group.aggregate)].concat(
+                group.members.map(function(m) { return renderClassCard(m); })
+              )
+            )
+          );
+        }
+        return h('div', { key: 'ungrouped', className: 'flex flex-wrap gap-3' },
+          group.members.map(function(m) { return renderClassCard(m); })
+        );
+      })
+    );
+  };

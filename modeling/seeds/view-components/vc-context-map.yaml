@@ -1,0 +1,92 @@
+apiVersion: synthesis/v1
+kind: system.view-component
+metadata:
+  name: vc-context-map
+spec:
+  displayName: "Context Map"
+  description: "DDD context map showing bounded context relationships and anti-corruption layers"
+  layoutType: context-map
+  icon: map
+  componentKind: inline-react
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  var contextColors = ['#6366f1', '#3b82f6', '#0891b2', '#059669', '#d97706', '#dc2626'];
+
+  return function ContextMap(props) {
+    var config = props.config;
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var contextKind = config.contextKind || (config.domainRefs && config.domainRefs[0]) || 'modeling.bounded-context';
+    var aclKind = config.aclKind || 'modeling.anti-corruption-layer';
+    var aggregateKind = config.aggregateKind || 'modeling.aggregate';
+
+    var contexts = (items && items[contextKind]) || [];
+    var acls = (items && items[aclKind]) || [];
+    var aggregates = (items && items[aggregateKind]) || [];
+
+    var aggCounts = useMemo(function() {
+      var counts = {};
+      aggregates.forEach(function(agg) {
+        var ref = agg.spec.boundedContextRef;
+        if (ref) counts[ref] = (counts[ref] || 0) + 1;
+      });
+      return counts;
+    }, [aggregates]);
+
+    function handleClick(item) {
+      if (onDrillDown) onDrillDown(item.metadata.uid, item.kind);
+      else if (onInspect) onInspect(item.metadata.uid, item.kind);
+    }
+
+    if (!contexts.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No bounded contexts found.'
+      );
+    }
+
+    return h('div', { className: 'space-y-6 p-6' },
+      h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' },
+        contexts.map(function(ctx, idx) {
+          var color = contextColors[idx % contextColors.length];
+          var count = aggCounts[ctx.metadata.uid] || 0;
+          return h('div', {
+            key: ctx.metadata.uid,
+            className: 'rounded-lg border-2 bg-card p-4 cursor-pointer transition-shadow hover:shadow-lg min-h-[120px]',
+            style: { borderColor: color + '60' },
+            onClick: function() { handleClick(ctx); }
+          },
+            h('div', { className: 'text-[10px] uppercase tracking-wider text-muted-foreground mb-1' }, '\u00ABbounded context\u00BB'),
+            h('div', { className: 'text-sm font-semibold mb-1' }, getName(ctx)),
+            ctx.spec.description ? h('div', { className: 'text-xs text-muted-foreground line-clamp-2 mb-2' }, ctx.spec.description) : null,
+            count > 0 ? h('div', { className: 'text-[10px] text-muted-foreground' }, count + ' aggregate' + (count > 1 ? 's' : '')) : null
+          );
+        })
+      ),
+
+      acls.length ? h('div', null,
+        h('div', { className: 'text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3' }, 'Anti-Corruption Layers'),
+        h('div', { className: 'flex flex-wrap gap-3' },
+          acls.map(function(acl) {
+            var upstream = contexts.find(function(c) { return c.metadata.uid === acl.spec.upstreamContextRef; });
+            var downstream = contexts.find(function(c) { return c.metadata.uid === acl.spec.downstreamContextRef; });
+            return h('div', {
+              key: acl.metadata.uid,
+              className: 'rounded border-2 border-dashed border-amber-300/50 bg-amber-50/5 p-3 cursor-pointer hover:shadow-md',
+              onClick: function() { handleClick(acl); }
+            },
+              h('div', { className: 'text-[10px] uppercase tracking-wider text-muted-foreground mb-1' }, '\u00ABACL\u00BB'),
+              h('div', { className: 'text-sm font-semibold mb-1' }, getName(acl)),
+              h('div', { className: 'text-[10px] text-muted-foreground' },
+                (upstream ? getName(upstream) : '?') + ' \u2192 ' + (downstream ? getName(downstream) : '?')
+              )
+            );
+          })
+        )
+      ) : null
+    );
+  };
