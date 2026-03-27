@@ -7,7 +7,7 @@ spec:
   description: "Dynamic quadrant radar for a tech-stack.stack item — use-cases become quadrants, technologies become blips placed by ring"
   layoutType: tech-radar
   icon: radar
-  componentKind: web-component
+  componentKind: inline-react
   requiredFields:
     - name: rings
       type: array
@@ -19,3 +19,229 @@ spec:
       - tech-stack.library
       - tech-stack.service
       - tech-stack.blueprint
+markdown: |
+  var h = React.createElement;
+
+  var CX = 400;
+  var CY = 400;
+  var MAX_R = 350;
+
+  var DEFAULT_RINGS = ['Adopt', 'Trial', 'Assess', 'Hold'];
+  var RING_FILL_COLORS = {
+    'Adopt': '#22c55e20',
+    'Trial': '#3b82f620',
+    'Assess': '#f59e0b20',
+    'Hold': '#ef444420'
+  };
+  var RING_STROKE_COLORS = {
+    'Adopt': '#22c55e',
+    'Trial': '#3b82f6',
+    'Assess': '#f59e0b',
+    'Hold': '#ef4444'
+  };
+  var QUADRANT_COLORS = ['#6366f1', '#0891b2', '#d97706', '#dc2626'];
+
+  function getName(item) {
+    return item.spec.displayName || item.metadata.name;
+  }
+
+  function getRingRadius(ringIdx, totalRings) {
+    return MAX_R * (ringIdx + 1) / totalRings;
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  function computeBlipPosition(ringIdx, totalRings, quadrantIdx, blipInQuadrant, totalInSlot) {
+    var innerR = ringIdx === 0 ? 20 : getRingRadius(ringIdx - 1, totalRings);
+    var outerR = getRingRadius(ringIdx, totalRings);
+    var midR = (innerR + outerR) / 2;
+    var spreadR = (outerR - innerR) * 0.3;
+
+    var quadStartDeg = quadrantIdx * 90;
+    var angleSpread = 70;
+    var angleStep = totalInSlot <= 1 ? 0 : angleSpread / (totalInSlot - 1);
+    var startAngle = quadStartDeg + 10 + (totalInSlot <= 1 ? 35 : 0);
+    var angleDeg = startAngle + blipInQuadrant * angleStep;
+    var angleRad = degToRad(angleDeg);
+
+    var rVariation = totalInSlot <= 1 ? 0 : (blipInQuadrant % 2 === 0 ? spreadR : -spreadR) * 0.5;
+    var r = midR + rVariation;
+
+    return {
+      x: CX + r * Math.cos(angleRad),
+      y: CY + r * Math.sin(angleRad)
+    };
+  }
+
+  function arcPath(innerR, outerR, startDeg, endDeg) {
+    var s1 = degToRad(startDeg);
+    var e1 = degToRad(endDeg);
+    var x1 = CX + outerR * Math.cos(s1);
+    var y1 = CY + outerR * Math.sin(s1);
+    var x2 = CX + outerR * Math.cos(e1);
+    var y2 = CY + outerR * Math.sin(e1);
+    var x3 = CX + innerR * Math.cos(e1);
+    var y3 = CY + innerR * Math.sin(e1);
+    var x4 = CX + innerR * Math.cos(s1);
+    var y4 = CY + innerR * Math.sin(s1);
+    return 'M ' + x1 + ' ' + y1 + ' A ' + outerR + ' ' + outerR + ' 0 0 1 ' + x2 + ' ' + y2 +
+      ' L ' + x3 + ' ' + y3 + ' A ' + innerR + ' ' + innerR + ' 0 0 0 ' + x4 + ' ' + y4 + ' Z';
+  }
+
+  return function TechRadarView(props) {
+    var config = props.config || {};
+    var items = props.items || {};
+    var onInspect = props.onInspect;
+
+    var stackItems = items['tech-stack.stack'] || [];
+    var useCaseItems = items['tech-stack.use-case'] || [];
+    var techKinds = ['tech-stack.language', 'tech-stack.library', 'tech-stack.service', 'tech-stack.blueprint'];
+
+    var focusStack = config.focusRef
+      ? stackItems.find(function(s) { return s.metadata.uid === config.focusRef; })
+      : stackItems[0];
+
+    var rings = (focusStack && focusStack.spec.rings && focusStack.spec.rings.length > 0)
+      ? focusStack.spec.rings
+      : DEFAULT_RINGS;
+
+    var quadrants = useCaseItems.slice(0, 4);
+
+    var techItems = useMemo(function() {
+      var result = [];
+      for (var k = 0; k < techKinds.length; k++) {
+        var kindList = items[techKinds[k]] || [];
+        for (var j = 0; j < kindList.length; j++) result.push(kindList[j]);
+      }
+      return result;
+    }, [items]);
+
+    var blips = useMemo(function() {
+      var slotCounts = {};
+      var slotAssign = {};
+
+      for (var i = 0; i < techItems.length; i++) {
+        var item = techItems[i];
+        var ring = item.spec.ring || rings[2] || 'Assess';
+        var ringIdx = -1;
+        for (var ri = 0; ri < rings.length; ri++) {
+          if (rings[ri].toLowerCase() === ring.toLowerCase()) { ringIdx = ri; break; }
+        }
+        if (ringIdx === -1) ringIdx = Math.min(2, rings.length - 1);
+
+        var qIdx = 0;
+        if (item.spec.useCaseRef) {
+          for (var q = 0; q < quadrants.length; q++) {
+            if (quadrants[q].metadata.uid === item.spec.useCaseRef) { qIdx = q; break; }
+          }
+        }
+
+        var slotKey = ringIdx + '_' + qIdx;
+        slotCounts[slotKey] = (slotCounts[slotKey] || 0) + 1;
+        slotAssign[item.metadata.uid] = { ringIdx: ringIdx, qIdx: qIdx, slotKey: slotKey };
+      }
+
+      var slotProgress = {};
+      var result = [];
+      for (var i = 0; i < techItems.length; i++) {
+        var item = techItems[i];
+        var assign = slotAssign[item.metadata.uid];
+        if (!assign) continue;
+        var slotKey = assign.slotKey;
+        var posInSlot = slotProgress[slotKey] || 0;
+        slotProgress[slotKey] = posInSlot + 1;
+        var total = slotCounts[slotKey] || 1;
+        var pos = computeBlipPosition(assign.ringIdx, rings.length, assign.qIdx, posInSlot, total);
+        result.push({ item: item, ringIdx: assign.ringIdx, qIdx: assign.qIdx, x: pos.x, y: pos.y });
+      }
+      return result;
+    }, [techItems, rings, quadrants]);
+
+    if (!techItems.length && !useCaseItems.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No technologies found. Add tech-stack items to see the radar.'
+      );
+    }
+
+    var svgHeight = 800;
+    var legendHeight = 60;
+
+    return h('div', { className: 'p-4 overflow-auto' },
+      h('svg', {
+        viewBox: '0 0 800 ' + (svgHeight + legendHeight),
+        style: { width: '100%', maxWidth: '700px', display: 'block', margin: '0 auto' }
+      },
+        rings.map(function(ring, ringIdx) {
+          var outerR = getRingRadius(ringIdx, rings.length);
+          var innerR = ringIdx === 0 ? 0 : getRingRadius(ringIdx - 1, rings.length);
+          var fillColor = RING_FILL_COLORS[ring] || '#6b728020';
+          var strokeColor = RING_STROKE_COLORS[ring] || '#6b7280';
+
+          return [
+            h('path', {
+              key: 'ring-fill-' + ringIdx,
+              d: innerR === 0
+                ? 'M ' + CX + ' ' + (CY - outerR) + ' A ' + outerR + ' ' + outerR + ' 0 1 1 ' + CX + ' ' + (CY + outerR) + ' A ' + outerR + ' ' + outerR + ' 0 1 1 ' + CX + ' ' + (CY - outerR) + ' Z'
+                : arcPath(innerR, outerR, 0, 360),
+              fill: fillColor,
+              stroke: strokeColor,
+              strokeWidth: '1',
+              strokeDasharray: '4 2'
+            })
+          ];
+        }),
+
+        h('line', { x1: CX, y1: CY - MAX_R - 10, x2: CX, y2: CY + MAX_R + 10, stroke: '#6b7280', strokeWidth: '1', strokeDasharray: '4 2' }),
+        h('line', { x1: CX - MAX_R - 10, y1: CY, x2: CX + MAX_R + 10, y2: CY, stroke: '#6b7280', strokeWidth: '1', strokeDasharray: '4 2' }),
+
+        quadrants.map(function(uc, idx) {
+          var angle = degToRad(idx * 90 + 45);
+          var labelR = MAX_R + 25;
+          var lx = CX + labelR * Math.cos(angle);
+          var ly = CY + labelR * Math.sin(angle);
+          var color = QUADRANT_COLORS[idx] || '#6b7280';
+          return h('text', {
+            key: 'qlabel-' + idx,
+            x: lx,
+            y: ly,
+            textAnchor: 'middle',
+            dominantBaseline: 'middle',
+            fontSize: '11',
+            fontWeight: 'bold',
+            fill: color
+          }, getName(uc));
+        }),
+
+        blips.map(function(blip) {
+          var color = QUADRANT_COLORS[blip.qIdx] || '#6b7280';
+          return h('g', {
+            key: blip.item.metadata.uid,
+            style: { cursor: 'pointer' },
+            onClick: function() { if (onInspect) onInspect(blip.item.metadata.uid, blip.item.metadata.kind); }
+          },
+            h('circle', {
+              cx: blip.x,
+              cy: blip.y,
+              r: 6,
+              fill: color,
+              stroke: '#fff',
+              strokeWidth: '1.5'
+            }),
+            h('title', null, getName(blip.item))
+          );
+        }),
+
+        rings.map(function(ring, ringIdx) {
+          var legendX = 40 + ringIdx * 180;
+          var legendY = svgHeight + 30;
+          var color = RING_STROKE_COLORS[ring] || '#6b7280';
+          return h('g', { key: 'legend-' + ringIdx },
+            h('circle', { cx: legendX, cy: legendY, r: 6, fill: color }),
+            h('text', { x: legendX + 12, y: legendY, dominantBaseline: 'middle', fontSize: '12', fill: '#6b7280' }, ring)
+          );
+        })
+      )
+    );
+  };
