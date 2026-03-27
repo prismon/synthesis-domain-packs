@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-04-admission-rule-matchers
+spec:
+  displayName: "INC-04: Admission Rule Matchers Incomplete"
+  severity: warning
+  category: incomplete-feature
+  description: "The admission rule resolver only handles a subset of the defined matcher types. Several matcher conditions are parsed but fall through to a no-op, meaning admission rules that use these matchers will never fire, silently failing to enforce the intended policy."
+  recommendation: "Implement all documented matcher types in the rule resolver. Add unit tests covering each matcher type. Consider adding a warning log when an unrecognized matcher is encountered."
+  sourceFile: "backend/internal/admission/rule_resolver.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

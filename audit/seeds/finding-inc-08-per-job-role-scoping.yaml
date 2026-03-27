@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-08-per-job-role-scoping
+spec:
+  displayName: "INC-08: Per-Job Role Scoping Deferred"
+  severity: info
+  category: incomplete-feature
+  description: "The scheduler job invocation code has a TODO comment noting that per-job role scoping (running each scheduled job under a specific role) has been deferred. Currently all scheduled jobs run with the same default permissions, which may be broader than necessary."
+  recommendation: "Implement per-job role configuration allowing administrators to specify the minimum required role for each scheduled job. This supports the principle of least privilege for automated workflows."
+  sourceFile: "backend/internal/mcpserver/scheduler_invoke.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-03-stale-catalog-terminology
+spec:
+  displayName: "DOC-03: Stale \"Catalog\" Terminology in README"
+  severity: warning
+  category: documentation
+  description: "The README uses the term \"catalog\" in several places where the current system uses \"domain\" terminology. This stale language misleads new contributors about how the system is structured."
+  recommendation: "Replace all instances of \"catalog\" with the correct domain-oriented terminology. Review the README for other outdated terms that no longer reflect the current architecture."
+  sourceFile: "README.md"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

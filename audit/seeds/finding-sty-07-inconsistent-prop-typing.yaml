@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-07-inconsistent-prop-typing
+spec:
+  displayName: "STY-07: Inconsistent Prop Typing"
+  severity: info
+  category: convention
+  description: "React component props are typed using a mix of inline type literals, separately defined type aliases, and interface declarations. There is no consistent convention for when to use each approach, making the codebase harder to navigate."
+  recommendation: "Establish a convention for prop typing (e.g. always use a named type alias with Props suffix). Document the convention and apply it consistently through the codebase."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

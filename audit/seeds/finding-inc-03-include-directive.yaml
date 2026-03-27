@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-03-include-directive
+spec:
+  displayName: "INC-03: Include Directive Not Implemented"
+  severity: warning
+  category: incomplete-feature
+  description: "The notebook parser recognizes an include directive syntax but the implementation is incomplete — included content is not fetched, parsed, or inlined into the notebook. Cells referencing external content via include will silently produce no output."
+  recommendation: "Implement the include directive to fetch and inline the referenced content at parse time. Add error handling for missing or inaccessible include targets."
+  sourceFile: "backend/internal/notebook/parser.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

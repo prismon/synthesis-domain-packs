@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-06-team-sections-migration
+spec:
+  displayName: "INC-06: Team Sections Migration Tool Incomplete"
+  severity: warning
+  category: incomplete-feature
+  description: "The migrate-team-sections command exists in backend/cmd/ but is incomplete. It contains TODO comments and missing logic, meaning the intended data migration cannot be executed. Existing team section data may be stranded in the old format."
+  recommendation: "Complete the migration tool implementation or document that the migration has been abandoned. If the tool is no longer needed, remove it from the codebase to avoid confusion."
+  sourceFile: "backend/cmd/migrate-team-sections/main.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-05-scheduler-leader-election
+spec:
+  displayName: "INC-05: Scheduler Missing Leader Election"
+  severity: warning
+  category: incomplete-feature
+  description: "The scheduler runs on every backend instance without any leader election or distributed locking. In a multi-instance deployment, scheduled jobs will fire on every instance simultaneously, causing duplicate executions and potential data corruption."
+  recommendation: "Implement leader election using a database advisory lock or a distributed lock (e.g. Redis). Only the elected leader should dispatch scheduled jobs. Add a graceful handoff mechanism for leader failure."
+  sourceFile: "backend/internal/scheduler/scheduler.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-02-silent-error-swallowing
+spec:
+  displayName: "STY-02: Silent Error Swallowing in React"
+  severity: warning
+  category: convention
+  description: "Multiple React components and hooks catch errors in try/catch blocks without logging or surfacing them to the user. This makes debugging difficult and can cause the UI to silently display stale or empty data when operations fail."
+  recommendation: "Ensure all error paths either log the error to console, display a user-facing message, or rethrow. Remove empty catch blocks. Use React Query's error handling instead of manual try/catch where possible."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

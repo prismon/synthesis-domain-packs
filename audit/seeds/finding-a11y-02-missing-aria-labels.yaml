@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-02-missing-aria-labels
+spec:
+  displayName: "A11Y-02: Missing ARIA Labels on Icon-Only Buttons"
+  severity: warning
+  category: accessibility
+  description: "Several toolbar buttons and action buttons render icon components without accompanying text or aria-label attributes. Screen readers will announce these as unnamed buttons, making them unusable for visually impaired users."
+  recommendation: "Add aria-label attributes to all icon-only buttons describing their action (e.g. aria-label=\"Delete item\"). Consider using the shadcn/ui Tooltip component to provide both visual and accessible labels."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

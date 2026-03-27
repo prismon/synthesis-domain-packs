@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-02-notebook-elicitation
+spec:
+  displayName: "INC-02: Notebook Elicitation Doesn't Block"
+  severity: warning
+  category: incomplete-feature
+  description: "The notebook runner has a code path for elicitation (asking the user a question mid-run) but the implementation does not actually block execution waiting for the user response. The elicitation call returns immediately, bypassing the intended interactive workflow."
+  recommendation: "Implement proper blocking elicitation: pause the runner goroutine, send the question to the frontend, await user input via the bidirectional comms channel, then resume execution with the user's answer."
+  sourceFile: "backend/internal/notebook/runner.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

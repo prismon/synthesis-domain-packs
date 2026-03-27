@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-07-referenceable-inconsistency
+spec:
+  displayName: "DOC-07: \"Referenceable\" Trait Inconsistency"
+  severity: warning
+  category: documentation
+  description: "The GLOSSARY.md references a \"Referenceable\" trait that does not appear in the canonical trait list in CLAUDE.md or the backend trait registry. This creates confusion about whether Referenceable is a real trait, an alias, or a deprecated concept."
+  recommendation: "Clarify the status of the Referenceable trait. If it is not a registered trait, remove or correct the glossary entry. If it exists under a different name, add a cross-reference."
+  sourceFile: "docs/GLOSSARY.md"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

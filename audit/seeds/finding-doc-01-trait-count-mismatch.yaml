@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-01-trait-count-mismatch
+spec:
+  displayName: "DOC-01: Trait Count/Definition Mismatch Across Docs"
+  severity: warning
+  category: documentation
+  description: "Different documents within the repository cite different counts for the number of built-in traits (e.g. 16, 17, or other numbers). This creates confusion about the actual trait inventory and makes it difficult to trust the documentation."
+  recommendation: "Audit all trait documentation and standardize on the correct count. Add a canonical trait registry reference in CLAUDE.md and cross-link other documents to it."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

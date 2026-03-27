@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-07-skipped-e2e-tests
+spec:
+  displayName: "INC-07: 45+ Skipped E2E Tests"
+  severity: warning
+  category: incomplete-feature
+  description: "Over 45 Playwright E2E test cases are marked as skipped (test.skip or similar). These tests represent known gaps in automated coverage for features that exist in the product. The skipped tests mean regressions in those areas will not be caught by CI."
+  recommendation: "Triage all skipped E2E tests. Fix and enable tests that cover implemented features. Remove tests for features that have been deleted. Track remaining skips in a GitHub issue with rationale."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

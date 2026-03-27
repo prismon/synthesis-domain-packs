@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-08-mixed-camelcase-go
+spec:
+  displayName: "STY-08: Mixed camelCase Parameter Names in Go Backend"
+  severity: info
+  category: convention
+  description: "Some Go function parameters and struct fields use camelCase while others use snake_case or PascalCase inconsistently. Go conventions require camelCase for unexported and PascalCase for exported identifiers, but the codebase has deviations."
+  recommendation: "Run golint or staticcheck across the backend to identify non-idiomatic naming. Fix violations incrementally. Enable lint checks in CI to prevent future regressions."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

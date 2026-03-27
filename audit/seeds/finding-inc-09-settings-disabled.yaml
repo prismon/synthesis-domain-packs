@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-09-settings-disabled
+spec:
+  displayName: "INC-09: Settings Page Has Disabled Sections"
+  severity: info
+  category: incomplete-feature
+  description: "The Settings page contains multiple sections that are rendered as disabled or grayed out with placeholder text. These sections represent planned functionality that has not been implemented, creating a confusing user experience."
+  recommendation: "Either implement the disabled settings sections or remove them from the UI until they are ready. If deferring, replace disabled UI with a clear 'coming soon' message or remove the sections entirely."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

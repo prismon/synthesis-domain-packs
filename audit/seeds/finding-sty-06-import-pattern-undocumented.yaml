@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-06-import-pattern-undocumented
+spec:
+  displayName: "STY-06: Import Pattern Not Documented"
+  severity: warning
+  category: convention
+  description: "The frontend uses both relative imports and the @/ path alias for importing modules, without documentation on when each should be used. Some files mix both styles in the same import block, creating inconsistency."
+  recommendation: "Document the import convention: use @/ alias for all imports from src/, use relative imports only for sibling files in the same directory. Add an ESLint rule to enforce this and document it in CLAUDE.md."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

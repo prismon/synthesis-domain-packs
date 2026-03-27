@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-04-incomplete-domain-pack-list
+spec:
+  displayName: "DOC-04: Incomplete Core Domain Pack List in README"
+  severity: warning
+  category: documentation
+  description: "The README lists only a subset of the core domain packs shipped with the platform. Several packs (e.g. sandbox, notebook, agent, team_of_agents, review, knowledge, agentic) are omitted, giving an incomplete picture of the system's capabilities."
+  recommendation: "Update the README to list all core domain packs with a brief description of each. Automate this list generation from domain.yaml files if possible."
+  sourceFile: "README.md"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-i18n-01-hardcoded-toast
+spec:
+  displayName: "I18N-01: Widespread Hardcoded English Strings"
+  severity: warning
+  category: convention
+  description: "Toast notifications, error messages, and status messages throughout the frontend are hardcoded English strings rather than i18n keys. The project uses react-i18next for translations but a significant portion of user-facing strings bypass the translation system."
+  recommendation: "Audit all user-facing strings and move them to the src/locales/en.ts translation file. Replace hardcoded strings with t('key') calls. This is a prerequisite for any future localization effort."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

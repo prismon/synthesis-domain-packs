@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-06-placeholder-content
+spec:
+  displayName: "DOC-06: Placeholder Content in Plan Doc"
+  severity: warning
+  category: documentation
+  description: "One or more planning documents in the docs/ directory contain placeholder sections (e.g. TBD, TODO, or empty headings) that were never filled in. This reduces the usefulness of the documents and suggests incomplete planning work."
+  recommendation: "Either complete the placeholder sections or remove the empty headings. If the content is genuinely unknown, add a brief note explaining why it is deferred."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

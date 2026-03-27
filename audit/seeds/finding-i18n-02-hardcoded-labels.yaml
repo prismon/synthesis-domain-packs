@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-i18n-02-hardcoded-labels
+spec:
+  displayName: "I18N-02: Hardcoded UI Labels and Dialog Text"
+  severity: warning
+  category: convention
+  description: "Dialog titles, button labels, column headers, and form field labels are hardcoded English strings in JSX rather than being driven by the i18n translation system. This creates a maintenance burden when text changes are needed and prevents localization."
+  recommendation: "Move all UI label strings to the translation file. Establish a linting rule or code review practice to catch new hardcoded strings before they reach the main branch."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

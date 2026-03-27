@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-10-heading-inconsistency
+spec:
+  displayName: "DOC-10: Heading Level Inconsistency"
+  severity: info
+  category: documentation
+  description: "Multiple documentation files use inconsistent heading levels, sometimes skipping from H1 to H3 or using H2 for both major sections and subsections. This reduces readability and makes automated document parsing or TOC generation unreliable."
+  recommendation: "Audit all docs/ files for heading level consistency. Establish and document a heading hierarchy convention (e.g. H1 for document title, H2 for major sections, H3 for subsections)."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

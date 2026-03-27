@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-05-mixed-quote-styles
+spec:
+  displayName: "STY-05: Mixed Quote Styles in Frontend"
+  severity: warning
+  category: convention
+  description: "The frontend TypeScript/TSX codebase uses both single quotes and double quotes for string literals without a consistent pattern. While functionally equivalent, inconsistency makes the codebase harder to read and diff."
+  recommendation: "Configure Prettier to enforce a single quote style (single quotes are idiomatic for TypeScript). Run Prettier across the frontend codebase to normalize existing code."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-07-form-labels
+spec:
+  displayName: "A11Y-07: Form Labels Present but Could Be Enhanced"
+  severity: info
+  category: accessibility
+  description: "Most form fields have label elements but some use placeholder text as the only label. Placeholders disappear when the user starts typing, leaving the field without a visible label. Additionally, some fields lack descriptive error messages associated via aria-describedby."
+  recommendation: "Ensure all form fields have persistent visible labels. Replace placeholder-as-label patterns with proper label elements. Associate validation error messages with their fields using aria-describedby."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

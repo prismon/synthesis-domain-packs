@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-02-woven-agentic-undocumented
+spec:
+  displayName: "DOC-02: Woven and Agentic Traits Undocumented Outside CLAUDE.md"
+  severity: warning
+  category: documentation
+  description: "The Woven and Agentic traits are the most complex and important traits in the system, but substantive documentation exists only in CLAUDE.md. There are no dedicated design documents, trait reference docs, or API documentation covering their behaviour, cell types, or admission validation rules."
+  recommendation: "Create dedicated trait reference documentation for Woven and Agentic traits covering cell types, field injection, admission validation, and executor behaviour. Link from CLAUDE.md and the glossary."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-06-missing-focus-management
+spec:
+  displayName: "A11Y-06: Missing Focus Management in Dialogs"
+  severity: warning
+  category: accessibility
+  description: "When dialogs and modal panels open, keyboard focus is not moved to the dialog. Users navigating by keyboard must tab through the entire page to reach dialog content. When dialogs close, focus is not returned to the triggering element."
+  recommendation: "Implement focus management: move focus to the first focusable element when a dialog opens, trap focus within the dialog while it is open, and restore focus to the trigger element when it closes. shadcn/ui Dialog already handles this — verify it is used consistently."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
