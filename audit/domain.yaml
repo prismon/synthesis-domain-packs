@@ -41,6 +41,9 @@ spec:
             - data-quality
             - performance
             - convention
+            - accessibility
+            - documentation
+            - incomplete-feature
         - name: description
           type: text
           required: true
