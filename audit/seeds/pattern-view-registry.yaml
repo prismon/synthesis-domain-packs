@@ -5,7 +5,7 @@ metadata:
 spec:
   displayName: "View Registry and Renderer"
   patternCategory: architectural
-  description: "Views are registered in a singleton ViewRegistry with react and web-component types. Built-in views (C4 diagrams, hierarchy board, class diagram, context map) are registered at startup. Enterprise plugins add views at runtime. ViewRenderer dispatches to the correct component based on layoutType."
+  description: "Views are registered in a singleton ViewRegistry with inline-react (primary/recommended), react (legacy), and web-component renderer types. 30+ built-in view components are registered at startup covering C4 diagrams, hierarchy board, class diagram, context map, application landscape, audit findings table, and more. Enterprise plugins add web-component or inline-react views at startup via loadPlugins(). ViewRenderer dispatches to the correct renderer based on layoutType. All new view development should use inline-react."
   componentRefs:
     - "!name ss-view-renderer"
   containerRefs:

@@ -23,27 +23,43 @@ markdown: |
   ## Key Numbers (As-Built)
   | Category | Count |
   |---|---|
-  | MCP Tools | 27 (16 core + 2 git + 9 enterprise + 2 agent) |
+  | MCP Tools | 80+ (core + sandbox + git + enterprise) |
   | Database Tables | 3 (definitions, items, edges) |
-  | Built-in Traits | 16 (12 Go + 4 enterprise) |
-  | Domain Packs | 4 (architecture, delivery, modeling, git) |
-  | Domain Definitions | ~30 across all domains |
-  | Admission Controllers | 4 (cardinality, edge-sync, rules, tenant-provisioning) |
-  | Frontend Routes | 9 (3 auth + 6 app) |
-  | View Types | 8 (C4 context/container/component, hierarchy-board, class-diagram, context-map, app-landscape, git-repo) |
+  | Built-in Traits | 20 (Hierarchical, Trackable, Ownable, Taggable, Lifecycle, Linkable, Presentable, Selectable, Viewable, Composable, Dependable, Budgetable, Investable, Impactable, Foldered, Woven, Agentic, Governable, and enterprise traits) |
+  | Domain Packs | 9+ (architecture, delivery, modeling, audit, git, sandbox, notebook, agent, review) |
+  | Domain Definitions | ~60+ across all domains |
+  | Admission Controllers | 4 (cardinality, edge-sync, woven-cell, tenant-provisioning) |
+  | Frontend Routes | 10+ (auth, dashboard, domains, views, administration, developer, settings) |
+  | View Components | 30+ (C4, hierarchy, class-diagram, context-map, inline-react, web-component) |
 
   ## Communication Model
   All frontend-backend communication uses MCP over Streamable HTTP.
-  No REST endpoints exist for data access. The single exception is
-  `GET /agent/stream/{streamId}` for SSE agent chat streaming (enterprise only).
+  No REST endpoints exist for data access.
 
   ## Multi-Tenancy Model
   - PostgreSQL RLS with `app.tenant_id` session config per transaction
   - Three roles: `tenant_user` (read-only), `tenant_admin` (read-write), `platform_admin` (full access)
-  - Three resolver modes: Multi-realm OIDC (Keycloak), Single-issuer OIDC, Dev headers
+  - Three auth modes: `oidc` (Keycloak), `oidc-stub` (lightweight stub), `header` (dev/local, no OIDC)
   - Tenant provisioning via Keycloak Admin API (optional)
 
   ## Domain Pack System
-  YAML-based domain packs bundle definitions, reference kinds, seeds, views, and navigation.
-  Core packs ship with the binary. Tenants can add local packs in `tenants/<slug>/domains/`.
-  The loader performs idempotent upserts with domain version tracking.
+  YAML-based domain packs bundle definitions, reference kinds, seeds, views, view-components,
+  and navigation. Core packs ship with the binary. Tenants can add local packs in
+  `tenants/<slug>/domains/`. Git-backed packs sync from remote repositories via the gitsync
+  controller. The loader performs idempotent two-pass upserts with domain version tracking.
+  `system.domain` source enum: `[platform, user, git]`.
+
+  ## HITL Review Workflow
+  Agent-proposed mutations are buffered as `system.pending-change` items grouped into
+  `system.change-set` batches. Reviewers approve or reject via per-item or batch MCP tools.
+  The WovenController (admission) validates cell-trait requirements before execution.
+
+  ## Scheduler
+  Items with a cron expression (via Agentic trait) are dispatched by `internal/scheduler/`.
+  Note: leader election is not yet implemented — multi-instance deployments will duplicate jobs.
+
+  ## Sandboxes
+  Isolated Docker execution managed by `internal/sandboxplugin/`. Sessions are `system.session`
+  items. The primary entry point is `chat_sandbox_session`. Async responses arrive as
+  `system.message` items filtered by `sessionRef`. Sandbox templates defined in the sandbox
+  domain pack.

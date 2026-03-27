@@ -12,52 +12,89 @@ markdown: |
   # Backend API — MCP Tool Reference
 
   ## Overview
-  The backend exposes 27 MCP tools and 1 HTTP endpoint. Tools are registered in
-  `backend/internal/mcpserver/server.go` (core) and `backend/enterprise/tools/` (enterprise).
+  The backend exposes 80+ MCP tools registered in `backend/internal/mcpserver/server.go`
+  (core) and `backend/enterprise/tools/` (enterprise). Tools are organized across the
+  following categories: definition management, item CRUD, graph and references, review,
+  changeset, version history, notebook, scheduler, runner, project, git, context and session,
+  MCP registry, controller, sandbox, thread, and enterprise (rules and metrics).
 
-  ## Core Domain Tools (16)
-  All read operations require `tenant_user`. All write operations require `tenant_admin`.
+  ## Core Domain Tools
+  All read operations require `tenant_user`. All write/admin operations require `tenant_admin`.
 
-  ### Definition Management
-  - `list_definitions` — List all definitions
-  - `get_definition(uid)` — Get single definition
-  - `create_definition(name, displayName, ...)` — Create definition
-  - `update_definition(uid, version, ...)` — Update with optimistic concurrency
-  - `delete_definition(uid)` — Delete definition
+  ### Definition Management (5)
+  `list_definition`, `get_definition`, `create_definition`, `update_definition`, `delete_definition`
 
-  ### Item Management
-  - `list_items(kind)` — List items by kind
-  - `get_item(uid)` — Get single item
-  - `create_item(kind, name, spec)` — Create item
-  - `update_item(uid, version, ...)` — Update item
-  - `delete_item(uid)` — Delete item
-  - `export_item(uid)` — Export as markdown/YAML
-  - `import_item(content)` — Import from markdown/YAML
+  ### Item CRUD (8)
+  `list_items`, `get_item`, `create_item`, `update_item`, `delete_item`, `detach_item`,
+  `export_item`, `import_item`
 
-  ### Graph & References
-  - `query_graph(startUid, direction?, depth?, refKinds?)` — Graph traversal
-  - `add_reference(sourceUid, refKind, targetUid)` — Add typed edge
-  - `remove_reference(sourceUid, refKind, targetUid)` — Remove edge
+  ### Graph & References (4)
+  `query_graph`, `list_schema_neighbor`, `add_reference`, `remove_reference`
 
-  ### Traits
-  - `list_traits` — List all trait definitions
+  ### Traits (1)
+  `list_trait`
 
-  ## Git Plugin Tools (2)
-  - `sync_git_repository(owner, repo)` — Sync GitHub repo as domain items
-  - `analyze_git_repository(repositoryName)` — Returns analysis recipe
+  ### Review (5)
+  `list_review_change`, `get_review_change`, `approve_review_change`, `reject_review_change`,
+  `list_my_review_change`
 
-  ## Enterprise Tools (11, build tag: enterprise)
-  ### Metrics & Digital Twins
-  - `enterprise_record_observation`, `enterprise_query_metrics`, `enterprise_list_observations`
-  - `enterprise_create_twin_snapshot`, `enterprise_simulate_twin`, `enterprise_evaluate_twin`
+  ### ChangeSet (4)
+  `approve_changeset`, `reject_changeset`, `approve_changeset_item`, `reject_changeset_item`
 
-  ### Rules & Agents
-  - `execute_enterprise_rule`, `evaluate_enterprise_rule`
-  - `enterprise_list_execution_logs`
-  - `chat_sandbox_session`, `list_sandbox_session`
+  ### Version History (3)
+  `list_version`, `get_version`, `diff_version`
+
+  ### Notebook (4)
+  `notebook_run`, `notebook_cancel_run`, `notebook_list_runs`, `notebook_get_run`
+
+  ### Team (1)
+  `send_gate_feedback`
+
+  ### Scheduler (5)
+  `scheduler_list_jobs`, `scheduler_create_job`, `scheduler_update_job`, `scheduler_delete_job`,
+  `scheduler_trigger_job`
+
+  ### Runner — Deprecated (3)
+  `execute_item`, `cancel_run`, `approve_run_gate` — superseded by notebook_* tools
+
+  ### Domain Pack (3)
+  `load_domain_sample`, `preview_domain_pack`, `load_domain_seeds` (deprecated)
+
+  ### Project — tenant_admin (4)
+  `create_project`, `import_project`, `reload_system_project`, `sync_system_project`
+
+  ### Git (6)
+  `git_status`, `git_commit`, `git_push`, `git_pull`, `git_log`, `git_diff`
+
+  ### Context & Session (3)
+  `generate_synthesis_context`, `resolve_synthesis_budget`, `get_synthesis_session`
+
+  ### Validation (1)
+  `validate_synthesis_branch`
+
+  ### MCP Registry — tenant_admin (3)
+  `proxy_mcp_call`, `refresh_mcp_server`, `get_mcp_server_status`
+
+  ### Controller — tenant_admin (2)
+  `get_controller_status`, `reconcile_controller`
+
+  ## Sandbox & Thread Tools (ss-sandbox-orchestrator component)
+  ### Sandbox (7)
+  `launch_sandbox_session`, `terminate_sandbox_session`, `get_sandbox_status`,
+  `list_sandbox_session`, `post_sandbox_message`, `update_sandbox_message`, `chat_sandbox_session`
+
+  ### Thread (5)
+  `get_thread`, `list_threads`, `seal_thread`, `submit_thread_for_review`, `dispose_thread`
+
+  ## Enterprise Tools (9, build tag: enterprise, ss-enterprise-engine component)
+  ### Rules (3)
+  `execute_enterprise_rule`, `evaluate_enterprise_rule`, `list_enterprise_execution_log`
+
+  ### Metrics & Digital Twins (6)
+  `record_enterprise_observation`, `query_enterprise_metric`, `list_enterprise_observation`,
+  `create_enterprise_twin_snapshot`, `simulate_enterprise_twin`, `evaluate_enterprise_twin`
 
   ## HTTP Endpoints
-  - `GET /agent/stream/{streamId}` — SSE stream for agent responses (enterprise)
   - `GET /healthz` — Health check (no auth)
   - `GET /readyz` — Readiness check (no auth)
   - `GET /.well-known/oauth-authorization-server` — OIDC discovery (no auth)

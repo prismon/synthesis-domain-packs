@@ -5,7 +5,7 @@ metadata:
 spec:
   displayName: "YAML Domain Packs"
   patternCategory: architectural
-  description: "YAML-based domain packs bundle definitions, reference kinds, seeds, views, and navigation items. Core packs ship with the binary (architecture, value-stream-mapping, domain-modeling). Tenants can add local packs. The loader performs idempotent upserts and skips enterprise-only definitions gracefully."
+  description: "YAML-based domain packs bundle definitions, reference kinds, seeds, views, view-components, and navigation items. Core packs ship with the binary (architecture, delivery, modeling, audit, git, sandbox, notebook, agent, review, and more). Tenants can add local packs in tenants/<slug>/domains/. Git-backed packs are loaded by registering system.repository items with source: git, which triggers the gitsync controller (gitplugin/) to clone, scan, and upsert system.domain items. The system.domain source enum is [platform, user, git]. The loader performs a two-pass idempotent upsert: first pass creates items preserving !name refs, second pass resolves ref names to UIDs. Enterprise-only definitions are skipped gracefully in non-enterprise builds."
   componentRefs:
     - "!name ss-domain-loader"
   containerRefs:

@@ -43,11 +43,21 @@ markdown: |
   - Developer: 6 tabs (Definitions, Items, Views, Navigation, Cache, MCP)
 
   ## View System
-  8 built-in view types registered in `builtin-registrations.ts`:
-  c4-context, c4-container, c4-component, hierarchy-board, class-diagram,
-  context-map, application-landscape, git-repo-diagram.
-  Enterprise plugins add views at runtime via `loadPlugins()`.
+  30+ built-in view components registered in `builtin-registrations.ts` across three renderer
+  types:
+  - **inline-react** (primary/recommended) — React components compiled into the frontend
+    bundle. Used for all new view development. Examples: C4 diagrams, hierarchy board,
+    class diagram, context map, application landscape, git-repo diagram, audit findings table.
+  - **react** — Legacy React component renderer, being phased out in favour of inline-react.
+  - **web-component** — Custom Elements loaded at runtime. Used by enterprise plugins.
+
+  React Flow integration provides graph layout for C4 container/component diagrams and
+  other graph-based views. Shared utilities in `components/views/c4-shared.tsx`.
+
+  `ViewRenderer` dispatches exclusively based on the view's `layoutType` field. It also
+  dispatches Woven-trait items to the notebook editor regardless of kind.
 
   ## Enterprise Plugin System
   `@enterprise/plugin` Vite alias resolves to stub or real module.
   Plugin manifest provides: traits, views, middleware, hooks (React component slots).
+  Enterprise plugins can register additional web-component and inline-react views at startup.
