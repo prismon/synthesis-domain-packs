@@ -85,9 +85,26 @@ markdown: |
     var personColor = config.personColor || '#0891b2';
     var externalColor = config.externalColor || '#94a3b8';
 
-    var systems = items['architecture.system'] || [];
-    var people = items['architecture.person'] || [];
-    var externals = items['architecture.external-system'] || [];
+    var legendState = useState({});
+    var hiddenKinds = legendState[0];
+    var setHiddenKinds = legendState[1];
+
+    function toggleKind(kind) {
+      setHiddenKinds(function(prev) {
+        var next = Object.assign({}, prev);
+        if (next[kind]) delete next[kind];
+        else next[kind] = true;
+        return next;
+      });
+    }
+
+    var systems = hiddenKinds['architecture.system'] ? [] : (items['architecture.system'] || []);
+    var people = hiddenKinds['architecture.person'] ? [] : (items['architecture.person'] || []);
+    var externals = hiddenKinds['architecture.external-system'] ? [] : (items['architecture.external-system'] || []);
+
+    var allSystems = items['architecture.system'] || [];
+    var allPeople = items['architecture.person'] || [];
+    var allExternals = items['architecture.external-system'] || [];
 
     var built = useMemo(function() {
       var nodes = [];
@@ -142,13 +159,33 @@ markdown: |
       else if (onInspect) onInspect(node.id, kind);
     }, [built.kindMap, onDrillDown, onInspect]);
 
-    if (!systems.length && !people.length && !externals.length) {
+    if (!allSystems.length && !allPeople.length && !allExternals.length) {
       return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' }, 'No architecture items found.');
     }
 
-    return h('div', { className: 'c4-context-canvas', style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
-      h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
-        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+    var totalFiltered = systems.length + people.length + externals.length;
+
+    return h('div', { style: { position: 'relative', width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
+      h('div', { className: 'absolute top-3 left-3 z-20 bg-background/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border/50 shadow-sm flex items-center gap-2 flex-wrap' },
+        h('button', { onClick: function() { toggleKind('architecture.system'); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds['architecture.system'] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: systemColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, allSystems.length + ' system' + (allSystems.length !== 1 ? 's' : ''))
+        ),
+        h('button', { onClick: function() { toggleKind('architecture.person'); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds['architecture.person'] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: personColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, allPeople.length + ' people')
+        ),
+        h('button', { onClick: function() { toggleKind('architecture.external-system'); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds['architecture.external-system'] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: externalColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, allExternals.length + ' external' + (allExternals.length !== 1 ? 's' : ''))
+        ),
+        h('span', { className: 'text-[11px] text-border mx-0.5 select-none' }, '|'),
+        h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, totalFiltered + ' total')
+      ),
+      h('div', { className: 'c4-context-canvas', style: { width: '100%', height: '100%' } },
+        h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
+          h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+        )
       )
     );
   };

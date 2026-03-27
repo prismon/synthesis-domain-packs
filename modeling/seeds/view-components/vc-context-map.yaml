@@ -75,9 +75,25 @@ markdown: |
     var contextColor = config.contextColor || '#6366f1';
     var aclColor = config.aclColor || '#f59e0b';
 
-    var contexts = items[contextKind] || [];
-    var acls = items[aclKind] || [];
+    var legendState = useState({});
+    var hiddenKinds = legendState[0];
+    var setHiddenKinds = legendState[1];
+
+    function toggleKind(kind) {
+      setHiddenKinds(function(prev) {
+        var next = Object.assign({}, prev);
+        if (next[kind]) delete next[kind];
+        else next[kind] = true;
+        return next;
+      });
+    }
+
+    var rawContexts = items[contextKind] || [];
+    var rawAcls = items[aclKind] || [];
     var aggregates = items[aggregateKind] || [];
+
+    var contexts = hiddenKinds[contextKind] ? [] : rawContexts;
+    var acls = hiddenKinds[aclKind] ? [] : rawAcls;
 
     var built = useMemo(function() {
       var nodes = [];
@@ -139,13 +155,29 @@ markdown: |
       else if (onInspect) onInspect(node.id, kind);
     }, [built.kindMap, onDrillDown, onInspect]);
 
-    if (!contexts.length) {
+    if (!rawContexts.length) {
       return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' }, 'No bounded contexts found.');
     }
 
-    return h('div', { className: 'c4-diagram-canvas', style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
-      h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
-        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+    var totalFiltered = contexts.length + acls.length;
+
+    return h('div', { style: { position: 'relative', width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
+      h('div', { className: 'absolute top-3 left-3 z-20 bg-background/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border/50 shadow-sm flex items-center gap-2 flex-wrap' },
+        h('button', { onClick: function() { toggleKind(contextKind); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds[contextKind] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: contextColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, rawContexts.length + ' context' + (rawContexts.length !== 1 ? 's' : ''))
+        ),
+        h('button', { onClick: function() { toggleKind(aclKind); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds[aclKind] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: aclColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, rawAcls.length + ' ACL' + (rawAcls.length !== 1 ? 's' : ''))
+        ),
+        h('span', { className: 'text-[11px] text-border mx-0.5 select-none' }, '|'),
+        h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, totalFiltered + ' total')
+      ),
+      h('div', { className: 'c4-diagram-canvas', style: { width: '100%', height: '100%' } },
+        h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
+          h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+        )
       )
     );
   };

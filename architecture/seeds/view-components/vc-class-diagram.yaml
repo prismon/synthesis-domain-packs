@@ -70,13 +70,35 @@ markdown: |
     var onInspect = props.onInspect;
     var onDrillDown = props.onDrillDown;
 
+    var legendState = useState({});
+    var hiddenKinds = legendState[0];
+    var setHiddenKinds = legendState[1];
+
+    function toggleKind(kind) {
+      setHiddenKinds(function(prev) {
+        var next = Object.assign({}, prev);
+        if (next[kind]) delete next[kind];
+        else next[kind] = true;
+        return next;
+      });
+    }
+
     var kinds = config.kinds || config.domainRefs || [];
     var aggregateKind = config.aggregateKind;
     var aggregateRefField = config.aggregateRefField || 'aggregateRef';
 
+    var rawItemsByKind = {};
+    kinds.forEach(function(k) { rawItemsByKind[k] = items[k] || []; });
+
     var allItems = [];
-    kinds.forEach(function(k) { (items[k] || []).forEach(function(item) { allItems.push(item); }); });
-    var aggregates = aggregateKind ? (items[aggregateKind] || []) : [];
+    kinds.forEach(function(k) {
+      var kindItems = hiddenKinds[k] ? [] : (items[k] || []);
+      kindItems.forEach(function(item) { allItems.push(item); });
+    });
+    var rawAllItems = [];
+    kinds.forEach(function(k) { (items[k] || []).forEach(function(item) { rawAllItems.push(item); }); });
+    var aggregates = aggregateKind ? (hiddenKinds[aggregateKind] ? [] : (items[aggregateKind] || [])) : [];
+    var rawAggregates = aggregateKind ? (items[aggregateKind] || []) : [];
 
     var built = useMemo(function() {
       var nodes = [];
@@ -92,7 +114,7 @@ markdown: |
 
       var otherKinds = kinds.filter(function(k) { return k !== aggregateKind; });
       otherKinds.forEach(function(kind) {
-        (items[kind] || []).forEach(function(item) {
+        (hiddenKinds[kind] ? [] : (items[kind] || [])).forEach(function(item) {
           var ref = item.spec[aggregateRefField];
           if (ref && aggGroups.has(ref)) aggGroups.get(ref).push({ kind: kind, item: item });
         });
@@ -127,7 +149,7 @@ markdown: |
 
       var allNodeIds = new Set(Object.keys(kindMap));
       kinds.forEach(function(kind) {
-        (items[kind] || []).forEach(function(item) {
+        (hiddenKinds[kind] ? [] : (items[kind] || [])).forEach(function(item) {
           if (!allNodeIds.has(item.metadata.name)) return;
           Object.entries(item.spec).forEach(function(entry) {
             var fieldName = entry[0], value = entry[1];
@@ -140,7 +162,7 @@ markdown: |
       });
 
       return { nodes: nodes, edges: edges, kindMap: kindMap };
-    }, [allItems, aggregates, config.focusBoundedContextName]);
+    }, [allItems, aggregates, config.focusBoundedContextName, hiddenKinds]);
 
     var nodesState = useNodesState(built.nodes);
     var edgesState = useEdgesState(built.edges);
@@ -157,13 +179,31 @@ markdown: |
       else if (onInspect) onInspect(node.id, kind);
     }, [built.kindMap, onDrillDown, onInspect]);
 
-    if (!allItems.length) {
+    if (!rawAllItems.length) {
       return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' }, 'No domain model items found.');
     }
 
-    return h('div', { className: 'class-diagram-canvas', style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
-      h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
-        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+    var legendKinds = aggregateKind ? [aggregateKind].concat(kinds.filter(function(k) { return k !== aggregateKind; })) : kinds;
+    var totalFiltered = allItems.length;
+
+    return h('div', { style: { position: 'relative', width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
+      h('div', { className: 'absolute top-3 left-3 z-20 bg-background/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border/50 shadow-sm flex items-center gap-2 flex-wrap' },
+        legendKinds.map(function(k) {
+          var stereotype = k.split('.').pop();
+          var color = stereotypeColors[stereotype] || '#6b7280';
+          var count = (items[k] || []).length;
+          return h('button', { key: k, onClick: function() { toggleKind(k); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds[k] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+            h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: color } }),
+            h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, count + ' ' + stereotype + (count !== 1 ? 's' : ''))
+          );
+        }),
+        h('span', { className: 'text-[11px] text-border mx-0.5 select-none' }, '|'),
+        h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, totalFiltered + ' total')
+      ),
+      h('div', { className: 'class-diagram-canvas', style: { width: '100%', height: '100%' } },
+        h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
+          h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+        )
       )
     );
   };

@@ -92,9 +92,25 @@ markdown: |
     var systemColor = config.systemColor || '#6366f1';
     var externalColor = config.externalColor || '#94a3b8';
 
-    var allContainers = items[containerKind] || [];
+    var legendState = useState({});
+    var hiddenKinds = legendState[0];
+    var setHiddenKinds = legendState[1];
+
+    function toggleKind(kind) {
+      setHiddenKinds(function(prev) {
+        var next = Object.assign({}, prev);
+        if (next[kind]) delete next[kind];
+        else next[kind] = true;
+        return next;
+      });
+    }
+
+    var rawContainers = items[containerKind] || [];
     var systems = items[systemKind] || [];
-    var externals = items[externalKind] || [];
+    var rawExternals = items[externalKind] || [];
+
+    var allContainers = hiddenKinds[containerKind] ? [] : rawContainers;
+    var externals = hiddenKinds[externalKind] ? [] : rawExternals;
 
     var built = useMemo(function() {
       var focusSystem = config.focusRef ? systems.find(function(s) { return s.metadata.uid === config.focusRef; }) : systems[0];
@@ -154,13 +170,29 @@ markdown: |
       else if (onInspect) onInspect(node.id, kind);
     }, [built.kindMap, onDrillDown, onInspect]);
 
-    if (!allContainers.length && !externals.length) {
+    if (!rawContainers.length && !rawExternals.length) {
       return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' }, 'No containers found.');
     }
 
-    return h('div', { className: 'c4-diagram-canvas', style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
-      h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
-        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+    var totalFiltered = allContainers.length + externals.length;
+
+    return h('div', { style: { position: 'relative', width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
+      h('div', { className: 'absolute top-3 left-3 z-20 bg-background/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border/50 shadow-sm flex items-center gap-2 flex-wrap' },
+        h('button', { onClick: function() { toggleKind(containerKind); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds[containerKind] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: containerColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, rawContainers.length + ' container' + (rawContainers.length !== 1 ? 's' : ''))
+        ),
+        h('button', { onClick: function() { toggleKind(externalKind); }, className: 'flex items-center gap-1.5 transition-opacity ' + (hiddenKinds[externalKind] ? 'opacity-30' : 'opacity-100') + ' hover:opacity-70', style: { cursor: 'pointer', background: 'none', border: 'none', padding: 0 } },
+          h('div', { className: 'w-2 h-2 rounded-full', style: { backgroundColor: externalColor } }),
+          h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, rawExternals.length + ' external' + (rawExternals.length !== 1 ? 's' : ''))
+        ),
+        h('span', { className: 'text-[11px] text-border mx-0.5 select-none' }, '|'),
+        h('span', { className: 'text-[11px] font-mono text-muted-foreground select-none' }, totalFiltered + ' total')
+      ),
+      h('div', { className: 'c4-diagram-canvas', style: { width: '100%', height: '100%' } },
+        h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
+          h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
+        )
       )
     );
   };
