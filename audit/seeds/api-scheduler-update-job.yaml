@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-scheduler-update-job
+spec:
+  displayName: "scheduler_update_job"
+  endpointType: mcp-tool
+  toolName: "scheduler_update_job"
+  description: "Update an existing scheduled job."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-reconcile-controller
+spec:
+  displayName: "reconcile_controller"
+  endpointType: mcp-tool
+  toolName: "reconcile_controller"
+  description: "Manually trigger a reconciliation pass for a controller."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

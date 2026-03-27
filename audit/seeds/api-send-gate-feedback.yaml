@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-send-gate-feedback
+spec:
+  displayName: "send_gate_feedback"
+  endpointType: mcp-tool
+  toolName: "send_gate_feedback"
+  description: "Send feedback to a human-in-the-loop gate in a running workflow."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

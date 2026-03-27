@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-export-item
+spec:
+  displayName: "export_item"
+  endpointType: mcp-tool
+  toolName: "export_item"
+  description: "Export a domain item as markdown or YAML."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

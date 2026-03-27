@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-reload-system-project
+spec:
+  displayName: "reload_system_project"
+  endpointType: mcp-tool
+  toolName: "reload_system_project"
+  description: "Reload the system project definitions and seeds."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

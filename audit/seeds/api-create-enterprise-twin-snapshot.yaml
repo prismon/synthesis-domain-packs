@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-create-enterprise-twin-snapshot
+spec:
+  displayName: "create_enterprise_twin_snapshot"
+  endpointType: mcp-tool
+  toolName: "create_enterprise_twin_snapshot"
+  description: "Create a snapshot of an enterprise digital twin state."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-reject-review-change
+spec:
+  displayName: "reject_review_change"
+  endpointType: mcp-tool
+  toolName: "reject_review_change"
+  description: "Reject a single pending review change."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

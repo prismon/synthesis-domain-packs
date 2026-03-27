@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-approve-run-gate
+spec:
+  displayName: "approve_run_gate"
+  endpointType: mcp-tool
+  toolName: "approve_run_gate"
+  description: "Approve a human gate checkpoint within a running execution (deprecated)."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"
+  lifecycleState: deprecated

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-post-sandbox-message
+spec:
+  displayName: "post_sandbox_message"
+  endpointType: mcp-tool
+  toolName: "post_sandbox_message"
+  description: "Post a message to a running sandbox session."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

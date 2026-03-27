@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-approve-changeset
+spec:
+  displayName: "approve_changeset"
+  endpointType: mcp-tool
+  toolName: "approve_changeset"
+  description: "Approve an entire changeset batch of pending changes."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-notebook-cancel-run
+spec:
+  displayName: "notebook_cancel_run"
+  endpointType: mcp-tool
+  toolName: "notebook_cancel_run"
+  description: "Cancel an in-progress notebook run."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

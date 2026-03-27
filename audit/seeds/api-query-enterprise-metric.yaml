@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-query-enterprise-metric
+spec:
+  displayName: "query_enterprise_metric"
+  endpointType: mcp-tool
+  toolName: "query_enterprise_metric"
+  description: "Query aggregated enterprise metrics over a time range."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

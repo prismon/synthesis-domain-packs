@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-update-sandbox-message
+spec:
+  displayName: "update_sandbox_message"
+  endpointType: mcp-tool
+  toolName: "update_sandbox_message"
+  description: "Update an existing message in a sandbox session thread."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

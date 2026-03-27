@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-execute-enterprise-rule
+spec:
+  displayName: "execute_enterprise_rule"
+  endpointType: mcp-tool
+  toolName: "execute_enterprise_rule"
+  description: "Execute an enterprise rule against the current domain state."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-scheduler-delete-job
+spec:
+  displayName: "scheduler_delete_job"
+  endpointType: mcp-tool
+  toolName: "scheduler_delete_job"
+  description: "Delete a scheduled job."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

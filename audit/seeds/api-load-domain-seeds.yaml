@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-load-domain-seeds
+spec:
+  displayName: "load_domain_seeds"
+  endpointType: mcp-tool
+  toolName: "load_domain_seeds"
+  description: "Load seeds from a domain pack (deprecated, seeds load automatically)."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"
+  lifecycleState: deprecated

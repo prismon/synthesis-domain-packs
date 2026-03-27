@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-get-controller-status
+spec:
+  displayName: "get_controller_status"
+  endpointType: mcp-tool
+  toolName: "get_controller_status"
+  description: "Get the status and last run time of a reconciliation controller."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

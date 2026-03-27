@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-list-schema-neighbor
+spec:
+  displayName: "list_schema_neighbor"
+  endpointType: mcp-tool
+  toolName: "list_schema_neighbor"
+  description: "List schema-level neighbour kinds for a given kind."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"
