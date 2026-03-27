@@ -21,101 +21,120 @@ spec:
       targetViewComponent: vc-c4-container
 markdown: |
   var h = React.createElement;
+  var NODE_W = 220;
+  var NODE_H = 120;
+  var EDGE_STYLE = { stroke: 'hsl(var(--diagram-edge, 215 20% 65%))', strokeWidth: 1.5, vectorEffect: 'non-scaling-stroke' };
+  var EDGE_LABEL_STYLE = { fontSize: 11, fill: 'hsl(var(--diagram-edge-label, 215 15% 55%))' };
 
   function getName(item) { return item.spec.displayName || item.metadata.name; }
 
-  function resolveRefs(refs, allItems) {
-    if (!refs || !refs.length) return [];
-    var result = [];
-    for (var i = 0; i < allItems.length; i++) {
-      if (refs.indexOf(allItems[i].metadata.uid) !== -1) {
-        result.push(allItems[i]);
-      }
-    }
-    return result;
+  function makeEdge(source, target) {
+    return { id: source + '->' + target, source: source, target: target, label: 'Uses', type: 'default', style: EDGE_STYLE, labelStyle: EDGE_LABEL_STYLE, markerEnd: { type: MarkerType.ArrowClosed, color: 'hsl(var(--diagram-edge, 215 20% 65%))' } };
   }
 
-  function C4Node(nodeProps) {
-    var item = nodeProps.item;
-    var color = nodeProps.color;
-    var stereotype = nodeProps.stereotype;
-    var onClick = nodeProps.onClick;
-    var usesNames = nodeProps.usesNames;
-    return h('div', {
-      className: 'rounded-lg border bg-card p-4 cursor-pointer transition-shadow hover:shadow-lg w-56',
-      style: { borderTopWidth: '3px', borderTopColor: color },
-      onClick: onClick
-    },
-      h('div', { className: 'text-[10px] uppercase tracking-wider text-muted-foreground mb-1' }, stereotype),
-      h('div', { className: 'text-sm font-semibold mb-1' }, getName(item)),
-      item.spec.description ? h('div', { className: 'text-xs text-muted-foreground line-clamp-2 mb-2' }, item.spec.description) : null,
-      item.spec.technology ? h('div', { className: 'text-[10px] text-muted-foreground' }, '[' + item.spec.technology + ']') : null,
-      usesNames && usesNames.length ? h('div', { className: 'mt-2 flex flex-wrap gap-1' },
-        usesNames.map(function(name) {
-          return h('span', { key: name, className: 'text-[10px] bg-muted rounded px-1.5 py-0.5' }, 'uses ' + name);
-        })
-      ) : null
+  function C4NodeBase(props) {
+    var data = props.data;
+    return h('div', { className: 'c4-node', style: { '--c4-color': data.color, width: NODE_W, padding: '12px 16px', borderRadius: 8, background: 'color-mix(in srgb, var(--c4-color) 12%, hsl(var(--card)))', border: '1px solid color-mix(in srgb, var(--c4-color) 30%, transparent)', textAlign: 'center' } },
+      h(Handle, { type: 'target', position: Position.Top, style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h(Handle, { type: 'source', position: Position.Bottom, style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h(Handle, { type: 'target', position: Position.Left, id: 'left', style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h(Handle, { type: 'source', position: Position.Right, id: 'right', style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      data.stereotype ? h('div', { style: { fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7, marginBottom: 2 } }, '[' + data.stereotype + ']') : null,
+      h('div', { style: { fontSize: 13, fontWeight: 600, marginBottom: 2 } }, data.label),
+      data.technology ? h('div', { style: { fontSize: 10, opacity: 0.6 } }, '[' + data.technology + ']') : null,
+      data.description ? h('div', { style: { fontSize: 11, opacity: 0.7, marginTop: 4, lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } }, data.description) : null
     );
   }
 
+  function PersonNodeType(props) {
+    var data = props.data;
+    return h('div', { style: { '--c4-color': data.color, textAlign: 'center' } },
+      h(Handle, { type: 'target', position: Position.Top, style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h(Handle, { type: 'source', position: Position.Bottom, style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h(Handle, { type: 'target', position: Position.Left, id: 'left', style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h(Handle, { type: 'source', position: Position.Right, id: 'right', style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+      h('div', { style: { width: 40, height: 40, borderRadius: '50%', background: 'color-mix(in srgb, var(--c4-color) 60%, transparent)', margin: '0 auto 8px' } }),
+      h('div', { style: { fontSize: 13, fontWeight: 600, marginBottom: 2 } }, data.label),
+      data.description ? h('div', { style: { fontSize: 11, opacity: 0.7, maxWidth: NODE_W, lineHeight: 1.3 } }, data.description) : null
+    );
+  }
+
+  var nodeTypes = { system: C4NodeBase, person: PersonNodeType, external: C4NodeBase };
+
   return function C4ContextDiagram(props) {
-    var config = props.config;
-    var items = props.items;
+    var config = props.config || {};
+    var items = props.items || {};
     var onDrillDown = props.onDrillDown;
     var onInspect = props.onInspect;
 
-    var systems = (items && items['architecture.system']) || [];
-    var people = (items && items['architecture.person']) || [];
-    var externals = (items && items['architecture.external-system']) || [];
-    var allItems = systems.concat(people).concat(externals);
+    var systemColor = config.systemColor || '#6366f1';
+    var personColor = config.personColor || '#0891b2';
+    var externalColor = config.externalColor || '#94a3b8';
 
-    var focusRef = config.focusRef;
-    var focusSystems = focusRef ? systems.filter(function(s) { return s.metadata.uid === focusRef; }) : systems;
-    var otherSystems = focusRef ? systems.filter(function(s) { return s.metadata.uid !== focusRef; }) : [];
+    var systems = items['architecture.system'] || [];
+    var people = items['architecture.person'] || [];
+    var externals = items['architecture.external-system'] || [];
 
-    function handleClick(item) {
-      if (onDrillDown) onDrillDown(item.metadata.uid, item.kind);
-      else if (onInspect) onInspect(item.metadata.uid, item.kind);
-    }
+    var built = useMemo(function() {
+      var nodes = [];
+      var edges = [];
+      var kindMap = {};
+      var cx = 400;
+      var cy = 300;
+
+      systems.forEach(function(sys, i) {
+        var isFocus = config.focusRef === sys.metadata.uid;
+        nodes.push({ id: sys.metadata.uid, type: 'system', position: { x: isFocus ? cx - NODE_W / 2 : cx - NODE_W / 2 + (i + 1) * 260, y: cy - NODE_H / 2 }, data: { label: getName(sys), description: sys.spec.description, technology: sys.spec.technology, color: systemColor, stereotype: 'Software System' } });
+        kindMap[sys.metadata.uid] = 'architecture.system';
+        (sys.spec.usesRefs || []).forEach(function(ref) { edges.push(makeEdge(sys.metadata.uid, ref)); });
+      });
+
+      var pCols = Math.min(people.length, 4);
+      var pSpacing = 260;
+      var pRowSpacing = 180;
+      var pStartX = cx - ((pCols - 1) * pSpacing) / 2 - NODE_W / 2;
+      var pRows = Math.ceil(people.length / pCols);
+      var pBlockH = pRows * pRowSpacing;
+      people.forEach(function(p, i) {
+        var col = i % pCols;
+        var row = Math.floor(i / pCols);
+        nodes.push({ id: p.metadata.uid, type: 'person', position: { x: pStartX + col * pSpacing, y: cy - pBlockH - 60 + row * pRowSpacing }, data: { label: getName(p), description: p.spec.description, color: personColor } });
+        kindMap[p.metadata.uid] = 'architecture.person';
+        (p.spec.usesRefs || []).forEach(function(ref) { edges.push(makeEdge(p.metadata.uid, ref)); });
+      });
+
+      var extSpacing = 280;
+      var extStartX = cx - ((externals.length - 1) * extSpacing) / 2 - NODE_W / 2;
+      externals.forEach(function(ext, i) {
+        nodes.push({ id: ext.metadata.uid, type: 'external', position: { x: extStartX + i * extSpacing, y: cy + 240 }, data: { label: getName(ext), description: ext.spec.description, technology: ext.spec.technology, color: externalColor, stereotype: 'External System' } });
+        kindMap[ext.metadata.uid] = 'architecture.external-system';
+      });
+
+      return { nodes: nodes, edges: edges, kindMap: kindMap };
+    }, [systems, people, externals, config.focusRef]);
+
+    var nodesState = useNodesState(built.nodes);
+    var edgesState = useEdgesState(built.edges);
+    var nodes = nodesState[0], setNodes = nodesState[1], onNodesChange = nodesState[2];
+    var edges = edgesState[0], setEdges = edgesState[1], onEdgesChange = edgesState[2];
+
+    useEffect(function() { setNodes(built.nodes); }, [built.nodes]);
+    useEffect(function() { setEdges(built.edges); }, [built.edges]);
+
+    var handleNodeClick = useCallback(function(event, node) {
+      var kind = built.kindMap[node.id];
+      if (!kind) return;
+      if (onDrillDown) onDrillDown(node.id, kind);
+      else if (onInspect) onInspect(node.id, kind);
+    }, [built.kindMap, onDrillDown, onInspect]);
 
     if (!systems.length && !people.length && !externals.length) {
-      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
-        'No architecture items found.'
-      );
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' }, 'No architecture items found.');
     }
 
-    return h('div', { className: 'flex flex-col items-center gap-8 p-6' },
-      people.length ? h('div', null,
-        h('div', { className: 'text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center mb-3' }, 'People'),
-        h('div', { className: 'flex flex-wrap justify-center gap-4' },
-          people.map(function(p) {
-            var usesNames = resolveRefs(p.spec.usesRefs, allItems).map(getName);
-            return h(C4Node, { key: p.metadata.uid, item: p, color: '#0891b2', stereotype: 'Person', onClick: function() { handleClick(p); }, usesNames: usesNames });
-          })
-        )
-      ) : null,
-
-      h('div', null,
-        h('div', { className: 'text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center mb-3' }, 'Systems'),
-        h('div', { className: 'flex flex-wrap justify-center gap-4' },
-          focusSystems.map(function(s) {
-            var usesNames = resolveRefs(s.spec.usesRefs, allItems).map(getName);
-            return h(C4Node, { key: s.metadata.uid, item: s, color: '#6366f1', stereotype: 'Software System', onClick: function() { handleClick(s); }, usesNames: usesNames });
-          }),
-          otherSystems.map(function(s) {
-            var usesNames = resolveRefs(s.spec.usesRefs, allItems).map(getName);
-            return h(C4Node, { key: s.metadata.uid, item: s, color: '#818cf8', stereotype: 'Software System', onClick: function() { handleClick(s); }, usesNames: usesNames });
-          })
-        )
-      ),
-
-      externals.length ? h('div', null,
-        h('div', { className: 'text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center mb-3' }, 'External Systems'),
-        h('div', { className: 'flex flex-wrap justify-center gap-4' },
-          externals.map(function(e) {
-            return h(C4Node, { key: e.metadata.uid, item: e, color: '#94a3b8', stereotype: 'External System', onClick: function() { handleClick(e); } });
-          })
-        )
-      ) : null
+    return h('div', { style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
+      h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
+        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots, 215 15% 50%) / 0.2)' })
+      )
     );
   };
