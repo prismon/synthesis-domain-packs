@@ -32,13 +32,21 @@ markdown: |
     'service': '#3b82f6', 'repository': '#8b5cf6', 'event': '#ef4444'
   };
 
+  var HANDLE_STYLE = { background: 'transparent', border: 0, width: 12, height: 12 };
+
+  function AllHandles() {
+    return h(React.Fragment, null,
+      h(Handle, { type: 'target', position: Position.Top, style: HANDLE_STYLE }),
+      h(Handle, { type: 'source', position: Position.Bottom, style: HANDLE_STYLE }),
+      h(Handle, { type: 'target', position: Position.Left, id: 'left', style: HANDLE_STYLE }),
+      h(Handle, { type: 'source', position: Position.Right, id: 'right', style: HANDLE_STYLE })
+    );
+  }
+
   function ClassNodeType(props) {
     var data = props.data;
-    return h('div', { style: { '--node-color': data.color, width: NODE_W, background: 'color-mix(in srgb, var(--node-color) 10%, transparent)', border: '1.5px solid color-mix(in srgb, var(--node-color) 38%, transparent)', borderRadius: 6, fontFamily: 'var(--font-mono)', overflow: 'hidden', color: 'hsl(var(--foreground))' } },
-      h(Handle, { type: 'target', position: Position.Top, style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
-      h(Handle, { type: 'source', position: Position.Bottom, style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
-      h(Handle, { type: 'target', position: Position.Left, id: 'left', style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
-      h(Handle, { type: 'source', position: Position.Right, id: 'right', style: { background: 'transparent', border: 0, width: 12, height: 12 } }),
+    return h('div', { className: 'class-diagram-node', style: { '--node-color': data.color, width: NODE_W, background: 'color-mix(in srgb, var(--node-color) 10%, transparent)', border: '1.5px solid color-mix(in srgb, var(--node-color) 38%, transparent)', borderRadius: 6, fontFamily: 'var(--font-mono)', overflow: 'hidden', color: 'hsl(var(--foreground))' } },
+      h(AllHandles),
       h('div', { style: { background: 'color-mix(in srgb, var(--node-color) 19%, transparent)', padding: '6px 10px', textAlign: 'center', borderBottom: '1px solid color-mix(in srgb, var(--node-color) 25%, transparent)' } },
         h('div', { style: { fontSize: 9, opacity: 0.7, fontStyle: 'italic' } }, '\u00AB' + data.stereotype + '\u00BB'),
         h('div', { style: { fontSize: 12, fontWeight: 600 } }, data.label)
@@ -153,9 +161,9 @@ markdown: |
       return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' }, 'No domain model items found.');
     }
 
-    return h('div', { style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
+    return h('div', { className: 'class-diagram-canvas', style: { width: '100%', height: 'calc(100vh - 220px)', minHeight: 400 } },
       h(ReactFlow, { nodes: nodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onNodeClick: handleNodeClick, nodeTypes: nodeTypes, fitView: true, fitViewOptions: { padding: 0.3 }, proOptions: { hideAttribution: true }, minZoom: 0.3, maxZoom: 2 },
-        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots, 215 15% 50%) / 0.2)' })
+        h(Background, { variant: 'dots', gap: 24, size: 1, color: 'hsl(var(--canvas-dots) / 0.2)' })
       )
     );
   };
