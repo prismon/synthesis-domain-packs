@@ -7,7 +7,7 @@ spec:
   description: "Spider chart comparing technologies within a use-case across evaluation dimensions from their scores field"
   layoutType: tech-radar-graph
   icon: radar
-  componentKind: web-component
+  componentKind: inline-react
   requiredFields:
     - name: stackRef
       type: ref
@@ -20,3 +20,179 @@ spec:
   defaultLayoutConfig:
     maxItems: 8
     dimensionOrder: []
+markdown: |
+  var h = React.createElement;
+
+  var CX = 350;
+  var CY = 350;
+  var MAX_R = 250;
+
+  var COLORS = ['#6366f1', '#0891b2', '#d97706', '#dc2626', '#22c55e', '#ec4899', '#8b5cf6', '#f97316'];
+
+  function getName(item) {
+    return item.spec.displayName || item.metadata.name;
+  }
+
+  function polarToCart(cx, cy, r, angleRad) {
+    return { x: cx + r * Math.cos(angleRad), y: cy + r * Math.sin(angleRad) };
+  }
+
+  function buildAxes(techItems, dimensionOrder) {
+    var dimSet = {};
+    for (var i = 0; i < techItems.length; i++) {
+      var scores = techItems[i].spec.scores;
+      if (scores && typeof scores === 'object') {
+        var keys = Object.keys(scores);
+        for (var k = 0; k < keys.length; k++) dimSet[keys[k]] = true;
+      }
+    }
+    if (dimensionOrder && dimensionOrder.length > 0) {
+      return dimensionOrder.filter(function(d) { return dimSet[d]; });
+    }
+    return Object.keys(dimSet);
+  }
+
+  function buildPolygonPoints(item, axes, cx, cy, maxR) {
+    if (!axes.length) return '';
+    var points = [];
+    for (var i = 0; i < axes.length; i++) {
+      var dim = axes[i];
+      var score = (item.spec.scores && item.spec.scores[dim]) || 0;
+      var fraction = Math.min(Math.max(score / 10, 0), 1);
+      var angle = (2 * Math.PI * i / axes.length) - Math.PI / 2;
+      var pt = polarToCart(cx, cy, fraction * maxR, angle);
+      points.push(pt.x + ',' + pt.y);
+    }
+    return points.join(' ');
+  }
+
+  function buildReferenceCircle(fraction, cx, cy, maxR, axisCount) {
+    if (axisCount < 3) {
+      return 'M ' + cx + ' ' + (cy - fraction * maxR) + ' A ' + (fraction * maxR) + ' ' + (fraction * maxR) + ' 0 1 1 ' + cx + ' ' + (cy + fraction * maxR) + ' A ' + (fraction * maxR) + ' ' + (fraction * maxR) + ' 0 1 1 ' + cx + ' ' + (cy - fraction * maxR) + ' Z';
+    }
+    var pts = [];
+    for (var i = 0; i < axisCount; i++) {
+      var angle = (2 * Math.PI * i / axisCount) - Math.PI / 2;
+      var pt = polarToCart(cx, cy, fraction * maxR, angle);
+      pts.push((i === 0 ? 'M' : 'L') + ' ' + pt.x + ' ' + pt.y);
+    }
+    return pts.join(' ') + ' Z';
+  }
+
+  return function TechRadarGraphView(props) {
+    var config = props.config || {};
+    var items = props.items || {};
+    var onInspect = props.onInspect;
+
+    var maxItems = config.maxItems || 8;
+    var dimensionOrder = config.dimensionOrder || [];
+
+    var techKinds = ['tech-stack.language', 'tech-stack.library', 'tech-stack.service', 'tech-stack.blueprint'];
+    var techItems = useMemo(function() {
+      var result = [];
+      for (var k = 0; k < techKinds.length; k++) {
+        var kindList = items[techKinds[k]] || [];
+        for (var j = 0; j < kindList.length; j++) result.push(kindList[j]);
+      }
+      return result.slice(0, maxItems);
+    }, [items, maxItems]);
+
+    var axes = useMemo(function() {
+      return buildAxes(techItems, dimensionOrder);
+    }, [techItems, dimensionOrder]);
+
+    if (!techItems.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No technologies found. Add tech-stack items with scores to see the radar graph.'
+      );
+    }
+
+    if (!axes.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No evaluation dimensions found. Add scores fields to technology items.'
+      );
+    }
+
+    var svgTotalHeight = 700;
+    var legendStartY = 620;
+
+    return h('div', { className: 'p-4 overflow-auto' },
+      h('svg', {
+        viewBox: '0 0 700 ' + svgTotalHeight,
+        style: { width: '100%', maxWidth: '600px', display: 'block', margin: '0 auto' }
+      },
+        [0.2, 0.4, 0.6, 0.8, 1.0].map(function(frac) {
+          return h('path', {
+            key: 'ref-' + frac,
+            d: buildReferenceCircle(frac, CX, CY, MAX_R, axes.length),
+            fill: 'none',
+            stroke: '#d1d5db',
+            strokeWidth: '1'
+          });
+        }),
+
+        axes.map(function(dim, i) {
+          var angle = (2 * Math.PI * i / axes.length) - Math.PI / 2;
+          var tipPt = polarToCart(CX, CY, MAX_R, angle);
+          var labelPt = polarToCart(CX, CY, MAX_R + 20, angle);
+          return h('g', { key: 'axis-' + i },
+            h('line', { x1: CX, y1: CY, x2: tipPt.x, y2: tipPt.y, stroke: '#9ca3af', strokeWidth: '1' }),
+            h('text', {
+              x: labelPt.x,
+              y: labelPt.y,
+              textAnchor: 'middle',
+              dominantBaseline: 'middle',
+              fontSize: '11',
+              fill: '#6b7280'
+            }, dim)
+          );
+        }),
+
+        techItems.map(function(item, idx) {
+          var color = COLORS[idx % COLORS.length];
+          var points = buildPolygonPoints(item, axes, CX, CY, MAX_R);
+          if (!points) return null;
+          return h('polygon', {
+            key: 'poly-' + item.metadata.uid,
+            points: points,
+            fill: color + '26',
+            stroke: color,
+            strokeWidth: '2'
+          });
+        }),
+
+        techItems.map(function(item, idx) {
+          var color = COLORS[idx % COLORS.length];
+          return axes.map(function(dim, axisIdx) {
+            var score = (item.spec.scores && item.spec.scores[dim]) || 0;
+            var fraction = Math.min(Math.max(score / 10, 0), 1);
+            var angle = (2 * Math.PI * axisIdx / axes.length) - Math.PI / 2;
+            var pt = polarToCart(CX, CY, fraction * MAX_R, angle);
+            return h('circle', {
+              key: 'dot-' + item.metadata.uid + '-' + axisIdx,
+              cx: pt.x,
+              cy: pt.y,
+              r: 4,
+              fill: color,
+              stroke: '#fff',
+              strokeWidth: '1',
+              style: { cursor: 'pointer' },
+              onClick: function() { if (onInspect) onInspect(item.metadata.uid, item.metadata.kind); }
+            },
+              h('title', null, getName(item) + ': ' + dim + ' = ' + score)
+            );
+          });
+        }),
+
+        techItems.map(function(item, idx) {
+          var color = COLORS[idx % COLORS.length];
+          var legendX = 40;
+          var legendY = legendStartY + idx * 18;
+          return h('g', { key: 'legend-' + item.metadata.uid },
+            h('rect', { x: legendX, y: legendY - 6, width: 12, height: 12, fill: color, rx: 2 }),
+            h('text', { x: legendX + 18, y: legendY, dominantBaseline: 'middle', fontSize: '12', fill: '#6b7280' }, getName(item))
+          );
+        })
+      )
+    );
+  };
