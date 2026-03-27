@@ -7,12 +7,161 @@ spec:
   description: "Coverage matrix showing requirement satisfaction and verification status with color-coded coverage bars, gap analysis, and filtering"
   layoutType: requirements-traceability
   icon: list-checks
-  componentKind: web-component
-  webComponentTag: synth-requirements-traceability
-  webComponentModule: "/domain-assets/mbse/view-components/requirements-traceability.js"
+  componentKind: inline-react
   defaultItemGroup:
     kinds:
       - mbse.requirement
       - mbse.block
       - mbse.test-case
       - mbse.stakeholder-need
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  function resolveItems(refs, itemMap) {
+    if (!refs || !refs.length) return [];
+    var result = [];
+    for (var i = 0; i < refs.length; i++) {
+      if (itemMap[refs[i]]) result.push(itemMap[refs[i]]);
+    }
+    return result;
+  }
+
+  function CoverageBar(barProps) {
+    var pct = barProps.pct;
+    var color = pct >= 80 ? '#22c55e' : pct >= 40 ? '#f59e0b' : '#f43f5e';
+    return h('div', { style: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 } },
+      h('div', { style: { flex: 1, height: 8, background: '#e2e8f0', borderRadius: 4, overflow: 'hidden' } },
+        h('div', { style: { width: pct + '%', height: '100%', background: color, borderRadius: 4, transition: 'width 0.3s' } })
+      ),
+      h('span', { style: { fontSize: 12, fontWeight: 600, color: color, minWidth: 40 } }, pct + '%')
+    );
+  }
+
+  function TraceCell(cellProps) {
+    var linked = cellProps.linked;
+    var names = cellProps.names;
+    var onClickFn = cellProps.onClick;
+    if (!names || names.length === 0) {
+      return h('td', {
+        style: { padding: '6px 10px', background: '#fef2f2', border: '1px solid #fecaca', cursor: 'default', verticalAlign: 'top' }
+      },
+        h('span', { style: { fontSize: 10, color: '#ef4444' } }, '\u2715 gap')
+      );
+    }
+    return h('td', {
+      style: { padding: '6px 10px', background: '#f0fdf4', border: '1px solid #bbf7d0', cursor: 'pointer', verticalAlign: 'top' },
+      onClick: onClickFn
+    },
+      names.map(function(name, i) {
+        return h('div', { key: i, style: { fontSize: 11, color: '#15803d', fontWeight: 500 } }, name);
+      })
+    );
+  }
+
+  return function RequirementsTraceability(props) {
+    var config = props.config;
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var reqs = (items && items['mbse.requirement']) || [];
+    var blocks = (items && items['mbse.block']) || [];
+    var tests = (items && items['mbse.test-case']) || [];
+    var needs = (items && items['mbse.stakeholder-need']) || [];
+
+    var blockMap = {};
+    for (var bi = 0; bi < blocks.length; bi++) blockMap[blocks[bi].metadata.uid] = blocks[bi];
+    var testMap = {};
+    for (var ti = 0; ti < tests.length; ti++) testMap[tests[ti].metadata.uid] = tests[ti];
+    var needMap = {};
+    for (var ni = 0; ni < needs.length; ni++) needMap[needs[ni].metadata.uid] = needs[ni];
+
+    var covered = 0;
+    for (var ci = 0; ci < reqs.length; ci++) {
+      var req = reqs[ci];
+      var hasSat = req.spec.satisfiedByBlocks && req.spec.satisfiedByBlocks.length > 0;
+      var hasVer = req.spec.verifiedByTests && req.spec.verifiedByTests.length > 0;
+      if (hasSat && hasVer) covered++;
+    }
+    var coveragePct = reqs.length > 0 ? Math.round((covered / reqs.length) * 100) : 0;
+
+    if (!reqs.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No requirements found. Add mbse.requirement items to see the traceability matrix.'
+      );
+    }
+
+    return h('div', { style: { padding: 16, fontFamily: 'system-ui, sans-serif' } },
+      h('div', { style: { marginBottom: 16 } },
+        h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 } },
+          h('span', { style: { fontSize: 13, fontWeight: 600, color: '#334155' } },
+            'Full Coverage (' + covered + '/' + reqs.length + ' requirements fully traced)'
+          ),
+          h('span', { style: { fontSize: 11, color: '#64748b' } }, 'Satisfied AND Verified')
+        ),
+        h(CoverageBar, { pct: coveragePct })
+      ),
+      h('div', { style: { overflowX: 'auto' } },
+        h('table', { style: { width: '100%', borderCollapse: 'collapse', fontSize: 12 } },
+          h('thead', null,
+            h('tr', { style: { background: '#f8fafc' } },
+              h('th', { style: { padding: '8px 10px', border: '1px solid #e2e8f0', textAlign: 'left', fontWeight: 600, color: '#475569', minWidth: 160 } }, 'Requirement'),
+              h('th', { style: { padding: '8px 10px', border: '1px solid #e2e8f0', textAlign: 'left', fontWeight: 600, color: '#475569', minWidth: 140 } }, 'Satisfied By'),
+              h('th', { style: { padding: '8px 10px', border: '1px solid #e2e8f0', textAlign: 'left', fontWeight: 600, color: '#475569', minWidth: 140 } }, 'Verified By'),
+              h('th', { style: { padding: '8px 10px', border: '1px solid #e2e8f0', textAlign: 'left', fontWeight: 600, color: '#475569', minWidth: 140 } }, 'Traced From')
+            )
+          ),
+          h('tbody', null,
+            reqs.map(function(req) {
+              var satItems = resolveItems(req.spec.satisfiedByBlocks, blockMap);
+              var verItems = resolveItems(req.spec.verifiedByTests, testMap);
+              var fromItems = resolveItems(req.spec.derivedFromNeeds, needMap);
+              var hasSat = satItems.length > 0;
+              var hasVer = verItems.length > 0;
+              var rowBg = (hasSat && hasVer) ? 'white' : '#fff7ed';
+              return h('tr', { key: req.metadata.uid, style: { background: rowBg } },
+                h('td', {
+                  style: { padding: '6px 10px', border: '1px solid #e2e8f0', verticalAlign: 'top', cursor: 'pointer', fontWeight: 600 },
+                  onClick: function() { if (onInspect) onInspect(req.metadata.uid, req.metadata.kind); }
+                },
+                  h('div', { style: { fontSize: 12 } }, getName(req)),
+                  req.spec.requirementId ? h('div', { style: { fontSize: 10, color: '#6366f1', marginTop: 2 } }, req.spec.requirementId) : null
+                ),
+                h(TraceCell, {
+                  linked: hasSat,
+                  names: satItems.map(getName),
+                  onClick: function() { if (satItems.length && onInspect) onInspect(satItems[0].metadata.uid, satItems[0].metadata.kind); }
+                }),
+                h(TraceCell, {
+                  linked: hasVer,
+                  names: verItems.map(getName),
+                  onClick: function() { if (verItems.length && onInspect) onInspect(verItems[0].metadata.uid, verItems[0].metadata.kind); }
+                }),
+                h(TraceCell, {
+                  linked: fromItems.length > 0,
+                  names: fromItems.map(getName),
+                  onClick: function() { if (fromItems.length && onInspect) onInspect(fromItems[0].metadata.uid, fromItems[0].metadata.kind); }
+                })
+              );
+            })
+          )
+        )
+      ),
+      h('div', { style: { marginTop: 10, display: 'flex', gap: 16, fontSize: 11, color: '#64748b' } },
+        h('div', { style: { display: 'flex', alignItems: 'center', gap: 4 } },
+          h('div', { style: { width: 12, height: 12, background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 2 } }),
+          'Linked'
+        ),
+        h('div', { style: { display: 'flex', alignItems: 'center', gap: 4 } },
+          h('div', { style: { width: 12, height: 12, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 2 } }),
+          'Gap (missing link)'
+        ),
+        h('div', { style: { display: 'flex', alignItems: 'center', gap: 4 } },
+          h('div', { style: { width: 12, height: 12, background: '#fff7ed', border: '1px solid #e2e8f0', borderRadius: 2 } }),
+          'Partially traced'
+        )
+      )
+    );
+  };

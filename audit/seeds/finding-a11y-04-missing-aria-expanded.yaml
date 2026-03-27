@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-04-missing-aria-expanded
+spec:
+  displayName: "A11Y-04: Missing aria-expanded on Expand/Collapse Controls"
+  severity: warning
+  category: accessibility
+  description: "Expand/collapse controls in the domain table and hierarchy views do not set aria-expanded to reflect the current open/closed state. Screen reader users cannot determine whether a section is expanded or collapsed without visually inspecting the page."
+  recommendation: "Add aria-expanded={isOpen} to all expand/collapse toggle buttons. Pair with aria-controls pointing to the controlled region's ID."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

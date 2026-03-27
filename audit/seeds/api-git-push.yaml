@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-git-push
+spec:
+  displayName: "git_push"
+  endpointType: mcp-tool
+  toolName: "git_push"
+  description: "Push commits to the remote for a repository item."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

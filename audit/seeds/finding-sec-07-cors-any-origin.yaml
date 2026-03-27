@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-07-cors-any-origin
+spec:
+  displayName: "SEC-07: CORS Allows Any Origin"
+  severity: info
+  category: security
+  description: "The backend CORS configuration allows requests from any origin (*). This weakens cross-origin protections and could allow malicious sites to make authenticated requests if combined with credential exposure."
+  recommendation: "Restrict CORS to known allowed origins (e.g. frontend hostname). Use environment-specific allowlists rather than a wildcard."
+  sourceFile: "backend/cmd/domain-service/main.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-get-thread
+spec:
+  displayName: "get_thread"
+  endpointType: mcp-tool
+  toolName: "get_thread"
+  description: "Get a conversation thread by UID."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

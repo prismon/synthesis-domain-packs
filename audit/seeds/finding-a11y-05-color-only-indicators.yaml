@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-05-color-only-indicators
+spec:
+  displayName: "A11Y-05: Color-Only Status Indicators"
+  severity: warning
+  category: accessibility
+  description: "Lifecycle state and severity status indicators use color alone to convey meaning (e.g. green for active, red for critical). Users with color vision deficiency cannot distinguish these states, violating WCAG 2.1 SC 1.4.1 (Use of Color)."
+  recommendation: "Supplement color with a text label, icon, or pattern. For example, add a visible text label alongside the colored badge, or use distinct icons for each status value in addition to color."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

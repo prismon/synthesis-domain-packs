@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-08-ssl-disabled-demo
+spec:
+  displayName: "SEC-08: SSL Disabled in Demo Database Connection"
+  severity: info
+  category: security
+  description: "The demo instance database connection string sets sslmode=disable, meaning database traffic is transmitted unencrypted. If the demo environment is network-accessible, this exposes data in transit."
+  recommendation: "Enable SSL for database connections in all non-local environments. Use sslmode=require or sslmode=verify-full with appropriate certificates."
+  sourceFile: "instances/demo.yaml"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-01-mixed-component-patterns
+spec:
+  displayName: "STY-01: Mixed React Component Declaration Patterns"
+  severity: warning
+  category: convention
+  description: "The frontend codebase uses a mix of function declarations, arrow function assignments, and forwardRef wrapping patterns without a consistent convention. This makes code navigation and review harder and complicates tooling like ESLint and IDE support."
+  recommendation: "Establish a single preferred React component pattern (e.g. named function declarations for all components). Document the convention in CLAUDE.md and add an ESLint rule to enforce it."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

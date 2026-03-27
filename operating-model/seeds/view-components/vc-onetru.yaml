@@ -7,5 +7,189 @@ spec:
   description: "Platform-Product-Market layered operating model view showing layers, tenets, and capabilities"
   layoutType: onetru
   icon: layers
-  componentKind: web-component
-  webComponentTag: synth-onetru-view
+  componentKind: inline-react
+markdown: |
+  var h = React.createElement;
+
+  var LAYER_CONFIG = {
+    market: {
+      label: 'Market',
+      borderColor: '#f97316',
+      bgColor: '#f9731610',
+      order: 0
+    },
+    product: {
+      label: 'Product',
+      borderColor: '#6366f1',
+      bgColor: '#6366f110',
+      order: 1
+    },
+    platform: {
+      label: 'Platform',
+      borderColor: '#22c55e',
+      bgColor: '#22c55e10',
+      order: 2
+    }
+  };
+
+  var LAYER_ORDER = ['market', 'product', 'platform'];
+
+  function getName(item) {
+    return item.spec.displayName || item.metadata.name;
+  }
+
+  function getLifecycleColor(state) {
+    if (!state) return '#6b7280';
+    var s = state.toLowerCase();
+    if (s === 'active' || s === 'production') return '#22c55e';
+    if (s === 'deprecated' || s === 'legacy') return '#ef4444';
+    if (s === 'beta' || s === 'trial') return '#f59e0b';
+    if (s === 'planned' || s === 'proposed') return '#3b82f6';
+    return '#6b7280';
+  }
+
+  return function OneTruView(props) {
+    var config = props.config || {};
+    var items = props.items || {};
+    var onInspect = props.onInspect;
+
+    var layerItems = items['ppm.layer'] || [];
+    var capabilityItems = items['ppm.capability'] || [];
+    var tenetItems = items['ppm.tenet'] || [];
+
+    var layersByType = useMemo(function() {
+      var map = {};
+      for (var i = 0; i < layerItems.length; i++) {
+        var layer = layerItems[i];
+        var type = (layer.spec.layerType || 'platform').toLowerCase();
+        if (!map[type]) map[type] = [];
+        map[type].push(layer);
+      }
+      return map;
+    }, [layerItems]);
+
+    var capsByLayerUid = useMemo(function() {
+      var map = {};
+      for (var i = 0; i < capabilityItems.length; i++) {
+        var cap = capabilityItems[i];
+        var ref = cap.spec.layerRef;
+        if (ref) {
+          if (!map[ref]) map[ref] = [];
+          map[ref].push(cap);
+        }
+      }
+      return map;
+    }, [capabilityItems]);
+
+    if (!layerItems.length && !capabilityItems.length && !tenetItems.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No operating model items found. Add ppm.layer, ppm.capability, and ppm.tenet items.'
+      );
+    }
+
+    return h('div', { className: 'p-4 space-y-3' },
+      LAYER_ORDER.map(function(layerType) {
+        var cfg = LAYER_CONFIG[layerType];
+        var layers = layersByType[layerType] || [];
+
+        var allCaps = [];
+        for (var i = 0; i < layers.length; i++) {
+          var layerCaps = capsByLayerUid[layers[i].metadata.uid] || [];
+          for (var j = 0; j < layerCaps.length; j++) allCaps.push(layerCaps[j]);
+        }
+
+        var primaryLayer = layers[0];
+
+        return h('div', {
+          key: layerType,
+          style: {
+            borderLeft: '4px solid ' + cfg.borderColor,
+            backgroundColor: cfg.bgColor,
+            borderRadius: '8px',
+            padding: '16px',
+            minHeight: '80px'
+          }
+        },
+          h('div', { style: { display: 'flex', alignItems: 'flex-start', gap: '16px' } },
+            h('div', {
+              style: {
+                minWidth: '80px',
+                fontWeight: 'bold',
+                fontSize: '14px',
+                color: cfg.borderColor,
+                cursor: primaryLayer ? 'pointer' : 'default',
+                paddingTop: '4px'
+              },
+              onClick: function() {
+                if (primaryLayer && onInspect) onInspect(primaryLayer.metadata.uid, primaryLayer.metadata.kind);
+              }
+            }, cfg.label),
+
+            h('div', {
+              style: { display: 'flex', flexWrap: 'wrap', gap: '8px', flex: '1' }
+            },
+              allCaps.length > 0
+                ? allCaps.map(function(cap) {
+                    var lifecycle = cap.spec.lifecycleState;
+                    var badgeColor = getLifecycleColor(lifecycle);
+                    return h('div', {
+                      key: cap.metadata.uid,
+                      style: {
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '6px',
+                        padding: '8px 12px',
+                        backgroundColor: '#fff',
+                        cursor: 'pointer',
+                        minWidth: '120px',
+                        maxWidth: '200px'
+                      },
+                      onClick: function() { if (onInspect) onInspect(cap.metadata.uid, cap.metadata.kind); }
+                    },
+                      h('div', { style: { fontWeight: 'bold', fontSize: '13px', marginBottom: '4px' } }, getName(cap)),
+                      cap.spec.description ? h('div', {
+                        style: {
+                          fontSize: '11px',
+                          color: '#6b7280',
+                          overflow: 'hidden',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical'
+                        }
+                      }, cap.spec.description) : null,
+                      lifecycle ? h('div', { style: { marginTop: '6px' } },
+                        h('span', {
+                          style: {
+                            display: 'inline-block',
+                            fontSize: '10px',
+                            padding: '1px 6px',
+                            borderRadius: '9999px',
+                            backgroundColor: badgeColor + '20',
+                            color: badgeColor,
+                            border: '1px solid ' + badgeColor + '40',
+                            textTransform: 'capitalize'
+                          }
+                        }, lifecycle)
+                      ) : null
+                    );
+                  })
+                : h('div', { style: { fontSize: '12px', color: '#9ca3af', paddingTop: '4px' } },
+                    'No capabilities'
+                  )
+            )
+          )
+        );
+      }),
+
+      tenetItems.length > 0 ? h('div', { style: { marginTop: '16px' } },
+        h('h3', { style: { fontWeight: 'bold', fontSize: '14px', marginBottom: '8px', color: '#374151' } }, 'Tenets'),
+        h('ol', { style: { listStyle: 'decimal', paddingLeft: '20px', space: '4px' } },
+          tenetItems.map(function(tenet, idx) {
+            return h('li', {
+              key: tenet.metadata.uid,
+              style: { fontSize: '13px', color: '#4b5563', marginBottom: '4px' }
+            }, tenet.spec.statement || getName(tenet));
+          })
+        )
+      ) : null
+    );
+  };

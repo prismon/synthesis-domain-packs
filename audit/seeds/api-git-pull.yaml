@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-git-pull
+spec:
+  displayName: "git_pull"
+  endpointType: mcp-tool
+  toolName: "git_pull"
+  description: "Pull changes from the remote for a repository item."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

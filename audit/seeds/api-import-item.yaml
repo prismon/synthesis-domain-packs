@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-import-item
+spec:
+  displayName: "import_item"
+  endpointType: mcp-tool
+  toolName: "import_item"
+  description: "Import a domain item from markdown or YAML content."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

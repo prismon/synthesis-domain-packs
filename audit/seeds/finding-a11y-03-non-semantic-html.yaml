@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-03-non-semantic-html
+spec:
+  displayName: "A11Y-03: Non-Semantic HTML for Interactive Elements"
+  severity: warning
+  category: accessibility
+  description: "Some interactive UI elements are implemented as styled div or span elements with role=\"button\" but lack the full button semantics (focusability, keyboard activation, disabled state). Using non-semantic elements requires manual re-implementation of native browser behaviours."
+  recommendation: "Replace div role=\"button\" elements with native button elements. This provides keyboard focus, Enter/Space activation, and proper disabled state handling automatically without extra ARIA attributes."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

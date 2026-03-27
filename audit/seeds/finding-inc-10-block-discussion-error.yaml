@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-10-block-discussion-error
+spec:
+  displayName: "INC-10: Block Discussion Error Handling"
+  severity: info
+  category: incomplete-feature
+  description: "The block-discussion UI component has incomplete error handling for API failures. When a discussion thread fails to load or post, the error state is not communicated to the user, leaving the component in a silent broken state."
+  recommendation: "Add explicit error states and user-facing error messages to the block-discussion component. Display a retry option when loading fails and a toast notification when posting fails."
+  sourceFile: "src/components/ui/block-discussion.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

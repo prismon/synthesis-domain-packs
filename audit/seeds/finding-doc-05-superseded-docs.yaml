@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-05-superseded-docs
+spec:
+  displayName: "DOC-05: Superseded Docs Not Marked"
+  severity: warning
+  category: documentation
+  description: "Several documents in the docs/ directory have been partially or fully superseded by newer plans or specs but are not marked as deprecated or superseded. Readers cannot tell which documents reflect current intent versus historical decisions."
+  recommendation: "Add a prominent notice at the top of superseded documents indicating their status and linking to the replacement. Consider moving deprecated docs to a docs/archive/ subdirectory."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

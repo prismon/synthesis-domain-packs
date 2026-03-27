@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-record-enterprise-observation
+spec:
+  displayName: "record_enterprise_observation"
+  endpointType: mcp-tool
+  toolName: "record_enterprise_observation"
+  description: "Record an observation metric for an enterprise digital twin."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

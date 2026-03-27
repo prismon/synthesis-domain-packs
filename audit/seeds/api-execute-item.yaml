@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-execute-item
+spec:
+  displayName: "execute_item"
+  endpointType: mcp-tool
+  toolName: "execute_item"
+  description: "Execute a domain item via the runner (deprecated, use notebook_run)."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"
+  lifecycleState: deprecated

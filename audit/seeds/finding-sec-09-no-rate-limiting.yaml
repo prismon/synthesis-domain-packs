@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-09-no-rate-limiting
+spec:
+  displayName: "SEC-09: No Rate Limiting on Auth Endpoints"
+  severity: info
+  category: security
+  description: "Authentication and MCP endpoints have no rate limiting. This leaves the service vulnerable to brute-force attacks, credential stuffing, and resource exhaustion through high-frequency requests."
+  recommendation: "Implement rate limiting middleware on authentication endpoints and optionally on MCP tool calls. Consider per-tenant or per-IP limits with appropriate burst allowances."
+  sourceFile: "backend/cmd/domain-service/main.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

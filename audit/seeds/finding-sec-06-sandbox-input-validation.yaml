@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-06-sandbox-input-validation
+spec:
+  displayName: "SEC-06: Missing Input Validation on Sandbox StartRequest"
+  severity: warning
+  category: security
+  description: "The sandbox StartRequest struct does not validate or sanitize fields such as the template name, environment variables, and resource limits before passing them to Docker. Malicious input could influence container configuration or inject unexpected behavior."
+  recommendation: "Add explicit validation for all StartRequest fields. Whitelist allowed template names, cap resource limit values, and sanitize environment variable names and values before use."
+  sourceFile: "backend/internal/sandboxplugin/provider_docker_sandbox.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

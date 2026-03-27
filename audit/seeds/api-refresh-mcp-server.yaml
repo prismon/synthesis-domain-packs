@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-refresh-mcp-server
+spec:
+  displayName: "refresh_mcp_server"
+  endpointType: mcp-tool
+  toolName: "refresh_mcp_server"
+  description: "Refresh the tool list from a registered external MCP server."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

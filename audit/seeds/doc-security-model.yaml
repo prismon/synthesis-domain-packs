@@ -13,15 +13,21 @@ markdown: |
 
   ## Authentication
 
-  ### Resolver Modes (in priority order)
+  ### Auth Modes
+  Three auth modes are supported (configured via `AUTH_MODE` / `VITE_AUTH_MODE` env vars):
+  - **`oidc`** — Full OIDC via Keycloak. Supports multi-realm (subdomain routing) and
+    single-issuer modes. JWT validated server-side; role from `role` claim.
+  - **`oidc-stub`** — Lightweight OIDC stub for testing without a full Keycloak deployment.
+  - **`header`** — No OIDC; backend trusts `X-Tenant-ID`, `X-Tenant-Slug` headers directly.
+    Used for local development and E2E tests. Role is `tenant_admin` for registered tenants.
+    **Never use in production.**
+
+  ### OIDC Resolver Modes (within `oidc` auth mode, in priority order)
   1. **Multi-realm OIDC** — `OIDC_ISSUER_URL` contains `{realm}` placeholder.
      Uses `MultiRealmJWTResolver`. Extracts realm from JWT issuer, verifies
      tenant registration, resolves role from People domain items.
   2. **Single-issuer OIDC** — `OIDC_ISSUER_URL` set without `{realm}`.
      Uses `JWTResolver`. Tenant from `org_id` claim, role from `role` claim.
-  3. **Dev headers** — Default fallback (no OIDC configured). `HeaderResolver`
-     reads `X-Tenant-ID`, `X-Tenant-Slug` headers. Role is `tenant_admin`
-     for registered tenants.
 
   ## Authorization
 
@@ -42,12 +48,17 @@ markdown: |
   Escalation is prevented (only downgrades honored).
 
   ## Tenant Isolation
-  - **Database**: PostgreSQL RLS with `FORCE ROW LEVEL SECURITY`
+  - **Database**: PostgreSQL RLS with `FORCE ROW LEVEL SECURITY` enforced on all tables
   - **Application**: `tenant.Middleware` sets tenant context per request
   - **Session**: `app.tenant_id` set via `set_config()` per transaction
 
+  ## Sandbox Isolation
+  Each sandbox session runs in an isolated Docker container managed by `internal/sandboxplugin/`.
+  Containers have resource limits and network isolation. Sessions are `system.session` items;
+  the container lifecycle is tied to session state transitions.
+
   ## Known Gaps
-  - Dev mode HeaderResolver trusts client-supplied role/tier headers
-  - Frontend has no RBAC — all UI elements visible to all users
-  - Agent chat has no rate limiting (BudgetManager exists but unwired)
-  - Lifecycle state transitions are modeled but not enforced
+  - Header auth mode trusts client-supplied role/tier headers — not safe outside dev
+  - Frontend has no RBAC — all UI elements visible to all authenticated users
+  - No rate limiting on MCP endpoints
+  - Lifecycle state transitions are modeled but not enforced server-side

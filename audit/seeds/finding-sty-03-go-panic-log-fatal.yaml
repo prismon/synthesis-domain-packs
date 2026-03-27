@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-03-go-panic-log-fatal
+spec:
+  displayName: "STY-03: Go panic/log.Fatal in Non-Critical Paths"
+  severity: warning
+  category: convention
+  description: "Several Go functions in non-startup code paths use panic() or log.Fatal() to handle errors. These calls terminate the entire process, which is inappropriate for recoverable errors occurring during request handling or background processing."
+  recommendation: "Replace panic() and log.Fatal() in request handlers and goroutines with proper error returns. Reserve panic for truly unrecoverable programmer errors during initialization only."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

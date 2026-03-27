@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-09-port-documentation
+spec:
+  displayName: "DOC-09: Port Documentation Could Be Clearer"
+  severity: info
+  category: documentation
+  description: "The README and CLAUDE.md mention port numbers for different instances (3333, 3334, 3001, 3002) but do not present them in a consolidated table. Developers switching between instances must cross-reference multiple sections to find the correct ports."
+  recommendation: "Add a consolidated port reference table near the top of CLAUDE.md listing all instance/service combinations and their port assignments."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-04-header-auth-spoofing
+spec:
+  displayName: "SEC-04: Header Auth Mode Allows Full Spoofing"
+  severity: warning
+  category: security
+  description: "The HeaderResolver auth mode trusts X-Tenant-ID, X-Tenant-Slug, and role headers supplied by the client without any cryptographic verification. In environments where this mode is accidentally enabled, any client can impersonate any tenant or role."
+  recommendation: "Ensure header auth mode is disabled in all non-development environments. Add a clear warning in the resolver. Consider requiring explicit flag to enable header auth rather than using it as a default fallback."
+  sourceFile: "backend/internal/tenant/resolver.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-01-in-memory-pagination
+spec:
+  displayName: "INC-01: In-Memory Pagination (Scalability Bottleneck)"
+  severity: warning
+  category: incomplete-feature
+  description: "Pagination is implemented by loading all items into memory and then slicing. As the number of domain items grows, this approach will exhaust available memory and cause significant performance degradation. It does not scale for large tenants."
+  recommendation: "Implement cursor-based or offset pagination at the database layer using SQL LIMIT/OFFSET. Push filtering and sorting to the database as well to reduce data transfer."
+  sourceFile: "backend/internal/mcpserver/pagination.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

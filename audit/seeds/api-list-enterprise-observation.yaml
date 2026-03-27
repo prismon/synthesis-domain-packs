@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-list-enterprise-observation
+spec:
+  displayName: "list_enterprise_observation"
+  endpointType: mcp-tool
+  toolName: "list_enterprise_observation"
+  description: "List raw enterprise observations for a twin."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

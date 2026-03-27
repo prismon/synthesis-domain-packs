@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-evaluate-enterprise-rule
+spec:
+  displayName: "evaluate_enterprise_rule"
+  endpointType: mcp-tool
+  toolName: "evaluate_enterprise_rule"
+  description: "Evaluate an enterprise rule without persisting results."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

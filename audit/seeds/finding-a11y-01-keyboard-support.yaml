@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-a11y-01-keyboard-support
+spec:
+  displayName: "A11Y-01: Custom Click Handlers Without Keyboard Support"
+  severity: warning
+  category: accessibility
+  description: "Custom interactive elements using onClick handlers on non-button elements (divs, spans, table rows) do not have corresponding onKeyDown/onKeyUp handlers. Keyboard-only users cannot activate these elements, violating WCAG 2.1 SC 2.1.1 (Keyboard)."
+  recommendation: "Add keyboard event handlers (Enter and Space keys) to all custom interactive elements. Alternatively, replace div/span interactive elements with button or a elements which have native keyboard support."
+  sourceFile: "src/components/domain/columns.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

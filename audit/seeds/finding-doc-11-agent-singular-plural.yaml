@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-11-agent-singular-plural
+spec:
+  displayName: "DOC-11: system.agent vs system.agents Not Documented Outside CLAUDE.md"
+  severity: info
+  category: documentation
+  description: "The important distinction between system.agent (singular, current notebook agent kind) and system.agents (plural, legacy kind) is only documented in CLAUDE.md. This gotcha is a common source of confusion but is not captured in the glossary, README, or any design document."
+  recommendation: "Add an entry in GLOSSARY.md or a dedicated agents reference document clearly distinguishing the two kinds. Include migration guidance for any code that still references the legacy kind."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

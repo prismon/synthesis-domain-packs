@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-doc-08-governable-inconsistency
+spec:
+  displayName: "DOC-08: \"Governable\" Trait Inconsistency"
+  severity: warning
+  category: documentation
+  description: "The GLOSSARY.md documents a \"Governable\" trait with specific fields and behaviour, but this trait does not appear in the canonical list in CLAUDE.md. It is unclear whether Governable is implemented, planned, or erroneously documented."
+  recommendation: "Verify whether the Governable trait is implemented in the backend trait registry. If it exists, add it to the canonical list in CLAUDE.md. If not, correct or remove the glossary entry."
+  sourceFile: "docs/GLOSSARY.md"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"

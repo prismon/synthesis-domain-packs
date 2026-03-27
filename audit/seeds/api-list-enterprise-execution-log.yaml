@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-list-enterprise-execution-log
+spec:
+  displayName: "list_enterprise_execution_log"
+  endpointType: mcp-tool
+  toolName: "list_enterprise_execution_log"
+  description: "List the execution log for enterprise rule runs."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

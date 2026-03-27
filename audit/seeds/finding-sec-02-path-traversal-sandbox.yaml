@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-02-path-traversal-sandbox
+spec:
+  displayName: "SEC-02: Path Traversal in Sandbox Session Management"
+  severity: critical
+  category: security
+  description: "User-controlled input is used to construct file system paths in sandbox session management without sufficient sanitization. An attacker could traverse outside intended directories to read or write arbitrary files on the host."
+  recommendation: "Sanitize and validate all user-supplied path components. Use filepath.Clean and confirm the resolved path starts with the expected base directory before any file system operation."
+  sourceFile: "backend/internal/sandboxplugin/provider_docker_sandbox.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

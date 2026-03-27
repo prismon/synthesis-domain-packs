@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-09-response-format
+spec:
+  displayName: "STY-09: Response Format Inconsistency"
+  severity: info
+  category: convention
+  description: "MCP tool response handling in the frontend is inconsistent — some callers check for a specific result field, others parse the response content array directly, and others expect a wrapped object. This makes it easy to introduce parsing bugs when adding new tool calls."
+  recommendation: "Create a typed helper function for parsing MCP tool responses that normalizes the content extraction. Use this helper consistently across all callTool() invocations in the frontend."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

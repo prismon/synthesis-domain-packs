@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-diff-version
+spec:
+  displayName: "diff_version"
+  endpointType: mcp-tool
+  toolName: "diff_version"
+  description: "Compute the diff between two versions of a domain item."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

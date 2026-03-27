@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-import-project
+spec:
+  displayName: "import_project"
+  endpointType: mcp-tool
+  toolName: "import_project"
+  description: "Import a project from an external source."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

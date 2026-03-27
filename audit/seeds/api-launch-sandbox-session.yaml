@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-launch-sandbox-session
+spec:
+  displayName: "launch_sandbox_session"
+  endpointType: mcp-tool
+  toolName: "launch_sandbox_session"
+  description: "Launch a new isolated sandbox session using a template."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-sandbox-orchestrator"

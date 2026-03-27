@@ -1,0 +1,14 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sty-04-legacy-agent-world-image
+spec:
+  displayName: "STY-04: Legacy \"agent-world\" Docker Image Reference"
+  severity: warning
+  category: convention
+  description: "Some configuration files or code still reference the old Docker image name \"synth-agent-world\" which was renamed to \"synth-sandbox\" when Agent Worlds were rebranded as Sandboxes. This causes confusion and may result in incorrect image pulls if the old image is not kept in sync."
+  recommendation: "Find and replace all remaining references to synth-agent-world with synth-sandbox. Update docker build scripts, compose files, and any documentation referencing the old image name."
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

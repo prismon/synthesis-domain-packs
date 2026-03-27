@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-sync-system-project
+spec:
+  displayName: "sync_system_project"
+  endpointType: mcp-tool
+  toolName: "sync_system_project"
+  description: "Synchronise the system project with its remote source."
+  permissionRequired: tenant_admin
+  componentRef: "!name ss-mcp-server"

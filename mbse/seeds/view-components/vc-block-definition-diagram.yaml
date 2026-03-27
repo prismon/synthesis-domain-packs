@@ -7,9 +7,7 @@ spec:
   description: "SysML Block Definition Diagram showing structural decomposition with typed block nodes, composition edges, and interface connections"
   layoutType: block-definition-diagram
   icon: boxes
-  componentKind: web-component
-  webComponentTag: synth-block-definition-diagram
-  webComponentModule: "/domain-assets/mbse/view-components/block-definition-diagram.js"
+  componentKind: inline-react
   defaultItemGroup:
     kinds:
       - mbse.block
@@ -17,3 +15,156 @@ spec:
   defaultDrillDown:
     - nodeKind: mbse.block
       targetViewName: mbse-internal-block
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  function parseLines(text) {
+    if (!text) return [];
+    return text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
+  }
+
+  function BlockNode(nodeProps) {
+    var data = nodeProps.data;
+    var item = data.item;
+    var ports = data.ports || [];
+    var onClick = data.onClick;
+    var properties = parseLines(item.spec.properties);
+    var operations = parseLines(item.spec.operations);
+
+    return h('div', {
+      style: { background: '#f0f9ff', border: '2px solid #0891b2', borderRadius: 4, minWidth: 160, cursor: 'pointer', fontFamily: 'monospace', fontSize: 12 },
+      onClick: onClick
+    },
+      h(Handle, { type: 'target', position: Position.Top, style: { background: '#0891b2' } }),
+      h('div', { style: { background: '#0891b2', color: 'white', padding: '4px 10px', textAlign: 'center', fontWeight: 700, fontSize: 13 } },
+        h('div', { style: { fontSize: 9, opacity: 0.8 } }, '\u00abblock\u00bb'),
+        getName(item)
+      ),
+      ports.length > 0 ? h('div', { style: { borderTop: '1px solid #0891b2', padding: '3px 8px', background: '#e0f2fe' } },
+        ports.map(function(port) {
+          return h('div', { key: port.metadata.uid, style: { fontSize: 10, color: '#0e7490' } },
+            '\u25c6 ' + getName(port)
+          );
+        })
+      ) : null,
+      h('div', { style: { borderTop: '1px solid #bae6fd', padding: '3px 8px', minHeight: 24 } },
+        properties.length > 0 ? properties.map(function(p, i) {
+          return h('div', { key: i, style: { fontSize: 11, color: '#334155' } }, p);
+        }) : h('div', { style: { fontSize: 10, color: '#94a3b8', fontStyle: 'italic' } }, '(no properties)')
+      ),
+      h('div', { style: { borderTop: '1px solid #bae6fd', padding: '3px 8px', minHeight: 24 } },
+        operations.length > 0 ? operations.map(function(op, i) {
+          return h('div', { key: i, style: { fontSize: 11, color: '#334155' } }, op + '()');
+        }) : h('div', { style: { fontSize: 10, color: '#94a3b8', fontStyle: 'italic' } }, '(no operations)')
+      ),
+      h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#0891b2' } })
+    );
+  }
+
+  var blockNodeTypes = { blockNode: BlockNode };
+
+  return function BlockDefinitionDiagram(props) {
+    var config = props.config;
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var blocks = (items && items['mbse.block']) || [];
+    var interfaces = (items && items['mbse.interface']) || [];
+
+    var blockById = {};
+    for (var bi = 0; bi < blocks.length; bi++) {
+      blockById[blocks[bi].metadata.uid] = blocks[bi];
+    }
+
+    var portsByBlock = {};
+    for (var ii = 0; ii < interfaces.length; ii++) {
+      var iface = interfaces[ii];
+      var ownerRef = iface.spec.ownerBlockRef || iface.spec.blockRef;
+      if (ownerRef) {
+        if (!portsByBlock[ownerRef]) portsByBlock[ownerRef] = [];
+        portsByBlock[ownerRef].push(iface);
+      }
+    }
+
+    var childrenOf = {};
+    var rootBlocks = [];
+    for (var ri = 0; ri < blocks.length; ri++) {
+      var blk = blocks[ri];
+      var parentRef = blk.spec.parentRef;
+      if (parentRef && blockById[parentRef]) {
+        if (!childrenOf[parentRef]) childrenOf[parentRef] = [];
+        childrenOf[parentRef].push(blk);
+      } else {
+        rootBlocks.push(blk);
+      }
+    }
+
+    var nodes = [];
+    var edges = [];
+    var COL_W = 220;
+    var ROW_H = 180;
+
+    function layoutLevel(levelBlocks, depth) {
+      for (var li = 0; li < levelBlocks.length; li++) {
+        var blk = levelBlocks[li];
+        nodes.push({
+          id: blk.metadata.uid,
+          type: 'blockNode',
+          position: { x: li * COL_W + depth * 40, y: depth * ROW_H + 20 },
+          data: {
+            item: blk,
+            ports: portsByBlock[blk.metadata.uid] || [],
+            onClick: (function(b) { return function() { if (onDrillDown) onDrillDown(b.metadata.uid, b.metadata.kind); }; })(blk)
+          }
+        });
+        if (blk.spec.parentRef && blockById[blk.spec.parentRef]) {
+          edges.push({
+            id: blk.spec.parentRef + '-comp-' + blk.metadata.uid,
+            source: blk.spec.parentRef,
+            target: blk.metadata.uid,
+            type: 'smoothstep',
+            markerStart: { type: MarkerType.Arrow, color: '#0891b2' },
+            markerEnd: { type: MarkerType.ArrowClosed },
+            style: { stroke: '#0891b2', strokeWidth: 2 },
+            label: 'contains'
+          });
+        }
+        var kids = childrenOf[blk.metadata.uid] || [];
+        if (kids.length) layoutLevel(kids, depth + 1);
+      }
+    }
+
+    layoutLevel(rootBlocks, 0);
+
+    var nodesState = useNodesState(nodes);
+    var edgesState = useEdgesState(edges);
+    var currentNodes = nodesState[0];
+    var onNodesChange = nodesState[2];
+    var currentEdges = edgesState[0];
+    var onEdgesChange = edgesState[2];
+
+    if (!blocks.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No blocks found. Add mbse.block items to see the diagram.'
+      );
+    }
+
+    return h('div', { style: { width: '100%', height: '600px' } },
+      h(ReactFlowProvider, null,
+        h(ReactFlow, {
+          nodes: currentNodes,
+          edges: currentEdges,
+          onNodesChange: onNodesChange,
+          onEdgesChange: onEdgesChange,
+          nodeTypes: blockNodeTypes,
+          fitView: true
+        },
+          h(Background, null),
+          h(Controls, null)
+        )
+      )
+    );
+  };

@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-update-item
+spec:
+  displayName: "update_item"
+  endpointType: mcp-tool
+  toolName: "update_item"
+  description: "Update an existing domain item with optimistic concurrency."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

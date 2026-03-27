@@ -1,0 +1,11 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-reject-changeset
+spec:
+  displayName: "reject_changeset"
+  endpointType: mcp-tool
+  toolName: "reject_changeset"
+  description: "Reject an entire changeset batch of pending changes."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-mcp-server"

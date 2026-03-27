@@ -4,12 +4,10 @@ metadata:
   name: vc-v-model-diagram
 spec:
   displayName: "V-Model Traceability Diagram"
-  description: "V-shaped diagram showing needs → requirements → design → verification traceability chain with MBSE-specific node types and traceability edges"
+  description: "V-shaped diagram showing needs -> requirements -> design -> verification traceability chain with MBSE-specific node types and traceability edges"
   layoutType: v-model-diagram
   icon: chevrons-down
-  componentKind: web-component
-  webComponentTag: synth-vmodel-diagram
-  webComponentModule: "/domain-assets/mbse/view-components/vmodel-diagram.js"
+  componentKind: inline-react
   defaultItemGroup:
     kinds:
       - mbse.stakeholder-need
@@ -26,3 +24,193 @@ spec:
       targetViewName: mbse-block-hierarchy
     - nodeKind: mbse.test-case
       targetViewName: mbse-verification-matrix
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  var V_COLORS = {
+    'mbse.stakeholder-need': '#0891b2',
+    'mbse.requirement': '#6366f1',
+    'mbse.block': '#22c55e',
+    'mbse.activity': '#f59e0b',
+    'mbse.test-case': '#f43f5e'
+  };
+
+  function VNode(nodeProps) {
+    var data = nodeProps.data;
+    var item = data.item;
+    var color = data.color;
+    var onClick = data.onClick;
+
+    return h('div', {
+      style: { padding: '8px 12px', background: 'white', border: '2px solid ' + color, borderRadius: 6, cursor: 'pointer', minWidth: 130, maxWidth: 160, textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
+      onClick: onClick
+    },
+      h(Handle, { type: 'target', position: Position.Top, style: { background: color } }),
+      h(Handle, { type: 'target', position: Position.Left, id: 'left-target', style: { background: color } }),
+      h('div', { style: { fontSize: 11, fontWeight: 600, color: color, marginBottom: 2 } }, getName(item)),
+      item.spec.description ? h('div', { style: { fontSize: 10, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 130 } }, item.spec.description) : null,
+      h(Handle, { type: 'source', position: Position.Bottom, style: { background: color } }),
+      h(Handle, { type: 'source', position: Position.Right, id: 'right-source', style: { background: color } })
+    );
+  }
+
+  var vNodeTypes = { vNode: VNode };
+
+  return function VModelDiagram(props) {
+    var config = props.config;
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var needs = (items && items['mbse.stakeholder-need']) || [];
+    var reqs = (items && items['mbse.requirement']) || [];
+    var blks = (items && items['mbse.block']) || [];
+    var acts = (items && items['mbse.activity']) || [];
+    var tests = (items && items['mbse.test-case']) || [];
+
+    var V_LEVELS = [
+      { kind: 'mbse.stakeholder-need', list: needs, arm: 'left', depth: 0 },
+      { kind: 'mbse.requirement', list: reqs, arm: 'left', depth: 1 },
+      { kind: 'mbse.block', list: blks, arm: 'bottom', depth: 2 },
+      { kind: 'mbse.activity', list: acts, arm: 'right', depth: 1 },
+      { kind: 'mbse.test-case', list: tests, arm: 'right', depth: 0 }
+    ];
+
+    var TOTAL_LEVELS = 5;
+    var NODE_W = 180;
+    var NODE_H = 80;
+    var H_GAP = 240;
+    var V_GAP = 110;
+    var CANVAS_W = H_GAP * (TOTAL_LEVELS - 1);
+    var CANVAS_H = V_GAP * 3;
+
+    function getLevelPos(levelIdx) {
+      var depth = V_LEVELS[levelIdx].depth;
+      var x = levelIdx * H_GAP;
+      var y = depth * V_GAP;
+      return { x: x, y: y };
+    }
+
+    var nodes = [];
+    var edges = [];
+    var itemsByKind = {};
+
+    for (var li = 0; li < V_LEVELS.length; li++) {
+      var level = V_LEVELS[li];
+      itemsByKind[level.kind] = {};
+      var basePos = getLevelPos(li);
+      for (var ii = 0; ii < level.list.length; ii++) {
+        var item = level.list[ii];
+        var color = V_COLORS[level.kind] || '#6b7280';
+        var nodeId = item.metadata.uid;
+        itemsByKind[level.kind][nodeId] = { levelIdx: li, itemIdx: ii };
+        nodes.push({
+          id: nodeId,
+          type: 'vNode',
+          position: { x: basePos.x, y: basePos.y + ii * (NODE_H + 10) },
+          data: {
+            item: item,
+            color: color,
+            onClick: (function(it) { return function() { if (onDrillDown) onDrillDown(it.metadata.uid, it.metadata.kind); }; })(item)
+          }
+        });
+      }
+    }
+
+    function addVerticalEdge(srcId, tgtId, label, color, dashed) {
+      edges.push({
+        id: srcId + '-vert-' + tgtId,
+        source: srcId,
+        target: tgtId,
+        label: label || undefined,
+        style: { stroke: color || '#64748b', strokeWidth: 1.5, strokeDasharray: dashed ? '5,4' : undefined },
+        markerEnd: { type: MarkerType.ArrowClosed, color: color || '#64748b' },
+        labelStyle: { fontSize: 9 }
+      });
+    }
+
+    for (var ri = 0; ri < reqs.length; ri++) {
+      var req = reqs[ri];
+      var derivedFrom = req.spec.derivedFromNeeds;
+      if (derivedFrom && derivedFrom.length) {
+        for (var di = 0; di < derivedFrom.length; di++) {
+          addVerticalEdge(derivedFrom[di], req.metadata.uid, 'derives', '#0891b2', false);
+        }
+      }
+    }
+
+    for (var bki = 0; bki < blks.length; bki++) {
+      var blk = blks[bki];
+      var satisfies = blk.spec.satisfiesReqs || blk.spec.requirementRefs;
+      if (satisfies && satisfies.length) {
+        for (var sci = 0; sci < satisfies.length; sci++) {
+          addVerticalEdge(satisfies[sci], blk.metadata.uid, 'satisfies', '#6366f1', false);
+        }
+      }
+    }
+
+    for (var tci = 0; tci < tests.length; tci++) {
+      var tc = tests[tci];
+      var verifies = tc.spec.verifiesBlocks || tc.spec.blockRefs;
+      if (verifies && verifies.length) {
+        for (var vi = 0; vi < verifies.length; vi++) {
+          addVerticalEdge(blks[0] ? blks[0].metadata.uid : verifies[vi], tc.metadata.uid, 'verifies', '#f43f5e', false);
+        }
+      }
+    }
+
+    for (var nri = 0; nri < needs.length && nri < tests.length; nri++) {
+      edges.push({
+        id: 'trace-' + nri,
+        source: needs[nri].metadata.uid,
+        target: tests[nri].metadata.uid,
+        sourceHandle: 'right-source',
+        targetHandle: 'left-target',
+        style: { stroke: '#94a3b8', strokeWidth: 1, strokeDasharray: '6,4' },
+        labelStyle: { fontSize: 9 },
+        label: 'traces'
+      });
+    }
+
+    var nodesState = useNodesState(nodes);
+    var edgesState = useEdgesState(edges);
+    var currentNodes = nodesState[0];
+    var onNodesChange = nodesState[2];
+    var currentEdges = edgesState[0];
+    var onEdgesChange = edgesState[2];
+
+    var total = needs.length + reqs.length + blks.length + acts.length + tests.length;
+    if (total === 0) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No MBSE items found. Add stakeholder needs, requirements, blocks, activities, or test cases.'
+      );
+    }
+
+    return h('div', { style: { width: '100%' } },
+      h('div', { style: { display: 'flex', gap: 12, padding: '8px 16px', borderBottom: '1px solid #e2e8f0', flexWrap: 'wrap' } },
+        V_LEVELS.map(function(level) {
+          return level.list.length > 0 ? h('div', { key: level.kind, style: { display: 'flex', alignItems: 'center', gap: 5, fontSize: 11 } },
+            h('div', { style: { width: 12, height: 12, borderRadius: 2, background: V_COLORS[level.kind] } }),
+            h('span', { style: { color: '#334155' } }, level.kind.replace('mbse.', '') + ' (' + level.list.length + ')')
+          ) : null;
+        })
+      ),
+      h('div', { style: { width: '100%', height: '560px' } },
+        h(ReactFlowProvider, null,
+          h(ReactFlow, {
+            nodes: currentNodes,
+            edges: currentEdges,
+            onNodesChange: onNodesChange,
+            onEdgesChange: onEdgesChange,
+            nodeTypes: vNodeTypes,
+            fitView: true
+          },
+            h(Background, null),
+            h(Controls, null)
+          )
+        )
+      )
+    );
+  };

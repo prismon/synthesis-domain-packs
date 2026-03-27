@@ -1,0 +1,12 @@
+apiVersion: synthesis/v1
+kind: audit.api-endpoint
+metadata:
+  name: api-evaluate-enterprise-twin
+spec:
+  displayName: "evaluate_enterprise_twin"
+  endpointType: mcp-tool
+  toolName: "evaluate_enterprise_twin"
+  description: "Evaluate an enterprise digital twin against defined targets."
+  permissionRequired: tenant_user
+  componentRef: "!name ss-enterprise-engine"
+  buildTag: enterprise

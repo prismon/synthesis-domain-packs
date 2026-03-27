@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-05-no-pagination-limit
+spec:
+  displayName: "SEC-05: No Pagination Limit Enforcement"
+  severity: warning
+  category: security
+  description: "MCP tool pagination does not enforce a maximum page size. A caller can request an arbitrarily large number of items in a single request, potentially causing high memory usage or enabling denial-of-service attacks against the backend."
+  recommendation: "Enforce a maximum page size (e.g. 500 items) server-side. Return an error if the requested page size exceeds the limit. Document the maximum in the tool schema."
+  sourceFile: "backend/internal/mcpserver/pagination.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"
