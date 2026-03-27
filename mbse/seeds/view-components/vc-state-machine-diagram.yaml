@@ -7,9 +7,7 @@ spec:
   description: "SysML State Machine Diagram showing states as rounded nodes with transition edges, guards, and actions within owner block boundaries"
   layoutType: state-machine-diagram
   icon: git-branch
-  componentKind: web-component
-  webComponentTag: synth-state-machine-diagram
-  webComponentModule: "/domain-assets/mbse/view-components/state-machine-diagram.js"
+  componentKind: inline-react
   defaultItemGroup:
     kinds:
       - mbse.state-machine
@@ -17,3 +15,203 @@ spec:
   defaultDrillDown:
     - nodeKind: mbse.state-machine
       targetViewName: mbse-block-hierarchy
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  function parseStates(text) {
+    if (!text) return [];
+    var lines = text.split('\n');
+    var result = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+      var parts = line.split('\u2014');
+      var stateName = parts[0].trim();
+      var desc = parts.length > 1 ? parts[1].trim() : '';
+      result.push({ name: stateName, description: desc });
+    }
+    return result;
+  }
+
+  function parseTransitions(text) {
+    if (!text) return [];
+    var lines = text.split('\n');
+    var result = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+      var arrowIdx = line.indexOf('->');
+      if (arrowIdx === -1) continue;
+      var source = line.substring(0, arrowIdx).trim();
+      var rest = line.substring(arrowIdx + 2).trim();
+      var guardMatch = rest.match(/\[([^\]]*)\]/);
+      var guard = guardMatch ? guardMatch[1] : '';
+      var actionIdx = rest.indexOf('/');
+      var action = actionIdx !== -1 ? rest.substring(actionIdx + 1).trim() : '';
+      var targetRaw = rest.replace(/\[[^\]]*\]/, '').replace(/\/.*$/, '').trim();
+      var target = targetRaw || rest.split(' ')[0];
+      result.push({ source: source, target: target, guard: guard, action: action });
+    }
+    return result;
+  }
+
+  function StateNode(nodeProps) {
+    var data = nodeProps.data;
+    var stateType = data.stateType;
+    var label = data.label;
+    var description = data.description;
+    var onClick = data.onClick;
+
+    if (stateType === 'initial') {
+      return h('div', { style: { width: 24, height: 24, borderRadius: '50%', background: '#1e293b', cursor: 'pointer' }, onClick: onClick },
+        h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#555' } })
+      );
+    }
+    if (stateType === 'final') {
+      return h('div', { style: { width: 28, height: 28, borderRadius: '50%', background: 'white', border: '3px solid #1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }, onClick: onClick },
+        h('div', { style: { width: 14, height: 14, borderRadius: '50%', background: '#1e293b' } }),
+        h(Handle, { type: 'target', position: Position.Top, style: { background: '#555' } })
+      );
+    }
+    return h('div', { style: { padding: '10px 16px', background: '#f0fdf4', border: '2px solid #22c55e', borderRadius: 12, cursor: 'pointer', minWidth: 100, textAlign: 'center' }, onClick: onClick },
+      h(Handle, { type: 'target', position: Position.Top, style: { background: '#22c55e' } }),
+      h('div', { style: { fontWeight: 600, fontSize: 13 } }, label),
+      description ? h('div', { style: { fontSize: 10, color: '#64748b', marginTop: 3 } }, description) : null,
+      h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#22c55e' } })
+    );
+  }
+
+  var smNodeTypes = { stateNode: StateNode };
+
+  return function StateMachineDiagram(props) {
+    var config = props.config;
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var stateMachines = (items && items['mbse.state-machine']) || [];
+    var blocks = (items && items['mbse.block']) || [];
+
+    var blockById = {};
+    for (var bi = 0; bi < blocks.length; bi++) {
+      blockById[blocks[bi].metadata.uid] = blocks[bi];
+    }
+
+    var nodes = [];
+    var edges = [];
+    var GRID_COLS = 4;
+    var COL_W = 180;
+    var ROW_H = 120;
+    var SM_OFFSET_Y = 0;
+
+    for (var si = 0; si < stateMachines.length; si++) {
+      var sm = stateMachines[si];
+      var smOffsetX = si * 800;
+      var parsedStates = parseStates(sm.spec.states);
+      var parsedTransitions = parseTransitions(sm.spec.transitions);
+      var initialStateName = sm.spec.initialState || '';
+
+      var stateIdMap = {};
+
+      if (initialStateName) {
+        var initId = sm.metadata.uid + '-__initial__';
+        stateIdMap['__initial__'] = initId;
+        nodes.push({
+          id: initId,
+          type: 'stateNode',
+          position: { x: smOffsetX + COL_W * Math.floor(0 / GRID_COLS), y: SM_OFFSET_Y + ROW_H * (0 % GRID_COLS) },
+          data: { stateType: 'initial', label: '', description: '', onClick: null }
+        });
+      }
+
+      for (var sti = 0; sti < parsedStates.length; sti++) {
+        var st = parsedStates[sti];
+        var stId = sm.metadata.uid + '-state-' + sti;
+        stateIdMap[st.name] = stId;
+        var col = (sti + (initialStateName ? 1 : 0)) % GRID_COLS;
+        var row = Math.floor((sti + (initialStateName ? 1 : 0)) / GRID_COLS);
+        nodes.push({
+          id: stId,
+          type: 'stateNode',
+          position: { x: smOffsetX + col * COL_W, y: SM_OFFSET_Y + row * ROW_H },
+          data: {
+            stateType: 'state',
+            label: st.name,
+            description: st.description,
+            onClick: (function(item) { return function() { if (onInspect) onInspect(item.metadata.uid, item.metadata.kind); }; })(sm)
+          }
+        });
+      }
+
+      var finalId = sm.metadata.uid + '-__final__';
+      var totalCount = parsedStates.length + (initialStateName ? 1 : 0);
+      var finalCol = totalCount % GRID_COLS;
+      var finalRow = Math.floor(totalCount / GRID_COLS);
+      nodes.push({
+        id: finalId,
+        type: 'stateNode',
+        position: { x: smOffsetX + finalCol * COL_W, y: SM_OFFSET_Y + finalRow * ROW_H },
+        data: { stateType: 'final', label: '', description: '', onClick: null }
+      });
+
+      if (initialStateName && stateIdMap[initialStateName] && stateIdMap['__initial__']) {
+        edges.push({
+          id: sm.metadata.uid + '-init-edge',
+          source: stateIdMap['__initial__'],
+          target: stateIdMap[initialStateName],
+          markerEnd: { type: MarkerType.ArrowClosed },
+          style: { stroke: '#1e293b' }
+        });
+      }
+
+      for (var ti = 0; ti < parsedTransitions.length; ti++) {
+        var tr = parsedTransitions[ti];
+        var srcId = stateIdMap[tr.source];
+        var tgtId = stateIdMap[tr.target];
+        if (!srcId || !tgtId) continue;
+        var edgeLabel = '';
+        if (tr.guard) edgeLabel += '[' + tr.guard + ']';
+        if (tr.action) edgeLabel += (edgeLabel ? ' / ' : '') + tr.action;
+        edges.push({
+          id: sm.metadata.uid + '-tr-' + ti,
+          source: srcId,
+          target: tgtId,
+          label: edgeLabel || undefined,
+          markerEnd: { type: MarkerType.ArrowClosed },
+          style: { stroke: '#22c55e' },
+          labelStyle: { fontSize: 10 }
+        });
+      }
+    }
+
+    var nodesState = useNodesState(nodes);
+    var edgesState = useEdgesState(edges);
+    var currentNodes = nodesState[0];
+    var onNodesChange = nodesState[2];
+    var currentEdges = edgesState[0];
+    var onEdgesChange = edgesState[2];
+
+    if (!stateMachines.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No state machines found. Add mbse.state-machine items to see the diagram.'
+      );
+    }
+
+    return h('div', { style: { width: '100%', height: '600px' } },
+      h(ReactFlowProvider, null,
+        h(ReactFlow, {
+          nodes: currentNodes,
+          edges: currentEdges,
+          onNodesChange: onNodesChange,
+          onEdgesChange: onEdgesChange,
+          nodeTypes: smNodeTypes,
+          fitView: true
+        },
+          h(Background, null),
+          h(Controls, null)
+        )
+      )
+    );
+  };
