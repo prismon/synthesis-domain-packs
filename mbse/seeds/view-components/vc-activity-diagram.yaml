@@ -7,9 +7,7 @@ spec:
   description: "SysML Activity Diagram showing functional behaviors with swim lanes per allocated block, activity type shapes, and control flow edges"
   layoutType: activity-diagram
   icon: network
-  componentKind: web-component
-  webComponentTag: synth-activity-diagram
-  webComponentModule: "/domain-assets/mbse/view-components/activity-diagram.js"
+  componentKind: inline-react
   defaultItemGroup:
     kinds:
       - mbse.activity
@@ -17,3 +15,164 @@ spec:
   defaultDrillDown:
     - nodeKind: mbse.activity
       targetViewName: mbse-block-hierarchy
+markdown: |
+  var h = React.createElement;
+
+  function getName(item) { return item.spec.displayName || item.metadata.name; }
+
+  function ActivityNode(nodeProps) {
+    var data = nodeProps.data;
+    var item = data.item;
+    var activityType = item.spec.activityType || 'action';
+    var onClick = data.onClick;
+    var label = getName(item);
+
+    if (activityType === 'initial') {
+      return h('div', { style: { width: 24, height: 24, borderRadius: '50%', background: '#1e293b', cursor: 'pointer', border: '2px solid #1e293b' }, onClick: onClick },
+        h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#555' } })
+      );
+    }
+    if (activityType === 'final') {
+      return h('div', { style: { width: 28, height: 28, borderRadius: '50%', background: 'white', border: '3px solid #1e293b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }, onClick: onClick },
+        h('div', { style: { width: 14, height: 14, borderRadius: '50%', background: '#1e293b' } }),
+        h(Handle, { type: 'target', position: Position.Top, style: { background: '#555' } })
+      );
+    }
+    if (activityType === 'decision') {
+      return h('div', { style: { width: 60, height: 60, background: '#fef3c7', border: '2px solid #f59e0b', cursor: 'pointer', transform: 'rotate(45deg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }, onClick: onClick },
+        h('div', { style: { transform: 'rotate(-45deg)', fontSize: 10, textAlign: 'center', maxWidth: 50, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, label),
+        h(Handle, { type: 'target', position: Position.Top, style: { background: '#555', transform: 'rotate(-45deg)' } }),
+        h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#555', transform: 'rotate(-45deg)' } })
+      );
+    }
+    if (activityType === 'fork' || activityType === 'join') {
+      return h('div', { style: { width: 120, height: 8, background: '#1e293b', cursor: 'pointer', borderRadius: 2 }, onClick: onClick },
+        h(Handle, { type: 'target', position: Position.Top, style: { background: '#888' } }),
+        h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#888' } })
+      );
+    }
+    return h('div', { style: { padding: '8px 14px', background: '#eff6ff', border: '1.5px solid #6366f1', borderRadius: 20, cursor: 'pointer', fontSize: 12, minWidth: 80, textAlign: 'center', whiteSpace: 'nowrap' }, onClick: onClick },
+      h(Handle, { type: 'target', position: Position.Top, style: { background: '#6366f1' } }),
+      label,
+      h(Handle, { type: 'source', position: Position.Bottom, style: { background: '#6366f1' } })
+    );
+  }
+
+  var activityNodeTypes = { activityNode: ActivityNode };
+
+  return function ActivityDiagram(props) {
+    var config = props.config;
+    var items = props.items;
+    var onDrillDown = props.onDrillDown;
+    var onInspect = props.onInspect;
+
+    var activities = (items && items['mbse.activity']) || [];
+    var blocks = (items && items['mbse.block']) || [];
+
+    var blockById = {};
+    for (var bi = 0; bi < blocks.length; bi++) {
+      blockById[blocks[bi].metadata.uid] = blocks[bi];
+    }
+
+    var laneMap = {};
+    var unallocated = [];
+    for (var ai = 0; ai < activities.length; ai++) {
+      var act = activities[ai];
+      var laneRef = act.spec.allocatedToBlockRef;
+      if (laneRef) {
+        if (!laneMap[laneRef]) laneMap[laneRef] = [];
+        laneMap[laneRef].push(act);
+      } else {
+        unallocated.push(act);
+      }
+    }
+
+    var nodes = [];
+    var edges = [];
+    var LANE_W = 220;
+    var NODE_H = 60;
+    var PADDING = 40;
+    var laneKeys = Object.keys(laneMap);
+    if (unallocated.length) laneKeys.push('__unallocated__');
+
+    for (var li = 0; li < laneKeys.length; li++) {
+      var laneKey = laneKeys[li];
+      var laneActs = laneKey === '__unallocated__' ? unallocated : laneMap[laneKey];
+      var laneX = li * (LANE_W + 10);
+      for (var lai = 0; lai < laneActs.length; lai++) {
+        var a = laneActs[lai];
+        var actType = a.spec.activityType || 'action';
+        var nodeH = (actType === 'fork' || actType === 'join') ? 8 : (actType === 'initial' || actType === 'final') ? 28 : NODE_H;
+        nodes.push({
+          id: a.metadata.uid,
+          type: 'activityNode',
+          position: { x: laneX + PADDING, y: lai * (NODE_H + 30) + PADDING },
+          data: {
+            item: a,
+            onClick: (function(item) { return function() { if (onInspect) onInspect(item.metadata.uid, item.metadata.kind); }; })(a)
+          },
+          style: { width: 'auto' }
+        });
+      }
+    }
+
+    for (var ei = 0; ei < activities.length; ei++) {
+      var src = activities[ei];
+      var deps = src.spec.dependsOn;
+      if (deps && deps.length) {
+        for (var di = 0; di < deps.length; di++) {
+          edges.push({
+            id: src.metadata.uid + '-dep-' + deps[di],
+            source: deps[di],
+            target: src.metadata.uid,
+            markerEnd: { type: MarkerType.ArrowClosed },
+            style: { stroke: '#6366f1' }
+          });
+        }
+      }
+    }
+
+    var initialNodes = React.useState(nodes)[0];
+    var initialEdges = React.useState(edges)[0];
+    var nodesState = useNodesState(initialNodes);
+    var edgesState = useEdgesState(initialEdges);
+    var currentNodes = nodesState[0];
+    var onNodesChange = nodesState[2];
+    var currentEdges = edgesState[0];
+    var onEdgesChange = edgesState[2];
+
+    if (!activities.length) {
+      return h('div', { className: 'flex items-center justify-center h-64 text-muted-foreground text-sm' },
+        'No activities found. Add mbse.activity items to see the diagram.'
+      );
+    }
+
+    return h('div', { style: { width: '100%' } },
+      laneKeys.length > 0 ? h('div', { style: { display: 'flex', borderBottom: '1px solid #e2e8f0', marginBottom: 0 } },
+        laneKeys.map(function(lk) {
+          var block = blockById[lk];
+          var laneName = lk === '__unallocated__' ? 'Unallocated' : (block ? getName(block) : lk);
+          return h('div', {
+            key: lk,
+            style: { width: LANE_W + 10, padding: '6px 8px', fontSize: 11, fontWeight: 600, color: '#6366f1', background: '#f0f0ff', borderRight: '1px solid #e2e8f0', cursor: block ? 'pointer' : 'default' },
+            onClick: block ? function() { if (onDrillDown) onDrillDown(block.metadata.uid, block.metadata.kind); } : null
+          }, laneName);
+        })
+      ) : null,
+      h('div', { style: { width: '100%', height: '560px' } },
+        h(ReactFlowProvider, null,
+          h(ReactFlow, {
+            nodes: currentNodes,
+            edges: currentEdges,
+            onNodesChange: onNodesChange,
+            onEdgesChange: onEdgesChange,
+            nodeTypes: activityNodeTypes,
+            fitView: true
+          },
+            h(Background, null),
+            h(Controls, null)
+          )
+        )
+      )
+    );
+  };
