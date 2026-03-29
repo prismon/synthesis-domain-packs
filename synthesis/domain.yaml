@@ -1,0 +1,13 @@
+apiVersion: synthesis/v1
+kind: Domain
+metadata:
+  name: synthesis
+  version: 1
+spec:
+  displayName: "Synthesis Platform"
+  description: "Self-referential audit of the Synthesis platform — findings, API endpoints, database schemas, permissions, design patterns, and design documents"
+  icon: "sparkles"
+  color: "#6366f1"
+  dependencies:
+    - name: audit
+    - name: architecture

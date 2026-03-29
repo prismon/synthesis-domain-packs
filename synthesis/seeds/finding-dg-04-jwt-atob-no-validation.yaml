@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dg-04-jwt-atob-no-validation
+spec:
+  displayName: "DG-04: JWT Decoding Uses Raw atob() Without Validation"
+  severity: info
+  category: design-gap
+  description: "Three frontend components (AuthTab, TenantSwitcher, ImpersonationContext) decode JWT tokens using raw atob() on the Base64 payload. While try-catch blocks exist, there is no validation of Base64 padding or structure before decoding. Malformed tokens with invalid Base64 will throw DOMException rather than being handled gracefully, and the silent catch may mask token corruption issues."
+  recommendation: "Use a lightweight JWT decode library (e.g. jwt-decode) that handles Base64URL encoding correctly and provides typed output. Alternatively, add explicit Base64URL-to-Base64 conversion before atob()."
+  sourceFile: "src/components/developer/AuthTab.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

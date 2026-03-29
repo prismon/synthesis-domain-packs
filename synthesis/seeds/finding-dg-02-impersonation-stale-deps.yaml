@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dg-02-impersonation-stale-deps
+spec:
+  displayName: "DG-02: Impersonation Context Has Stale React Effect Dependencies"
+  severity: info
+  category: design-gap
+  description: "ImpersonationContext.tsx has a useEffect with [isAuthenticated] as the sole dependency, but the effect body reads current.tenantSlug from closure state. An eslint-disable comment suppresses the warning. If tenantSlug changes without isAuthenticated toggling, the effect will not re-run, potentially leaving the impersonation context in a stale state with the wrong tenant."
+  recommendation: "Add current.tenantSlug to the dependency array, or restructure the effect to derive tenant state from the auth context directly rather than combining closure-captured state with the dependency array."
+  sourceFile: "src/contexts/ImpersonationContext.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

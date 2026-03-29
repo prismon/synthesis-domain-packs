@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-12-view-preview-unwired
+spec:
+  displayName: "INC-12: View Preview Component Not Wired to ViewRenderer"
+  severity: info
+  category: incomplete-feature
+  description: "ViewPreview.tsx contains a TODO comment and renders placeholder text instead of an actual live preview. The component is not connected to ViewRenderer with ephemeral view config. Users editing views cannot see a real-time preview of their changes."
+  recommendation: "Wire ViewPreview to ViewRenderer with a transient/ephemeral view configuration. Pass the current editor state as props to render a live preview alongside the view editor."
+  sourceFile: "src/components/views/ViewPreview.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

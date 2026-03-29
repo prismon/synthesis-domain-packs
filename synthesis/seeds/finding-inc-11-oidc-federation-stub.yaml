@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-inc-11-oidc-federation-stub
+spec:
+  displayName: "INC-11: OIDC Federation Token Validation Not Implemented"
+  severity: warning
+  category: incomplete-feature
+  description: "The OIDC federation module's /userinfo endpoint returns a hardcoded 'token validation not implemented' error. The AUTH_MODE=oidc-federate path is non-functional — any request to validate a federated token will fail. This blocks federated identity scenarios where external IdPs need to be trusted."
+  recommendation: "Implement proper token introspection or JWKS-based validation in the oidcfederate package. Until implemented, remove oidc-federate from the documented AUTH_MODE options to prevent misconfiguration."
+  sourceFile: "backend/internal/oidcfederate/token.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

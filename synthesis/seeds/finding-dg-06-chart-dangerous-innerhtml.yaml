@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dg-06-chart-dangerous-innerhtml
+spec:
+  displayName: "DG-06: Chart Component Injects Unsanitized CSS via innerHTML"
+  severity: info
+  category: design-gap
+  description: "The shadcn chart component (chart.tsx) uses unsafe HTML injection to set CSS custom property declarations from chart configuration objects. While the config is typed and values are expected to be color strings, any config value containing a closing style tag or CSS injection payload could break out of the style element and inject arbitrary HTML into the page."
+  recommendation: "Sanitize color values with a strict regex (e.g. hex, rgb, hsl only) before interpolation. Alternatively, use element.style.setProperty() via a ref to set CSS custom properties programmatically without raw HTML injection."
+  sourceFile: "src/components/ui/chart.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

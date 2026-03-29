@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dg-05-tenant-context-panic
+spec:
+  displayName: "DG-05: Tenant Context Extraction Panics on Missing Context"
+  severity: warning
+  category: design-gap
+  description: "tenant.go calls panic('tenant: no TenantContext in context') when the tenant context is absent from the request context. While the security gate middleware normally prevents unauthenticated requests from reaching this code, any internal goroutine or background job that calls this function without propagating the context will crash the entire process. A single panic in a Go HTTP server with default recovery middleware will only kill the goroutine, but in non-HTTP paths (controllers, scheduler) it will terminate the service."
+  recommendation: "Return an error instead of panicking. Callers in HTTP handlers can treat this as a 500, while background jobs can log and retry. Reserve panic for truly unrecoverable programmer errors, not missing middleware state."
+  sourceFile: "backend/internal/tenant/tenant.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-12-privileged-docker-profile
+spec:
+  displayName: "SEC-12: Privileged Docker Security Profile Allows Container Escape"
+  severity: critical
+  category: security
+  description: "The sandbox provider defines a 'privileged' security profile that passes --privileged to Docker, granting full host capabilities. A compromised or malicious agent running in a privileged container could escape to the host, access other containers, or read host filesystems. The restricted and standard profiles are well-designed, but the privileged option undermines all isolation guarantees."
+  recommendation: "Remove the privileged security profile entirely, or gate it behind an explicit platform-admin approval workflow. If privileged access is required for specific use cases, use fine-grained Linux capabilities (--cap-add) instead of --privileged. Add audit logging when elevated profiles are selected."
+  sourceFile: "backend/internal/sandboxplugin/provider_docker.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

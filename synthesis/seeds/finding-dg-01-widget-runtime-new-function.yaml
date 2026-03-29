@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dg-01-widget-runtime-new-function
+spec:
+  displayName: "DG-01: Widget Runtime Uses Dynamic Code Compilation Without Browser Sandboxing"
+  severity: warning
+  category: design-gap
+  description: "The widget runtime compiles user-provided widget source code using dynamic Function construction, which executes in the main window context. Although documented as intentional for trusted agents, there is no browser-level sandboxing (e.g. iframe sandbox, Web Worker, or CSP restriction). If an untrusted widget source is ever loaded — through a compromised agent, a malicious domain pack, or a git-synced repository — it has full access to the DOM, cookies, and localStorage."
+  recommendation: "Execute widget code in a sandboxed iframe with restrictive sandbox attributes (no same-origin, no scripts escaping to parent). Alternatively, use a Web Worker for non-DOM widgets. Add a CSP header restricting eval/Function usage to the widget container only."
+  sourceFile: "src/lib/notebook/widget-runtime.ts"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"

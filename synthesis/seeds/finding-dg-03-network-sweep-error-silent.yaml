@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-dg-03-network-sweep-error-silent
+spec:
+  displayName: "DG-03: Sandbox Network Sweep Silently Drops Errors"
+  severity: info
+  category: design-gap
+  description: "The Docker sandbox provider's SweepOrphaned() method for cleaning up orphaned networks and containers does not check or propagate its return value. If orphan cleanup fails — due to Docker daemon issues, permission errors, or locked resources — the failure is silent. Over time this can lead to resource leaks (dangling networks, zombie containers) that degrade the host."
+  recommendation: "Log errors from SweepOrphaned() at warning level. Consider adding a metric or health check that tracks orphan count over time so operators can detect accumulation."
+  sourceFile: "backend/internal/sandboxplugin/provider_docker_sandbox.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

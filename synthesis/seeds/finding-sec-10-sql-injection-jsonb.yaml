@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-10-sql-injection-jsonb
+spec:
+  displayName: "SEC-10: SQL Injection via JSONB Field Interpolation"
+  severity: critical
+  category: security
+  description: "The query builder interpolates field names directly into JSONB SQL expressions using fmt.Sprintf (e.g. spec->>'%s'). Although a regex whitelist (safeFieldName) restricts characters, the value is not parameterized or identifier-escaped. The 'exists' operator (spec ? '%s') also interpolates unescaped. A crafted field name that passes the regex but exploits PostgreSQL JSONB operator parsing could bypass RLS or leak cross-tenant data."
+  recommendation: "Use PostgreSQL parameterized identifier escaping (e.g. quote_ident) or pass field names as query parameters rather than interpolating into SQL strings. Consider using a prepared statement approach for all JSONB access patterns."
+  sourceFile: "backend/internal/repository/query_builder.go"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-backend"

@@ -1,0 +1,15 @@
+apiVersion: synthesis/v1
+kind: audit.finding
+metadata:
+  name: finding-sec-11-open-redirect-authcallback
+spec:
+  displayName: "SEC-11: Open Redirect in AuthCallback via OIDC State"
+  severity: warning
+  category: security
+  description: "AuthCallback.tsx extracts a 'from' path from the OIDC state object and passes it directly to window.location.replace() with no validation beyond checking it is not '/'. An attacker who controls the OIDC state parameter could inject an arbitrary URL, redirecting the user to a malicious site after successful authentication."
+  recommendation: "Validate the 'from' parameter against a whitelist of allowed path prefixes (e.g. /domains/, /views/, /landing) or enforce that it is a relative path starting with '/' and containing no protocol scheme."
+  sourceFile: "src/pages/AuthCallback.tsx"
+  status: open
+  lifecycleState: identified
+  systemRef: "!name synthesis"
+  containerRef: "!name ss-frontend"
